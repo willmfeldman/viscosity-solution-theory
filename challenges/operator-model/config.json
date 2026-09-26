@@ -1,0 +1,15 @@
+{
+  "challenge_module": "Challenge",
+  "solution_module": "Solution",
+  "theorem_names": [
+    "ViscositySolns.challenge_zero_operator_model_case",
+    "ViscositySolns.challenge_zero_jet_mem_superjet",
+    "ViscositySolns.challenge_positive_operator_rejects_zero_subsolution",
+    "ViscositySolns.challenge_two_identity_mem_superjet_sq",
+    "ViscositySolns.challenge_identity_not_mem_superjet_sq",
+    "ViscositySolns.challenge_neg_trace_degenerateElliptic",
+    "ViscositySolns.challenge_trace_not_degenerateElliptic"
+  ],
+  "permitted_axioms": ["propext", "Quot.sound", "Classical.choice"],
+  "enable_nanoda": false
+}

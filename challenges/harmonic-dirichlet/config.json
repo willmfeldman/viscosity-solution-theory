@@ -1,0 +1,11 @@
+{
+  "challenge_module": "Challenge",
+  "solution_module": "Solution",
+  "theorem_names": [
+    "ViscositySolns.challenge_harmonic_dirichlet_c2",
+    "ViscositySolns.challenge_harmonic_dirichlet_exteriorSphere",
+    "ViscositySolns.challenge_harmonic_dirichlet_ball"
+  ],
+  "permitted_axioms": ["propext", "Quot.sound", "Classical.choice"],
+  "enable_nanoda": false
+}

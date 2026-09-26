@@ -1,0 +1,14 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it using the metadata in this file."
+title: "Viscosity Solution Theory"
+type: software
+authors:
+  - family-names: Feldman
+    given-names: William M.
+repository-code: "https://github.com/willmfeldman/viscosity-solution-theory"
+license: Apache-2.0
+version: 0.1.0
+abstract: >-
+  A Lean 4 formalization of viscosity-solution theory for second-order
+  degenerate elliptic partial differential equations. A paper describing the
+  formalization may follow.

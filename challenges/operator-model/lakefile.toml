@@ -1,0 +1,19 @@
+name = "operator_model"
+version = "0.1.0"
+# Keep `lake build` safe for the comparator workflow: it elaborates only the
+# trusted statement surface.  The repository driver builds `Solution`
+# explicitly in a trusted CI checkout.
+defaultTargets = ["Challenge"]
+# Share the root workspace's dependency checkouts and builds; the manifests
+# lock identical revisions.
+packagesDir = "../../.lake/packages"
+
+[[require]]
+name = "viscosity_solns"
+path = "../.."
+
+[[lean_lib]]
+name = "Challenge"
+
+[[lean_lib]]
+name = "Solution"

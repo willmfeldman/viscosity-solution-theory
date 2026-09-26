@@ -1,0 +1,144 @@
+project: ViscositySolns
+description: >
+  Lean 4 formalization of viscosity-solution theory for second-order
+  degenerate elliptic equations, following Crandall, Ishii, and Lions,
+  "User's guide to viscosity solutions" (Bull. AMS 27, 1992).
+lean_toolchain: leanprover/lean4:v4.30.0
+mathlib: v4.30.0
+dependencies:
+  - name: AleksandrovDifferentiability
+    url: https://github.com/willmfeldman/aleksandrov-differentiability
+    rev: e366fe9588032b784382d39f19389c9ad74ed431
+permitted_axioms: [propext, Quot.sound, Classical.choice]
+automation:
+  methods:
+    - method: agent-assisted formalization
+      models: []
+      framework: "Agent-assisted Lean development with human direction and review"
+      review_status: human-supervised
+      notes: >-
+        AI coding agents contributed to the formalization. Exact model history and
+        per-declaration provenance are not recorded in this manifest.
+targets:
+  - id: comparison-compact
+    kind: headline-theorem
+    expected_axioms: [propext, Quot.sound, Classical.choice]
+    title: Comparison principle on compact domains
+    source: "CIL User's Guide, Theorem 3.3"
+    module: ViscositySolns.Comparison.ProperComparison.Compact.ConstantShiftBoundary
+    declaration: ViscositySolns.comparison_of_constantShift_boundary_of_aleksandrov
+    informal: >
+      A viscosity subsolution lies below a viscosity supersolution on a
+      domain with compact closure when the boundary comparison, properness,
+      structural continuity, and uniform constant-shift hypotheses hold.
+    challenge: challenges/comparison-compact
+    challenge_theorems: [ViscositySolns.challenge_comparison_boundary_compact]
+  - id: uniqueness
+    kind: headline-theorem
+    expected_axioms: [propext, Quot.sound, Classical.choice]
+    title: Uniqueness corollary of comparison
+    source: "CIL User's Guide, Theorem 3.3 corollary"
+    module: ViscositySolns.Comparison.Corollaries
+    declaration: ViscositySolns.ViscositySolution.eqOn_of_comparisonConclusions
+    informal: >
+      Two viscosity solutions with the same boundary data agree on the
+      domain, by applying comparison in both directions.
+    challenge: challenges/uniqueness
+    challenge_theorems: [ViscositySolns.challenge_uniqueness_boundary_compact]
+  - id: ishii-lemma
+    kind: headline-theorem
+    expected_axioms: [propext, Quot.sound, Classical.choice]
+    title: Crandall--Ishii maximum principle
+    source: "CIL User's Guide, Theorem 3.2"
+    module: ViscositySolns.Comparison.CILMaximumPrinciple
+    declaration: ViscositySolns.QuadraticPenaltyIshiiLemmaOn.of_aleksandrov
+    informal: >
+      A doubled-variable local maximum for the quadratic penalty produces
+      closed semijets satisfying the Ishii block-matrix bounds.
+    challenge: challenges/ishii-lemma
+    challenge_theorems: [ViscositySolns.challenge_ishii_lemma]
+  - id: jensen-lemma
+    kind: headline-theorem
+    expected_axioms: [propext, Quot.sound, Classical.choice]
+    title: Localized Jensen contact-set lemma
+    source: "CIL User's Guide, Lemma A.3"
+    module: ViscositySolns.Analysis.SemiconvexJensen.Jensen.MainTheorems
+    declaration: ViscositySolns.JensenContactSetPositiveMeasureOnClosedBallTheorem.proof
+    informal: >
+      Under the localized semiconvexity and strict-contact hypotheses, the
+      Jensen contact set in a closed ball has positive measure.
+    challenge: challenges/jensen-lemma
+    challenge_theorems: [ViscositySolns.challenge_jensen_contact_set]
+  - id: perron-existence
+    kind: assembly-theorem
+    expected_axioms: [propext, Quot.sound, Classical.choice]
+    title: Perron existence for the Dirichlet problem
+    source: "CIL User's Guide, Theorem 4.1"
+    module: ViscositySolns.Existence.Perron.Method.StrictBoundary.EnvelopeAssembly
+    declaration: ViscositySolns.PerronMethodExistenceTheorem.strictBoundary
+    related_declarations:
+      - ViscositySolns.PerronMethodExistenceTheorem.strictBoundary_zero
+    informal: >
+      The Perron envelope is a solution of the Dirichlet problem with data g
+      under the packaged Section 4 comparison, barrier, and bumping
+      assumptions. Dirichlet subsolutions and supersolutions are respectively
+      upper and lower semicontinuous on the domain together with its boundary.
+      For the Laplacian these hypotheses are discharged in the harmonic
+      Dirichlet application.
+    challenge: challenges/perron-existence
+    challenge_theorems: [ViscositySolns.challenge_perron_existence]
+  - id: semijet-testfunction
+    kind: headline-theorem
+    expected_axioms: [propext, Quot.sound, Classical.choice]
+    title: Semijet and smooth test-function equivalence
+    source: "CIL User's Guide, Section 2"
+    module: ViscositySolns.TestFunctions.Characterization
+    declaration: ViscositySolns.viscositySubsolution_iff_smoothTestFunctionSubsolution
+    related_declarations:
+      - ViscositySolns.viscositySupersolution_iff_smoothTestFunctionSupersolution
+    informal: >
+      On an open domain, the semijet and smooth C² test-function formulations
+      of viscosity subsolutions and supersolutions are equivalent for
+      Hessian-continuous, symmetric-part-invariant operators.
+    challenge: challenges/semijet-testfunction
+    challenge_theorems:
+      - ViscositySolns.challenge_subsolution_smooth_test_function_characterization
+      - ViscositySolns.challenge_supersolution_smooth_test_function_characterization
+  - id: harmonic-dirichlet
+    kind: application-theorem
+    expected_axioms: [propext, Quot.sound, Classical.choice]
+    title: Dirichlet problem for harmonic functions
+    source: "Gilbarg--Trudinger, Theorem 2.14 and Section 2.8; via CIL User's Guide, Theorem 4.1"
+    module: ViscositySolns.Applications.Laplace.Dirichlet
+    declaration: ViscositySolns.dirichlet_harmonic_modulus_of_uniformExteriorSphere
+    related_declarations:
+      - ViscositySolns.uniformExteriorSphere_of_contDiff_levelSet
+      - ViscositySolns.uniformExteriorSphere_ball
+      - ViscositySolns.dirichletComparisonPrinciple_laplaceOperator
+      - ViscositySolns.PerronMethodExistenceTheorem.strictBoundary
+      - ViscositySolns.Analysis.weyl_of_weaklyHarmonicOn
+    informal: >
+      On a bounded open set in R^d with a uniform exterior sphere condition
+      (in particular a bounded C² domain), Lipschitz boundary data g has a
+      classical harmonic extension h ∈ C(Ū) ∩ C²(U) with h = g on ∂U. Its
+      boundary modulus of continuity depends only on the domain and the
+      Lipschitz constant. The proof applies the Perron theorem with the
+      Laplace comparison principle and exterior-sphere barriers, then Weyl's
+      lemma for classical regularity.
+    challenge: challenges/harmonic-dirichlet
+    challenge_theorems:
+      - ViscositySolns.challenge_harmonic_dirichlet_c2
+      - ViscositySolns.challenge_harmonic_dirichlet_exteriorSphere
+      - ViscositySolns.challenge_harmonic_dirichlet_ball
+supplemental_challenges:
+  - id: operator-model
+    title: Operator model cases, semijet sign and Hessian conventions, and degenerate ellipticity
+    challenge: challenges/operator-model
+    challenge_theorems:
+      - ViscositySolns.challenge_zero_operator_model_case
+      - ViscositySolns.challenge_zero_jet_mem_superjet
+      - ViscositySolns.challenge_positive_operator_rejects_zero_subsolution
+      - ViscositySolns.challenge_two_identity_mem_superjet_sq
+      - ViscositySolns.challenge_identity_not_mem_superjet_sq
+      - ViscositySolns.challenge_neg_trace_degenerateElliptic
+      - ViscositySolns.challenge_trace_not_degenerateElliptic
