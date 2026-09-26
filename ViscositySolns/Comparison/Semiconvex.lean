@@ -3,9 +3,11 @@ Copyright (c) 2026 William M. Feldman. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: William M. Feldman
 -/
-import Mathlib.Analysis.Convex.Continuous
-import ViscositySolns.Comparison.SupConvolution
-import ViscositySolns.Semijets.Closure
+module
+
+public import Mathlib.Analysis.Convex.Continuous
+public import ViscositySolns.Comparison.SupConvolution
+public import ViscositySolns.Semijets.Closure
 
 /-!
 # Semiconvexity for compact sup-convolutions
@@ -14,7 +16,7 @@ This file records the semiconvexity inequality used in the
 finite-dimensional maximum-principle proof.
 -/
 
-noncomputable section
+@[expose] public noncomputable section
 
 open scoped MatrixOrder
 

@@ -3,7 +3,9 @@ Copyright (c) 2026 William M. Feldman. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: William M. Feldman
 -/
-import ViscositySolns.Analysis.SemiconvexJensen.Jensen.ContactSets
+module
+
+public import ViscositySolns.Analysis.SemiconvexJensen.Jensen.ContactSets
 
 /-!
 # Jensen Contact-Set Theorem (VolumeEstimates)
@@ -12,7 +14,7 @@ Part of the localized Jensen contact-set theorem and the smooth convex
 approximation machinery used to prove it. Split from `Jensen.lean`; see the
 umbrella module docstring.
 -/
-noncomputable section
+@[expose] public noncomputable section
 
 open scoped ContDiff MatrixOrder Topology
 open scoped Convolution

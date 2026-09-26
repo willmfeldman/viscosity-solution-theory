@@ -3,20 +3,22 @@ Copyright (c) 2026 William M. Feldman. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: William M. Feldman
 -/
-import Mathlib.Analysis.Calculus.BumpFunction.Convolution
-import Mathlib.Analysis.Calculus.BumpFunction.Normed
-import Mathlib.Analysis.Calculus.LocalExtr.Basic
-import Mathlib.Analysis.Calculus.Rademacher
-import Mathlib.Analysis.Complex.Tietze
-import Mathlib.Analysis.Convex.Deriv
-import Mathlib.MeasureTheory.Function.Jacobian
-import Mathlib.MeasureTheory.Measure.Lebesgue.Basic
-import ViscositySolns.Analysis.SemiconvexJensen.Aleksandrov.Basic.Core
-import ViscositySolns.Analysis.SemiconvexJensen.Aleksandrov.JetCalculus.Convex
-import ViscositySolns.Analysis.SemiconvexJensen.Aleksandrov.JetCalculus.Determinant
-import ViscositySolns.Analysis.SemiconvexJensen.Strictification
-import ViscositySolns.Comparison.Semiconvex
-import ViscositySolns.TestFunctions.Taylor
+module
+
+public import Mathlib.Analysis.Calculus.BumpFunction.Convolution
+public import Mathlib.Analysis.Calculus.BumpFunction.Normed
+public import Mathlib.Analysis.Calculus.LocalExtr.Basic
+public import Mathlib.Analysis.Calculus.Rademacher
+public import Mathlib.Analysis.Complex.Tietze
+public import Mathlib.Analysis.Convex.Deriv
+public import Mathlib.MeasureTheory.Function.Jacobian
+public import Mathlib.MeasureTheory.Measure.Lebesgue.Basic
+public import ViscositySolns.Analysis.SemiconvexJensen.Aleksandrov.Basic.Core
+public import ViscositySolns.Analysis.SemiconvexJensen.Aleksandrov.JetCalculus.Convex
+public import ViscositySolns.Analysis.SemiconvexJensen.Aleksandrov.JetCalculus.Determinant
+public import ViscositySolns.Analysis.SemiconvexJensen.Strictification
+public import ViscositySolns.Comparison.Semiconvex
+public import ViscositySolns.TestFunctions.Taylor
 
 /-!
 # Jensen Contact-Set Theorem (ContactSets)
@@ -25,7 +27,7 @@ Part of the localized Jensen contact-set theorem and the smooth convex
 approximation machinery used to prove it. Split from `Jensen.lean`; see the
 umbrella module docstring.
 -/
-noncomputable section
+@[expose] public noncomputable section
 
 open scoped ContDiff MatrixOrder Topology
 open scoped Convolution

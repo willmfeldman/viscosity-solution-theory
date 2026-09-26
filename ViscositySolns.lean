@@ -3,155 +3,157 @@ Copyright (c) 2026 William M. Feldman. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: William M. Feldman
 -/
-import ViscositySolns.Analysis.ABP
-import ViscositySolns.Analysis.SemiconvexJensen
-import ViscositySolns.Analysis.SemiconvexJensen.Aleksandrov.Basic.Core
-import ViscositySolns.Analysis.SemiconvexJensen.Aleksandrov.Basic.Core.JetsAndFTC
-import ViscositySolns.Analysis.SemiconvexJensen.Aleksandrov.Basic.Core.SegmentTaylor
-import ViscositySolns.Analysis.SemiconvexJensen.Aleksandrov.JetCalculus.Basic
-import ViscositySolns.Analysis.SemiconvexJensen.Aleksandrov.JetCalculus.Convex
-import ViscositySolns.Analysis.SemiconvexJensen.Aleksandrov.JetCalculus.Determinant
-import ViscositySolns.Analysis.SemiconvexJensen.Aleksandrov.JetCalculus.Strictification
-import ViscositySolns.Analysis.SemiconvexJensen.Aleksandrov.JetCalculus.Strictification.CoordinateQuartic
-import ViscositySolns.Analysis.SemiconvexJensen.Aleksandrov.JetCalculus.Strictification.StrictifiedObjective
-import ViscositySolns.Analysis.SemiconvexJensen.Aleksandrov.Theorems.Core
-import ViscositySolns.Analysis.SemiconvexJensen.ContactSelection
-import ViscositySolns.Analysis.SemiconvexJensen.ExternalAleksandrov
-import ViscositySolns.Analysis.SemiconvexJensen.Jensen
-import ViscositySolns.Analysis.SemiconvexJensen.Jensen.ContDiffHessian
-import ViscositySolns.Analysis.SemiconvexJensen.Jensen.ContactSets
-import ViscositySolns.Analysis.SemiconvexJensen.Jensen.ConvexMollification
-import ViscositySolns.Analysis.SemiconvexJensen.Jensen.MainTheorems
-import ViscositySolns.Analysis.SemiconvexJensen.Jensen.VolumeEstimates
-import ViscositySolns.Analysis.SemiconvexJensen.MatrixConclusion
-import ViscositySolns.Analysis.SemiconvexJensen.Strictification
-import ViscositySolns.Applications.Laplace.Barriers.Construction
-import ViscositySolns.Applications.Laplace.Barriers.Pair
-import ViscositySolns.Applications.Laplace.Barriers.Radial
-import ViscositySolns.Applications.Laplace.Comparison
-import ViscositySolns.Applications.Laplace.Dirichlet
-import ViscositySolns.Applications.Laplace.Euclidean
-import ViscositySolns.Applications.Laplace.ExteriorSphere
-import ViscositySolns.Applications.Laplace.Geometry
-import ViscositySolns.Applications.Laplace.PerronSolution
-import ViscositySolns.Applications.Laplace.WeakHarmonic.SecondDifference
-import ViscositySolns.Applications.Laplace.WeakHarmonic.Solution
-import ViscositySolns.Applications.Laplace.WeakHarmonic.Subsolution
-import ViscositySolns.Applications.Laplace.WeakHarmonic.SupConvolution
-import ViscositySolns.Applications.Laplace.Weyl.DuBoisReymond
-import ViscositySolns.Applications.Laplace.Weyl.LaplacianInvariance
-import ViscositySolns.Applications.Laplace.Weyl.MeanValue
-import ViscositySolns.Applications.Laplace.Weyl.PolarCoord
-import ViscositySolns.Applications.Laplace.Weyl.Weyl
-import ViscositySolns.Basic
-import ViscositySolns.Comparison.CILMaximumPrinciple
-import ViscositySolns.Comparison.Corollaries
-import ViscositySolns.Comparison.DoublingVariables
-import ViscositySolns.Comparison.IshiiLemma
-import ViscositySolns.Comparison.MatrixInequalities
-import ViscositySolns.Comparison.MatrixInequalities.BlockStructure
-import ViscositySolns.Comparison.MatrixInequalities.QuadraticModel
-import ViscositySolns.Comparison.MaximumPrinciple
-import ViscositySolns.Comparison.Neighborhoods
-import ViscositySolns.Comparison.OperatorCondition
-import ViscositySolns.Comparison.OperatorCondition.IshiiCondition
-import ViscositySolns.Comparison.OperatorCondition.TraceForm
-import ViscositySolns.Comparison.ProductCoordinates
-import ViscositySolns.Comparison.ProductCoordinates.Embeddings
-import ViscositySolns.Comparison.ProductCoordinates.JetTransfer
-import ViscositySolns.Comparison.ProductCoordinates.MatrixLemmaBounds
-import ViscositySolns.Comparison.ProductCoordinates.Normalization
-import ViscositySolns.Comparison.ProductCoordinates.RegularizedConvolution
-import ViscositySolns.Comparison.ProperComparison
-import ViscositySolns.Comparison.ProperComparison.Algebra
-import ViscositySolns.Comparison.ProperComparison.Compact
-import ViscositySolns.Comparison.ProperComparison.Compact.CompactSelection
-import ViscositySolns.Comparison.ProperComparison.Compact.ConstantShiftBoundary
-import ViscositySolns.Comparison.ProperComparison.Core
-import ViscositySolns.Comparison.ProperComparison.Localization
-import ViscositySolns.Comparison.ProperComparison.Localization.SelectedMaximizers
-import ViscositySolns.Comparison.ProperComparison.Localization.SemicontinuityScaleEstimates
-import ViscositySolns.Comparison.ProperComparison.Setup
-import ViscositySolns.Comparison.ProperComparison.Trace
-import ViscositySolns.Comparison.ProperComparison.Trace.InfOperatorAndSelection
-import ViscositySolns.Comparison.ProperComparison.Trace.SingleOperator
-import ViscositySolns.Comparison.ProperComparison.Trace.SupOperator
-import ViscositySolns.Comparison.Semiconvex
-import ViscositySolns.Comparison.SeparatedJets
-import ViscositySolns.Comparison.SeparatedJets.BlockBounds
-import ViscositySolns.Comparison.SeparatedJets.CilBounds
-import ViscositySolns.Comparison.SupConvolution
-import ViscositySolns.Comparison.SupConvolution.ClosedJetTransfer
-import ViscositySolns.Comparison.SupConvolution.SuperjetTransfer
-import ViscositySolns.Existence
-import ViscositySolns.Existence.Perron
-import ViscositySolns.Existence.Perron.Basic
-import ViscositySolns.Existence.Perron.BoundarySemicontinuityRegression
-import ViscositySolns.Existence.Perron.Bump
-import ViscositySolns.Existence.Perron.Bump.Bridges
-import ViscositySolns.Existence.Perron.Bump.Contradiction
-import ViscositySolns.Existence.Perron.Bump.Definitions
-import ViscositySolns.Existence.Perron.Bump.GlobalBridges
-import ViscositySolns.Existence.Perron.Bump.Interfaces
-import ViscositySolns.Existence.Perron.Bump.LiftedQuadratic
-import ViscositySolns.Existence.Perron.Bump.Quadratic
-import ViscositySolns.Existence.Perron.Bump.QuadraticGluing
-import ViscositySolns.Existence.Perron.Bump.QuadraticGluing.AnnulusSelectionPatches
-import ViscositySolns.Existence.Perron.Bump.QuadraticGluing.BentStrictNegativity
-import ViscositySolns.Existence.Perron.Bump.QuadraticGluing.CertifiedPatches
-import ViscositySolns.Existence.Perron.Bump.QuadraticGluing.CompactInactivePatches
-import ViscositySolns.Existence.Perron.Bump.QuadraticGluing.GluingSkeleton
-import ViscositySolns.Existence.Perron.Bump.QuadraticGluing.OpenBumpMaxPatches
-import ViscositySolns.Existence.Perron.Bump.QuadraticGluing.OpenBumpPatches
-import ViscositySolns.Existence.Perron.Bump.QuadraticGluing.OuterSemijetPatches
-import ViscositySolns.Existence.Perron.Bump.Supersolution
-import ViscositySolns.Existence.Perron.ComparisonAdapter
-import ViscositySolns.Existence.Perron.ConcreteComparisonExample
-import ViscositySolns.Existence.Perron.Envelopes
-import ViscositySolns.Existence.Perron.Method
-import ViscositySolns.Existence.Perron.Method.Core
-import ViscositySolns.Existence.Perron.Method.HalfRelaxed
-import ViscositySolns.Existence.Perron.Method.LowerInterfaces
-import ViscositySolns.Existence.Perron.Method.LowerInterfaces.BentSourcePatches
-import ViscositySolns.Existence.Perron.Method.LowerInterfaces.CoreInterfaces
-import ViscositySolns.Existence.Perron.Method.PerronFamily
-import ViscositySolns.Existence.Perron.Method.StrictBoundary
-import ViscositySolns.Existence.Perron.Method.StrictBoundary.BentAnnulusPatches
-import ViscositySolns.Existence.Perron.Method.StrictBoundary.EnvelopeAssembly
-import ViscositySolns.Existence.Perron.Method.StrictBoundary.SubsolutionPatches
-import ViscositySolns.Existence.Perron.SupStability
-import ViscositySolns.Foundation
-import ViscositySolns.Operators.Comparison
-import ViscositySolns.Operators.Continuity
-import ViscositySolns.Operators.Examples
-import ViscositySolns.Operators.Linear
-import ViscositySolns.Operators.Proper
-import ViscositySolns.Operators.SupInf
-import ViscositySolns.Operators.Trace
-import ViscositySolns.Semijets
-import ViscositySolns.Semijets.Calculus
-import ViscositySolns.Semijets.Calculus.QuadraticControl
-import ViscositySolns.Semijets.Calculus.ShiftsClosedness
-import ViscositySolns.Semijets.Closure
-import ViscositySolns.Semijets.Definitions
-import ViscositySolns.Solutions
-import ViscositySolns.Stability.HalfRelaxedLimits
-import ViscositySolns.Stability.HalfRelaxedLimits.Basic
-import ViscositySolns.Stability.HalfRelaxedLimits.CompactSelection
-import ViscositySolns.Stability.HalfRelaxedLimits.Semijets
-import ViscositySolns.Stability.HalfRelaxedLimits.Stability
-import ViscositySolns.Stability.Limits
-import ViscositySolns.Stability.LocallyUniform
-import ViscositySolns.Stability.Max
-import ViscositySolns.Stability.Neighborhoods
-import ViscositySolns.Stability.Selection
-import ViscositySolns.Stability.Selection.CompactContact
-import ViscositySolns.Stability.Selection.LocallyUniformApproximation
-import ViscositySolns.Stability.SmoothSelection
-import ViscositySolns.TestFunctions.Characterization
-import ViscositySolns.TestFunctions.Smooth
-import ViscositySolns.TestFunctions.Solutions
-import ViscositySolns.TestFunctions.Taylor
+module
+
+public import ViscositySolns.Analysis.ABP
+public import ViscositySolns.Analysis.SemiconvexJensen
+public import ViscositySolns.Analysis.SemiconvexJensen.Aleksandrov.Basic.Core
+public import ViscositySolns.Analysis.SemiconvexJensen.Aleksandrov.Basic.Core.JetsAndFTC
+public import ViscositySolns.Analysis.SemiconvexJensen.Aleksandrov.Basic.Core.SegmentTaylor
+public import ViscositySolns.Analysis.SemiconvexJensen.Aleksandrov.JetCalculus.Basic
+public import ViscositySolns.Analysis.SemiconvexJensen.Aleksandrov.JetCalculus.Convex
+public import ViscositySolns.Analysis.SemiconvexJensen.Aleksandrov.JetCalculus.Determinant
+public import ViscositySolns.Analysis.SemiconvexJensen.Aleksandrov.JetCalculus.Strictification
+public import ViscositySolns.Analysis.SemiconvexJensen.Aleksandrov.JetCalculus.Strictification.CoordinateQuartic
+public import ViscositySolns.Analysis.SemiconvexJensen.Aleksandrov.JetCalculus.Strictification.StrictifiedObjective
+public import ViscositySolns.Analysis.SemiconvexJensen.Aleksandrov.Theorems.Core
+public import ViscositySolns.Analysis.SemiconvexJensen.ContactSelection
+public import ViscositySolns.Analysis.SemiconvexJensen.ExternalAleksandrov
+public import ViscositySolns.Analysis.SemiconvexJensen.Jensen
+public import ViscositySolns.Analysis.SemiconvexJensen.Jensen.ContDiffHessian
+public import ViscositySolns.Analysis.SemiconvexJensen.Jensen.ContactSets
+public import ViscositySolns.Analysis.SemiconvexJensen.Jensen.ConvexMollification
+public import ViscositySolns.Analysis.SemiconvexJensen.Jensen.MainTheorems
+public import ViscositySolns.Analysis.SemiconvexJensen.Jensen.VolumeEstimates
+public import ViscositySolns.Analysis.SemiconvexJensen.MatrixConclusion
+public import ViscositySolns.Analysis.SemiconvexJensen.Strictification
+public import ViscositySolns.Applications.Laplace.Barriers.Construction
+public import ViscositySolns.Applications.Laplace.Barriers.Pair
+public import ViscositySolns.Applications.Laplace.Barriers.Radial
+public import ViscositySolns.Applications.Laplace.Comparison
+public import ViscositySolns.Applications.Laplace.Dirichlet
+public import ViscositySolns.Applications.Laplace.Euclidean
+public import ViscositySolns.Applications.Laplace.ExteriorSphere
+public import ViscositySolns.Applications.Laplace.Geometry
+public import ViscositySolns.Applications.Laplace.PerronSolution
+public import ViscositySolns.Applications.Laplace.WeakHarmonic.SecondDifference
+public import ViscositySolns.Applications.Laplace.WeakHarmonic.Solution
+public import ViscositySolns.Applications.Laplace.WeakHarmonic.Subsolution
+public import ViscositySolns.Applications.Laplace.WeakHarmonic.SupConvolution
+public import ViscositySolns.Applications.Laplace.Weyl.DuBoisReymond
+public import ViscositySolns.Applications.Laplace.Weyl.LaplacianInvariance
+public import ViscositySolns.Applications.Laplace.Weyl.MeanValue
+public import ViscositySolns.Applications.Laplace.Weyl.PolarCoord
+public import ViscositySolns.Applications.Laplace.Weyl.Weyl
+public import ViscositySolns.Basic
+public import ViscositySolns.Comparison.CILMaximumPrinciple
+public import ViscositySolns.Comparison.Corollaries
+public import ViscositySolns.Comparison.DoublingVariables
+public import ViscositySolns.Comparison.IshiiLemma
+public import ViscositySolns.Comparison.MatrixInequalities
+public import ViscositySolns.Comparison.MatrixInequalities.BlockStructure
+public import ViscositySolns.Comparison.MatrixInequalities.QuadraticModel
+public import ViscositySolns.Comparison.MaximumPrinciple
+public import ViscositySolns.Comparison.Neighborhoods
+public import ViscositySolns.Comparison.OperatorCondition
+public import ViscositySolns.Comparison.OperatorCondition.IshiiCondition
+public import ViscositySolns.Comparison.OperatorCondition.TraceForm
+public import ViscositySolns.Comparison.ProductCoordinates
+public import ViscositySolns.Comparison.ProductCoordinates.Embeddings
+public import ViscositySolns.Comparison.ProductCoordinates.JetTransfer
+public import ViscositySolns.Comparison.ProductCoordinates.MatrixLemmaBounds
+public import ViscositySolns.Comparison.ProductCoordinates.Normalization
+public import ViscositySolns.Comparison.ProductCoordinates.RegularizedConvolution
+public import ViscositySolns.Comparison.ProperComparison
+public import ViscositySolns.Comparison.ProperComparison.Algebra
+public import ViscositySolns.Comparison.ProperComparison.Compact
+public import ViscositySolns.Comparison.ProperComparison.Compact.CompactSelection
+public import ViscositySolns.Comparison.ProperComparison.Compact.ConstantShiftBoundary
+public import ViscositySolns.Comparison.ProperComparison.Core
+public import ViscositySolns.Comparison.ProperComparison.Localization
+public import ViscositySolns.Comparison.ProperComparison.Localization.SelectedMaximizers
+public import ViscositySolns.Comparison.ProperComparison.Localization.SemicontinuityScaleEstimates
+public import ViscositySolns.Comparison.ProperComparison.Setup
+public import ViscositySolns.Comparison.ProperComparison.Trace
+public import ViscositySolns.Comparison.ProperComparison.Trace.InfOperatorAndSelection
+public import ViscositySolns.Comparison.ProperComparison.Trace.SingleOperator
+public import ViscositySolns.Comparison.ProperComparison.Trace.SupOperator
+public import ViscositySolns.Comparison.Semiconvex
+public import ViscositySolns.Comparison.SeparatedJets
+public import ViscositySolns.Comparison.SeparatedJets.BlockBounds
+public import ViscositySolns.Comparison.SeparatedJets.CilBounds
+public import ViscositySolns.Comparison.SupConvolution
+public import ViscositySolns.Comparison.SupConvolution.ClosedJetTransfer
+public import ViscositySolns.Comparison.SupConvolution.SuperjetTransfer
+public import ViscositySolns.Existence
+public import ViscositySolns.Existence.Perron
+public import ViscositySolns.Existence.Perron.Basic
+public import ViscositySolns.Existence.Perron.BoundarySemicontinuityRegression
+public import ViscositySolns.Existence.Perron.Bump
+public import ViscositySolns.Existence.Perron.Bump.Bridges
+public import ViscositySolns.Existence.Perron.Bump.Contradiction
+public import ViscositySolns.Existence.Perron.Bump.Definitions
+public import ViscositySolns.Existence.Perron.Bump.GlobalBridges
+public import ViscositySolns.Existence.Perron.Bump.Interfaces
+public import ViscositySolns.Existence.Perron.Bump.LiftedQuadratic
+public import ViscositySolns.Existence.Perron.Bump.Quadratic
+public import ViscositySolns.Existence.Perron.Bump.QuadraticGluing
+public import ViscositySolns.Existence.Perron.Bump.QuadraticGluing.AnnulusSelectionPatches
+public import ViscositySolns.Existence.Perron.Bump.QuadraticGluing.BentStrictNegativity
+public import ViscositySolns.Existence.Perron.Bump.QuadraticGluing.CertifiedPatches
+public import ViscositySolns.Existence.Perron.Bump.QuadraticGluing.CompactInactivePatches
+public import ViscositySolns.Existence.Perron.Bump.QuadraticGluing.GluingSkeleton
+public import ViscositySolns.Existence.Perron.Bump.QuadraticGluing.OpenBumpMaxPatches
+public import ViscositySolns.Existence.Perron.Bump.QuadraticGluing.OpenBumpPatches
+public import ViscositySolns.Existence.Perron.Bump.QuadraticGluing.OuterSemijetPatches
+public import ViscositySolns.Existence.Perron.Bump.Supersolution
+public import ViscositySolns.Existence.Perron.ComparisonAdapter
+public import ViscositySolns.Existence.Perron.ConcreteComparisonExample
+public import ViscositySolns.Existence.Perron.Envelopes
+public import ViscositySolns.Existence.Perron.Method
+public import ViscositySolns.Existence.Perron.Method.Core
+public import ViscositySolns.Existence.Perron.Method.HalfRelaxed
+public import ViscositySolns.Existence.Perron.Method.LowerInterfaces
+public import ViscositySolns.Existence.Perron.Method.LowerInterfaces.BentSourcePatches
+public import ViscositySolns.Existence.Perron.Method.LowerInterfaces.CoreInterfaces
+public import ViscositySolns.Existence.Perron.Method.PerronFamily
+public import ViscositySolns.Existence.Perron.Method.StrictBoundary
+public import ViscositySolns.Existence.Perron.Method.StrictBoundary.BentAnnulusPatches
+public import ViscositySolns.Existence.Perron.Method.StrictBoundary.EnvelopeAssembly
+public import ViscositySolns.Existence.Perron.Method.StrictBoundary.SubsolutionPatches
+public import ViscositySolns.Existence.Perron.SupStability
+public import ViscositySolns.Foundation
+public import ViscositySolns.Operators.Comparison
+public import ViscositySolns.Operators.Continuity
+public import ViscositySolns.Operators.Examples
+public import ViscositySolns.Operators.Linear
+public import ViscositySolns.Operators.Proper
+public import ViscositySolns.Operators.SupInf
+public import ViscositySolns.Operators.Trace
+public import ViscositySolns.Semijets
+public import ViscositySolns.Semijets.Calculus
+public import ViscositySolns.Semijets.Calculus.QuadraticControl
+public import ViscositySolns.Semijets.Calculus.ShiftsClosedness
+public import ViscositySolns.Semijets.Closure
+public import ViscositySolns.Semijets.Definitions
+public import ViscositySolns.Solutions
+public import ViscositySolns.Stability.HalfRelaxedLimits
+public import ViscositySolns.Stability.HalfRelaxedLimits.Basic
+public import ViscositySolns.Stability.HalfRelaxedLimits.CompactSelection
+public import ViscositySolns.Stability.HalfRelaxedLimits.Semijets
+public import ViscositySolns.Stability.HalfRelaxedLimits.Stability
+public import ViscositySolns.Stability.Limits
+public import ViscositySolns.Stability.LocallyUniform
+public import ViscositySolns.Stability.Max
+public import ViscositySolns.Stability.Neighborhoods
+public import ViscositySolns.Stability.Selection
+public import ViscositySolns.Stability.Selection.CompactContact
+public import ViscositySolns.Stability.Selection.LocallyUniformApproximation
+public import ViscositySolns.Stability.SmoothSelection
+public import ViscositySolns.TestFunctions.Characterization
+public import ViscositySolns.TestFunctions.Smooth
+public import ViscositySolns.TestFunctions.Solutions
+public import ViscositySolns.TestFunctions.Taylor
 
 /-!
 # ViscositySolns
@@ -179,3 +181,5 @@ solutions* (Bull. AMS 27, 1992). This root module imports the entire library.
   the `ViscositySolns.PerronMethodExistenceTheorem.of_*` family
   in `ViscositySolns.Existence.Perron.Method.Core`.
 -/
+
+@[expose] public section

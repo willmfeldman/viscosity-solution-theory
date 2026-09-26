@@ -3,8 +3,10 @@ Copyright (c) 2026 William M. Feldman. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: William M. Feldman
 -/
-import ViscositySolns.Operators.Continuity
-import ViscositySolns.Operators.Examples
+module
+
+public import ViscositySolns.Operators.Continuity
+public import ViscositySolns.Operators.Examples
 
 /-!
 # Affine linear operator forms
@@ -18,7 +20,7 @@ theorems in this file only require the standard antitonicity condition in the
 Hessian variable.
 -/
 
-noncomputable section
+@[expose] public noncomputable section
 
 open scoped MatrixOrder
 

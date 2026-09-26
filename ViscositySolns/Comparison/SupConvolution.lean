@@ -3,8 +3,10 @@ Copyright (c) 2026 William M. Feldman. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: William M. Feldman
 -/
-import ViscositySolns.Comparison.SupConvolution.SuperjetTransfer
-import ViscositySolns.Comparison.SupConvolution.ClosedJetTransfer
+module
+
+public import ViscositySolns.Comparison.SupConvolution.SuperjetTransfer
+public import ViscositySolns.Comparison.SupConvolution.ClosedJetTransfer
 
 /-!
 # Sup-convolution declarations
@@ -24,3 +26,5 @@ development the functions are currently real-valued, so the first formal layer
 uses suprema over a compact set. The development lives in the
 `SupConvolution/` submodules; this file re-exports all of them.
 -/
+
+@[expose] public section

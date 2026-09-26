@@ -3,9 +3,11 @@ Copyright (c) 2026 William M. Feldman. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: William M. Feldman
 -/
-import ViscositySolns.Operators.Proper
-import Mathlib.Topology.MetricSpace.Basic
-import Mathlib.Tactic.Linarith
+module
+
+public import ViscositySolns.Operators.Proper
+public import Mathlib.Topology.MetricSpace.Basic
+public import Mathlib.Tactic.Linarith
 
 /-!
 # Continuity and boundedness hypotheses for operators
@@ -15,7 +17,7 @@ nonlinear operators through `operatorGraphEval`, the graph-space evaluation map
 used by closed-semijet arguments.
 -/
 
-noncomputable section
+@[expose] public noncomputable section
 
 namespace ViscositySolns
 

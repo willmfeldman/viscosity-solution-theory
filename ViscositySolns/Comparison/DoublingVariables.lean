@@ -3,8 +3,10 @@ Copyright (c) 2026 William M. Feldman. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: William M. Feldman
 -/
-import Mathlib.Topology.Semicontinuity.Basic
-import ViscositySolns.Foundation
+module
+
+public import Mathlib.Topology.Semicontinuity.Basic
+public import ViscositySolns.Foundation
 
 /-!
 # Doubling variables
@@ -20,7 +22,7 @@ The first-order components of the quadratic penalty are recorded explicitly as
 `α • (x - y)` and `-α • (x - y)`.
 -/
 
-noncomputable section
+@[expose] public noncomputable section
 
 namespace ViscositySolns
 

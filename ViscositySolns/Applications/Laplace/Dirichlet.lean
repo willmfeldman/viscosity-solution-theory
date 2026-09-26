@@ -3,11 +3,13 @@ Copyright (c) 2026 William M. Feldman. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: William M. Feldman
 -/
-import ViscositySolns.Applications.Laplace.PerronSolution
-import ViscositySolns.Applications.Laplace.Barriers.Pair
-import ViscositySolns.Applications.Laplace.WeakHarmonic.Solution
-import ViscositySolns.Applications.Laplace.Euclidean
-import ViscositySolns.Applications.Laplace.Weyl.Weyl
+module
+
+public import ViscositySolns.Applications.Laplace.PerronSolution
+public import ViscositySolns.Applications.Laplace.Barriers.Pair
+public import ViscositySolns.Applications.Laplace.WeakHarmonic.Solution
+public import ViscositySolns.Applications.Laplace.Euclidean
+public import ViscositySolns.Applications.Laplace.Weyl.Weyl
 
 /-!
 # The Dirichlet problem for harmonic functions
@@ -32,7 +34,7 @@ The proof is an application of the CIL Perron method:
 The modulus is `ϖ t = K √t`.
 -/
 
-noncomputable section
+@[expose] public noncomputable section
 
 open Filter Topology Set
 open scoped Laplacian ContDiff NNReal

@@ -3,7 +3,9 @@ Copyright (c) 2026 William M. Feldman. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: William M. Feldman
 -/
-import ViscositySolns.Analysis.SemiconvexJensen.Aleksandrov.Basic.Core.JetsAndFTC
+module
+
+public import ViscositySolns.Analysis.SemiconvexJensen.Aleksandrov.Basic.Core.JetsAndFTC
 
 /-!
 # Core Aleksandrov Jet Infrastructure (SegmentTaylor)
@@ -12,7 +14,7 @@ Part of the core Aleksandrov jet infrastructure development. Split from
 `Core.lean`; see the umbrella module docstring.
 -/
 
-noncomputable section
+@[expose] public noncomputable section
 
 open scoped ContDiff MatrixOrder Topology
 open scoped ENNReal

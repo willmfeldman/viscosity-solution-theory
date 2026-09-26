@@ -3,8 +3,10 @@ Copyright (c) 2026 William M. Feldman. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: William M. Feldman
 -/
-import Mathlib.Topology.Order.Lattice
-import ViscositySolns.Operators.Continuity
+module
+
+public import Mathlib.Topology.Order.Lattice
+public import ViscositySolns.Operators.Continuity
 
 /-!
 # Finite suprema and infima of operators
@@ -14,7 +16,7 @@ operators. These constructions are the finite-index versions of the
 Hamilton-Jacobi-Bellman and Isaacs operators appearing in viscosity theory.
 -/
 
-noncomputable section
+@[expose] public noncomputable section
 
 open scoped MatrixOrder
 

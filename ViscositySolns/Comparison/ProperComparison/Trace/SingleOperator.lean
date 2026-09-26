@@ -3,8 +3,10 @@ Copyright (c) 2026 William M. Feldman. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: William M. Feldman
 -/
-import ViscositySolns.Comparison.ProperComparison.Compact
-import ViscositySolns.Comparison.ProperComparison.Setup
+module
+
+public import ViscositySolns.Comparison.ProperComparison.Compact
+public import ViscositySolns.Comparison.ProperComparison.Setup
 
 /-!
 # Trace-form and finite-family comparison wrappers. (SingleOperator)
@@ -13,7 +15,7 @@ Part of the trace-form and finite-family comparison wrappers. Split from
 `Trace.lean`; see the umbrella module docstring.
 -/
 
-noncomputable section
+@[expose] public noncomputable section
 
 open Filter
 open scoped MatrixOrder

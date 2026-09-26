@@ -3,11 +3,13 @@ Copyright (c) 2026 William M. Feldman. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: William M. Feldman
 -/
-import ViscositySolns.Stability.Limits
-import ViscositySolns.Stability.LocallyUniform
-import ViscositySolns.Stability.Neighborhoods
-import ViscositySolns.Stability.Selection
-import ViscositySolns.TestFunctions.Solutions
+module
+
+public import ViscositySolns.Stability.Limits
+public import ViscositySolns.Stability.LocallyUniform
+public import ViscositySolns.Stability.Neighborhoods
+public import ViscositySolns.Stability.Selection
+public import ViscositySolns.TestFunctions.Solutions
 
 /-!
 # Smooth selected contacts for locally uniform stability
@@ -17,7 +19,7 @@ This file connects the compact selected-contact machinery with the canonical
 jet-side bridge used in the locally uniform semijet approximation theorem.
 -/
 
-noncomputable section
+@[expose] public noncomputable section
 
 open Filter
 open scoped ContDiff

@@ -3,15 +3,17 @@ Copyright (c) 2026 William M. Feldman. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: William M. Feldman
 -/
-import Mathlib.Analysis.Calculus.ContDiff.Operations
-import Mathlib.Analysis.Calculus.MeanValue
-import Mathlib.MeasureTheory.Group.Integral
-import Mathlib.MeasureTheory.Integral.Bochner.Set
-import Mathlib.MeasureTheory.Measure.Lebesgue.Basic
-import Mathlib.MeasureTheory.Function.LocallyIntegrable
-import Mathlib.Topology.MetricSpace.Thickening
-import Mathlib.Topology.UniformSpace.HeineCantor
-import ViscositySolns.Foundation
+module
+
+public import Mathlib.Analysis.Calculus.ContDiff.Operations
+public import Mathlib.Analysis.Calculus.MeanValue
+public import Mathlib.MeasureTheory.Group.Integral
+public import Mathlib.MeasureTheory.Integral.Bochner.Set
+public import Mathlib.MeasureTheory.Measure.Lebesgue.Basic
+public import Mathlib.MeasureTheory.Function.LocallyIntegrable
+public import Mathlib.Topology.MetricSpace.Thickening
+public import Mathlib.Topology.UniformSpace.HeineCantor
+public import ViscositySolns.Foundation
 
 /-!
 # Coordinate second differences and the trace Laplacian
@@ -34,7 +36,7 @@ distributional subharmonicity:
   (`integral_coordSecondDifference_mul`).
 -/
 
-noncomputable section
+@[expose] public noncomputable section
 
 open Filter MeasureTheory Metric Set
 open scoped Topology

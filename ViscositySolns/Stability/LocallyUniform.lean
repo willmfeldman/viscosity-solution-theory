@@ -3,8 +3,10 @@ Copyright (c) 2026 William M. Feldman. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: William M. Feldman
 -/
-import Mathlib.Topology.UniformSpace.UniformApproximation
-import ViscositySolns.Foundation
+module
+
+public import Mathlib.Topology.UniformSpace.UniformApproximation
+public import ViscositySolns.Foundation
 
 /-!
 # Locally uniform convergence infrastructure
@@ -14,7 +16,7 @@ theorems in the concrete `Point n -> Real` setting used by the viscosity
 solution development.
 -/
 
-noncomputable section
+@[expose] public noncomputable section
 
 open Filter
 

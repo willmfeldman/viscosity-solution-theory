@@ -3,8 +3,10 @@ Copyright (c) 2026 William M. Feldman. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: William M. Feldman
 -/
-import ViscositySolns.Existence.Perron.Basic
-import ViscositySolns.Comparison.ProperComparison.Compact.ConstantShiftBoundary
+module
+
+public import ViscositySolns.Existence.Perron.Basic
+public import ViscositySolns.Comparison.ProperComparison.Compact.ConstantShiftBoundary
 
 /-!
 # Adapters from concrete comparison theorems
@@ -15,7 +17,7 @@ This module keeps the concrete operator assumptions separate from Perron's
 abstract assembly.
 -/
 
-noncomputable section
+@[expose] public noncomputable section
 
 namespace ViscositySolns
 

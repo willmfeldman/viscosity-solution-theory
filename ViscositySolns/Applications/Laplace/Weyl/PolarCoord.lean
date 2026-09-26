@@ -3,8 +3,10 @@ Copyright (c) 2026 The Tau Ceti contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: The Tau Ceti contributors
 -/
-import Mathlib.MeasureTheory.Constructions.HaarToSphere
-import Mathlib.MeasureTheory.Integral.IntegralEqImproper
+module
+
+public import Mathlib.MeasureTheory.Constructions.HaarToSphere
+public import Mathlib.MeasureTheory.Integral.IntegralEqImproper
 
 /-!
 # Integration in polar coordinates (ported from TauCeti)
@@ -45,7 +47,7 @@ integral formula for an arbitrary integrable function, in both orders of integra
   (`integral_norm_rpow_neg_finrank_mul_fderiv_apply_self`) is not ported.
 -/
 
-noncomputable section
+@[expose] public noncomputable section
 
 namespace ViscositySolns
 

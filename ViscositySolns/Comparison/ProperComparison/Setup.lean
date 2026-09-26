@@ -3,21 +3,23 @@ Copyright (c) 2026 William M. Feldman. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: William M. Feldman
 -/
-import ViscositySolns.Analysis.SemiconvexJensen.Jensen
-import ViscositySolns.Comparison.CILMaximumPrinciple
-import ViscositySolns.Comparison.IshiiLemma
-import ViscositySolns.Comparison.OperatorCondition
-import ViscositySolns.Comparison.ProperComparison.Core
-import ViscositySolns.Comparison.ProperComparison.Localization
-import ViscositySolns.Operators.Comparison
-import ViscositySolns.Operators.Trace
-import ViscositySolns.Solutions
+module
+
+public import ViscositySolns.Analysis.SemiconvexJensen.Jensen
+public import ViscositySolns.Comparison.CILMaximumPrinciple
+public import ViscositySolns.Comparison.IshiiLemma
+public import ViscositySolns.Comparison.OperatorCondition
+public import ViscositySolns.Comparison.ProperComparison.Core
+public import ViscositySolns.Comparison.ProperComparison.Localization
+public import ViscositySolns.Operators.Comparison
+public import ViscositySolns.Operators.Trace
+public import ViscositySolns.Solutions
 
 /-!
 # Strictification and theorem-shaped hypotheses for proper comparison.
 -/
 
-noncomputable section
+@[expose] public noncomputable section
 
 open Filter
 open scoped MatrixOrder

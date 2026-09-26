@@ -3,9 +3,11 @@ Copyright (c) 2026 William M. Feldman. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: William M. Feldman
 -/
-import ViscositySolns.TestFunctions.Smooth
-import Mathlib.Analysis.Calculus.FDeriv.Symmetric
-import Mathlib.Analysis.Calculus.MeanValue
+module
+
+public import ViscositySolns.TestFunctions.Smooth
+public import Mathlib.Analysis.Calculus.FDeriv.Symmetric
+public import Mathlib.Analysis.Calculus.MeanValue
 
 /-!
 # Taylor bridges for test functions
@@ -14,7 +16,7 @@ This file packages Taylor-style little-oh remainders into the abstract
 second-order expansion predicate used by the viscosity solution definitions.
 -/
 
-noncomputable section
+@[expose] public noncomputable section
 
 open Filter
 open scoped ContDiff

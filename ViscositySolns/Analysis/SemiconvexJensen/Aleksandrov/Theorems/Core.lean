@@ -3,14 +3,16 @@ Copyright (c) 2026 William M. Feldman. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: William M. Feldman
 -/
-import ViscositySolns.Analysis.SemiconvexJensen.Aleksandrov.Basic.Core
-import ViscositySolns.Analysis.SemiconvexJensen.Aleksandrov.JetCalculus.Basic
+module
+
+public import ViscositySolns.Analysis.SemiconvexJensen.Aleksandrov.Basic.Core
+public import ViscositySolns.Analysis.SemiconvexJensen.Aleksandrov.JetCalculus.Basic
 
 /-!
 # Core Aleksandrov Theorem Statements
 -/
 
-noncomputable section
+@[expose] public noncomputable section
 
 open scoped ContDiff MatrixOrder Topology
 open scoped ENNReal

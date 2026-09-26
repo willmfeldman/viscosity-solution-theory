@@ -3,9 +3,11 @@ Copyright (c) 2026 William M. Feldman. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: William M. Feldman
 -/
-import ViscositySolns.Stability.HalfRelaxedLimits.Basic
-import ViscositySolns.Stability.HalfRelaxedLimits.CompactSelection
-import ViscositySolns.Stability.Limits
+module
+
+public import ViscositySolns.Stability.HalfRelaxedLimits.Basic
+public import ViscositySolns.Stability.HalfRelaxedLimits.CompactSelection
+public import ViscositySolns.Stability.Limits
 
 /-!
 # Semijet approximation for half-relaxed limits
@@ -14,7 +16,7 @@ This file proves that ordinary semijets of half-relaxed limits belong to the
 tail closures of the approximating semijet graphs.
 -/
 
-noncomputable section
+@[expose] public noncomputable section
 
 open Filter
 

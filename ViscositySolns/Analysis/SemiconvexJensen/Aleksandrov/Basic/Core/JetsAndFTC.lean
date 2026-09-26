@@ -3,21 +3,23 @@ Copyright (c) 2026 William M. Feldman. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: William M. Feldman
 -/
-import Mathlib.Analysis.Calculus.FDeriv.OfCompLeft
-import Mathlib.Analysis.Calculus.InverseFunctionTheorem.FDeriv
-import Mathlib.Analysis.Calculus.LocalExtr.Basic
-import Mathlib.Analysis.Calculus.Rademacher
-import Mathlib.Analysis.Convex.Deriv
-import Mathlib.Analysis.LocallyConvex.Separation
-import Mathlib.MeasureTheory.Function.AbsolutelyContinuous
-import Mathlib.MeasureTheory.Function.Jacobian
-import Mathlib.MeasureTheory.Integral.IntervalIntegral.AbsolutelyContinuousFun
-import Mathlib.MeasureTheory.Integral.IntervalIntegral.FundThmCalculus
-import Mathlib.MeasureTheory.Measure.Hausdorff
-import Mathlib.MeasureTheory.Measure.Lebesgue.Basic
-import Mathlib.MeasureTheory.Measure.Lebesgue.EqHaar
-import ViscositySolns.Comparison.Semiconvex
-import ViscositySolns.TestFunctions.Taylor
+module
+
+public import Mathlib.Analysis.Calculus.FDeriv.OfCompLeft
+public import Mathlib.Analysis.Calculus.InverseFunctionTheorem.FDeriv
+public import Mathlib.Analysis.Calculus.LocalExtr.Basic
+public import Mathlib.Analysis.Calculus.Rademacher
+public import Mathlib.Analysis.Convex.Deriv
+public import Mathlib.Analysis.LocallyConvex.Separation
+public import Mathlib.MeasureTheory.Function.AbsolutelyContinuous
+public import Mathlib.MeasureTheory.Function.Jacobian
+public import Mathlib.MeasureTheory.Integral.IntervalIntegral.AbsolutelyContinuousFun
+public import Mathlib.MeasureTheory.Integral.IntervalIntegral.FundThmCalculus
+public import Mathlib.MeasureTheory.Measure.Hausdorff
+public import Mathlib.MeasureTheory.Measure.Lebesgue.Basic
+public import Mathlib.MeasureTheory.Measure.Lebesgue.EqHaar
+public import ViscositySolns.Comparison.Semiconvex
+public import ViscositySolns.TestFunctions.Taylor
 
 /-!
 # Core Aleksandrov Jet Infrastructure (JetsAndFTC)
@@ -26,7 +28,7 @@ Part of the core Aleksandrov jet infrastructure development. Split from
 `Core.lean`; see the umbrella module docstring.
 -/
 
-noncomputable section
+@[expose] public noncomputable section
 
 open scoped ContDiff MatrixOrder Topology
 open scoped ENNReal

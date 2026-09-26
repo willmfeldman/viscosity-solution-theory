@@ -1,5 +1,5 @@
 name = "viscosity_solns"
-version = "0.1.0"
+version = "0.2.0"
 description = "Lean 4 formalization of viscosity-solution theory for second-order degenerate elliptic PDE"
 keywords = ["math"]
 defaultTargets = ["ViscositySolns", "ViscositySolnsComparator"]
@@ -18,7 +18,7 @@ rev = "v4.30.0"
 [[require]]
 name = "AleksandrovDifferentiability"
 git = "https://github.com/willmfeldman/aleksandrov-differentiability"
-rev = "e366fe9588032b784382d39f19389c9ad74ed431"
+rev = "730e7e9256c7e8018abad3bbc50a0598c656b61c"
 
 [[lean_lib]]
 name = "ViscositySolns"

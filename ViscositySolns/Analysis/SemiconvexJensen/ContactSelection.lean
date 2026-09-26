@@ -3,9 +3,11 @@ Copyright (c) 2026 William M. Feldman. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: William M. Feldman
 -/
-import ViscositySolns.Analysis.SemiconvexJensen.Jensen
-import ViscositySolns.Analysis.SemiconvexJensen.Strictification
-import ViscositySolns.Comparison.Semiconvex
+module
+
+public import ViscositySolns.Analysis.SemiconvexJensen.Jensen
+public import ViscositySolns.Analysis.SemiconvexJensen.Strictification
+public import ViscositySolns.Comparison.Semiconvex
 
 /-!
 # Aleksandrov--Jensen theorem for semiconvex functions (ContactSelection)
@@ -14,7 +16,7 @@ Part of the Aleksandrov--Jensen development assembling the localized Jensen
 contact-set theorem with Aleksandrov differentiability. Split from
 `SemiconvexJensen.lean`; see the umbrella module docstring.
 -/
-noncomputable section
+@[expose] public noncomputable section
 
 open scoped ContDiff MatrixOrder Topology
 open scoped Convolution

@@ -3,8 +3,10 @@ Copyright (c) 2026 William M. Feldman. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: William M. Feldman
 -/
-import ViscositySolns.Stability.HalfRelaxedLimits.Basic
-import ViscositySolns.Stability.Selection
+module
+
+public import ViscositySolns.Stability.HalfRelaxedLimits.Basic
+public import ViscositySolns.Stability.Selection
 
 /-!
 # Compact selection for half-relaxed limits
@@ -13,7 +15,7 @@ This file proves the compact maximum and minimum selection statements used to
 approximate semijets of half-relaxed limits.
 -/
 
-noncomputable section
+@[expose] public noncomputable section
 
 open Filter
 

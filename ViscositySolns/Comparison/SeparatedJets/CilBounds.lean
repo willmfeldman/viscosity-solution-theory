@@ -3,7 +3,9 @@ Copyright (c) 2026 William M. Feldman. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: William M. Feldman
 -/
-import ViscositySolns.Comparison.SeparatedJets.BlockBounds
+module
+
+public import ViscositySolns.Comparison.SeparatedJets.BlockBounds
 
 /-!
 # Second-order jets of separated functions (CilBounds)
@@ -13,7 +15,7 @@ writing a function on `R^n × R^n` as a separated difference. Split from
 `SeparatedJets.lean`; see the umbrella module docstring.
 -/
 
-noncomputable section
+@[expose] public noncomputable section
 
 open scoped MatrixOrder
 

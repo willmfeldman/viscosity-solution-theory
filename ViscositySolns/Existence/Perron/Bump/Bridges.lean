@@ -3,7 +3,9 @@ Copyright (c) 2026 William M. Feldman. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: William M. Feldman
 -/
-import ViscositySolns.Existence.Perron.Bump.Definitions
+module
+
+public import ViscositySolns.Existence.Perron.Bump.Definitions
 
 /-!
 # Perron bump interface bridges
@@ -12,7 +14,7 @@ Implications between the local and global Perron lower-envelope
 bump interfaces.
 -/
 
-noncomputable section
+@[expose] public noncomputable section
 
 open Filter
 open scoped MatrixOrder

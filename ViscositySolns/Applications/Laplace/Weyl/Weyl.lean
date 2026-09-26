@@ -3,9 +3,11 @@ Copyright (c) 2026 William M. Feldman. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: William M. Feldman
 -/
-import ViscositySolns.Applications.Laplace.Weyl.MeanValue
-import Mathlib.Analysis.Calculus.ContDiff.Convolution
-import Mathlib.Analysis.SpecialFunctions.SmoothTransition
+module
+
+public import ViscositySolns.Applications.Laplace.Weyl.MeanValue
+public import Mathlib.Analysis.Calculus.ContDiff.Convolution
+public import Mathlib.Analysis.SpecialFunctions.SmoothTransition
 
 /-!
 # Weyl's lemma
@@ -29,6 +31,8 @@ This file imports only Mathlib and the TauCeti ports `Weyl/{LaplacianInvariance,
 DuBoisReymond, PolarCoord, MeanValue}.lean`, so that it can be reused elsewhere. The mean value
 property is the TauCeti port in `Weyl/MeanValue.lean`; the code in this file is new.
 -/
+
+@[expose] public section
 
 open InnerProductSpace MeasureTheory Metric Set Filter Topology ContinuousLinearMap
 open scoped ContDiff Laplacian Convolution

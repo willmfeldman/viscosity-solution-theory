@@ -3,9 +3,11 @@ Copyright (c) 2026 William M. Feldman. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: William M. Feldman
 -/
-import ViscositySolns.Analysis.SemiconvexJensen
-import ViscositySolns.Analysis.SemiconvexJensen.Jensen
-import ViscositySolns.Comparison.ProductCoordinates
+module
+
+public import ViscositySolns.Analysis.SemiconvexJensen
+public import ViscositySolns.Analysis.SemiconvexJensen.Jensen
+public import ViscositySolns.Comparison.ProductCoordinates
 
 /-!
 # Second-order jets of separated functions (BlockBounds)
@@ -15,7 +17,7 @@ writing a function on `R^n × R^n` as a separated difference. Split from
 `SeparatedJets.lean`; see the umbrella module docstring.
 -/
 
-noncomputable section
+@[expose] public noncomputable section
 
 open scoped MatrixOrder
 

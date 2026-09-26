@@ -3,8 +3,10 @@ Copyright (c) 2026 William M. Feldman. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: William M. Feldman
 -/
-import Mathlib.Geometry.Manifold.PartitionOfUnity
-import ViscositySolns.Applications.Laplace.WeakHarmonic.Subsolution
+module
+
+public import Mathlib.Geometry.Manifold.PartitionOfUnity
+public import ViscositySolns.Applications.Laplace.WeakHarmonic.Subsolution
 
 /-!
 # Viscosity harmonic functions are weakly harmonic
@@ -22,7 +24,7 @@ the difference `χ = (χ + M θ) - M θ` of two nonnegative ones, where `θ` is 
 smooth cutoff equal to `1` on `supp χ` and `M ≥ sup |χ|`.
 -/
 
-noncomputable section
+@[expose] public noncomputable section
 
 open Filter MeasureTheory Metric Set
 open scoped Topology ContDiff Manifold

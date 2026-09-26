@@ -3,8 +3,10 @@ Copyright (c) 2026 William M. Feldman. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: William M. Feldman
 -/
-import ViscositySolns.Existence.Perron.Envelopes
-import ViscositySolns.Stability.HalfRelaxedLimits.Stability
+module
+
+public import ViscositySolns.Existence.Perron.Envelopes
+public import ViscositySolns.Stability.HalfRelaxedLimits.Stability
 
 /-!
 # Supremum stability for Perron's method
@@ -15,7 +17,7 @@ a subsolution. It may reuse the half-relaxed-limit semijet approximation
 machinery, but it must not depend on the concrete comparison proof.
 -/
 
-noncomputable section
+@[expose] public noncomputable section
 
 open Filter
 

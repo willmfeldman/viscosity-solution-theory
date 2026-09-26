@@ -3,7 +3,9 @@ Copyright (c) 2026 William M. Feldman. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: William M. Feldman
 -/
-import ViscositySolns.Existence.Perron.Bump.Contradiction
+module
+
+public import ViscositySolns.Existence.Perron.Bump.Contradiction
 
 /-!
 # Perron bump supersolution consequences
@@ -12,7 +14,7 @@ Conversion from lower-envelope contradiction interfaces to lower-envelope
 subjet inequalities and Dirichlet supersolution conclusions.
 -/
 
-noncomputable section
+@[expose] public noncomputable section
 
 open Filter
 open scoped MatrixOrder

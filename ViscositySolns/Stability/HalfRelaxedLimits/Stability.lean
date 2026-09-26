@@ -3,8 +3,10 @@ Copyright (c) 2026 William M. Feldman. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: William M. Feldman
 -/
-import ViscositySolns.Stability.HalfRelaxedLimits.Basic
-import ViscositySolns.Stability.HalfRelaxedLimits.Semijets
+module
+
+public import ViscositySolns.Stability.HalfRelaxedLimits.Basic
+public import ViscositySolns.Stability.HalfRelaxedLimits.Semijets
 
 /-!
 # Half-relaxed stability theorems
@@ -16,7 +18,7 @@ The main declarations are `ViscositySubsolution.upperHalfRelaxedLimit` and
 `ViscositySupersolution.lowerHalfRelaxedLimit`.
 -/
 
-noncomputable section
+@[expose] public noncomputable section
 
 open Filter
 

@@ -3,11 +3,13 @@ Copyright (c) 2026 The Tau Ceti contributors, William M. Feldman. All rights res
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: The Tau Ceti contributors, William M. Feldman
 -/
-import ViscositySolns.Applications.Laplace.Weyl.DuBoisReymond
-import ViscositySolns.Applications.Laplace.Weyl.LaplacianInvariance
-import ViscositySolns.Applications.Laplace.Weyl.PolarCoord
-import Mathlib.Analysis.SpecialFunctions.Sqrt
-import Mathlib.Analysis.SpecialFunctions.Pow.Deriv
+module
+
+public import ViscositySolns.Applications.Laplace.Weyl.DuBoisReymond
+public import ViscositySolns.Applications.Laplace.Weyl.LaplacianInvariance
+public import ViscositySolns.Applications.Laplace.Weyl.PolarCoord
+public import Mathlib.Analysis.SpecialFunctions.Sqrt
+public import Mathlib.Analysis.SpecialFunctions.Pow.Deriv
 
 /-!
 # The mean-value property of continuous weakly harmonic functions
@@ -53,6 +55,8 @@ lemma, and `Φ R = Φ 0 = μ.toSphere(S) • u 0` by continuity. No divergence t
   `harmonicOnNhd_comp_add_right_closedBall_zero_iff`. The ball forms are not ported. New
   (W. M. Feldman): `weaklyHarmonic_comp_add_right`, `integral_radial_smul_eq_of_weaklyHarmonic`.
 -/
+
+@[expose] public section
 
 open InnerProductSpace MeasureTheory Metric Set Filter Topology
 open scoped ContDiff Laplacian

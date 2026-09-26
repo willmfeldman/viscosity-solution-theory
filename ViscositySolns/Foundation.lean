@@ -3,11 +3,13 @@ Copyright (c) 2026 William M. Feldman. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: William M. Feldman
 -/
-import Mathlib.Analysis.Asymptotics.Defs
-import Mathlib.Analysis.Matrix.Order
-import Mathlib.Algebra.Module.TransferInstance
-import Mathlib.Tactic.Linarith
-import Mathlib.Tactic.Ring
+module
+
+public import Mathlib.Analysis.Asymptotics.Defs
+public import Mathlib.Analysis.Matrix.Order
+public import Mathlib.Algebra.Module.TransferInstance
+public import Mathlib.Tactic.Linarith
+public import Mathlib.Tactic.Ring
 
 /-!
 # Foundational definitions for viscosity solutions
@@ -16,7 +18,7 @@ This file contains the ambient coordinate model, jets, quadratic models, and
 abstract second-order expansion predicates used throughout the formalization.
 -/
 
-noncomputable section
+@[expose] public noncomputable section
 
 open Filter
 open Matrix

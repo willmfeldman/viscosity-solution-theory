@@ -3,11 +3,13 @@ Copyright (c) 2026 William M. Feldman. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: William M. Feldman
 -/
-import Mathlib.Analysis.Calculus.Gradient.Basic
-import Mathlib.Analysis.Calculus.MeanValue
-import Mathlib.Analysis.Calculus.ContDiff.Comp
-import Mathlib.Analysis.InnerProductSpace.PiL2
-import Mathlib.Topology.MetricSpace.Pseudo.Lemmas
+module
+
+public import Mathlib.Analysis.Calculus.Gradient.Basic
+public import Mathlib.Analysis.Calculus.MeanValue
+public import Mathlib.Analysis.Calculus.ContDiff.Comp
+public import Mathlib.Analysis.InnerProductSpace.PiL2
+public import Mathlib.Topology.MetricSpace.Pseudo.Lemmas
 
 /-!
 # Uniform exterior sphere condition
@@ -37,7 +39,7 @@ closed ball containing the `1`-neighbourhood of `closure U`. At a boundary point
 `x ∉ closure U`.
 -/
 
-noncomputable section
+@[expose] public noncomputable section
 
 open Metric Set
 open scoped Gradient RealInnerProductSpace

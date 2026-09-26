@@ -3,7 +3,9 @@ Copyright (c) 2026 William M. Feldman. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: William M. Feldman
 -/
-import ViscositySolns.Existence.Perron.ComparisonAdapter
+module
+
+public import ViscositySolns.Existence.Perron.ComparisonAdapter
 
 /-!
 # A concrete comparison example
@@ -16,7 +18,7 @@ not supply the barrier or trace hypotheses needed by the packaged Perron
 existence theorem.
 -/
 
-noncomputable section
+@[expose] public noncomputable section
 
 namespace ViscositySolns
 

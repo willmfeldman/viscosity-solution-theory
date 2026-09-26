@@ -3,8 +3,10 @@ Copyright (c) 2026 William M. Feldman. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: William M. Feldman
 -/
-import ViscositySolns
-import ViscositySolns.Existence
+module
+
+public import ViscositySolns
+public import ViscositySolns.Existence
 
 /-!
 # Comparator challenges
@@ -24,7 +26,7 @@ same headline statements over `Mathlib` only; this file guards the library
 side of that surface on every build.
 -/
 
-noncomputable section
+@[expose] public noncomputable section
 
 open Filter
 

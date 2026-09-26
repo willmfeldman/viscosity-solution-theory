@@ -3,9 +3,11 @@ Copyright (c) 2026 William M. Feldman. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: William M. Feldman
 -/
-import ViscositySolns.Comparison.IshiiLemma
-import ViscositySolns.Comparison.Neighborhoods
-import ViscositySolns.Comparison.SeparatedJets
+module
+
+public import ViscositySolns.Comparison.IshiiLemma
+public import ViscositySolns.Comparison.Neighborhoods
+public import ViscositySolns.Comparison.SeparatedJets
 
 /-!
 # The CIL maximum principle for quadratic test functions
@@ -17,7 +19,7 @@ each base point. The coordinate quadratic penalty is the main intended
 instance.
 -/
 
-noncomputable section
+@[expose] public noncomputable section
 
 open scoped MatrixOrder
 

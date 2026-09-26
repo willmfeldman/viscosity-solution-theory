@@ -3,8 +3,10 @@ Copyright (c) 2026 William M. Feldman. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: William M. Feldman
 -/
-import ViscositySolns.Semijets.Definitions
-import ViscositySolns.Semijets.Calculus
+module
+
+public import ViscositySolns.Semijets.Definitions
+public import ViscositySolns.Semijets.Calculus
 
 /-!
 # Closed second-order semijets
@@ -13,7 +15,7 @@ This file contains closed superjets, closed subjets, and closure-induction
 principles for the closed semijet graph.
 -/
 
-noncomputable section
+@[expose] public noncomputable section
 
 open Filter
 open scoped MatrixOrder

@@ -3,7 +3,9 @@ Copyright (c) 2026 William M. Feldman. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: William M. Feldman
 -/
-import ViscositySolns.Operators.Continuity
+module
+
+public import ViscositySolns.Operators.Continuity
 
 /-!
 # Basic examples of proper operators
@@ -13,7 +15,7 @@ monotonicity, continuity, and boundedness hypotheses used in the viscosity
 solution theory.
 -/
 
-noncomputable section
+@[expose] public noncomputable section
 
 open scoped MatrixOrder
 

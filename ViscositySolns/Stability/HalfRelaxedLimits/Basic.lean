@@ -3,8 +3,10 @@ Copyright (c) 2026 William M. Feldman. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: William M. Feldman
 -/
-import Mathlib.Topology.Order.LiminfLimsup
-import ViscositySolns.Foundation
+module
+
+public import Mathlib.Topology.Order.LiminfLimsup
+public import ViscositySolns.Foundation
 
 /-!
 # Basic half-relaxed limit definitions and estimates
@@ -13,7 +15,7 @@ This file contains the definitions of upper and lower half-relaxed limits and
 basic estimates derived from the limsup and liminf definitions.
 -/
 
-noncomputable section
+@[expose] public noncomputable section
 
 open Filter
 

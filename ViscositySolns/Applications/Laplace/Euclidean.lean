@@ -3,10 +3,12 @@ Copyright (c) 2026 William M. Feldman. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: William M. Feldman
 -/
-import ViscositySolns.Applications.Laplace.Geometry
-import ViscositySolns.Applications.Laplace.ExteriorSphere
-import ViscositySolns.Applications.Laplace.Weyl.MeanValue
-import ViscositySolns.Applications.Laplace.WeakHarmonic.SecondDifference
+module
+
+public import ViscositySolns.Applications.Laplace.Geometry
+public import ViscositySolns.Applications.Laplace.ExteriorSphere
+public import ViscositySolns.Applications.Laplace.Weyl.MeanValue
+public import ViscositySolns.Applications.Laplace.WeakHarmonic.SecondDifference
 
 /-!
 # Transport between `EuclideanSpace ℝ (Fin d)` and `Point d`
@@ -28,7 +30,7 @@ boundedness, and Lebesgue measure), and it converts Euclidean distances into
   side.
 -/
 
-noncomputable section
+@[expose] public noncomputable section
 
 open MeasureTheory Set
 open scoped Laplacian ContDiff

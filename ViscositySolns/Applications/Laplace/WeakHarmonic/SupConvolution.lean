@@ -3,8 +3,10 @@ Copyright (c) 2026 William M. Feldman. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: William M. Feldman
 -/
-import ViscositySolns.Applications.Laplace.WeakHarmonic.SecondDifference
-import ViscositySolns.Analysis.SemiconvexJensen.Aleksandrov.Basic.Core.JetsAndFTC
+module
+
+public import ViscositySolns.Applications.Laplace.WeakHarmonic.SecondDifference
+public import ViscositySolns.Analysis.SemiconvexJensen.Aleksandrov.Basic.Core.JetsAndFTC
 
 /-!
 # Second differences of semiconvex functions and sup-convolutions
@@ -26,7 +28,7 @@ subharmonic:
   uniformly on `K` as `λ → ∞` (`exists_lambda_abs_compactSupConvolution_sub_le`).
 -/
 
-noncomputable section
+@[expose] public noncomputable section
 
 open Filter Metric Set Asymptotics
 open scoped Topology

@@ -3,8 +3,10 @@ Copyright (c) 2026 William M. Feldman. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: William M. Feldman
 -/
-import ViscositySolns.Comparison.MatrixInequalities
-import ViscositySolns.Semijets.Closure
+module
+
+public import ViscositySolns.Comparison.MatrixInequalities
+public import ViscositySolns.Semijets.Closure
 
 /-!
 # Declarations for the finite-dimensional maximum principle
@@ -21,7 +23,7 @@ belongs to the closed subjet of `v` at `y`, and the matrices `X` and `Y`
 satisfy the matrix inequality supplied by the maximum principle.
 -/
 
-noncomputable section
+@[expose] public noncomputable section
 
 open scoped MatrixOrder
 

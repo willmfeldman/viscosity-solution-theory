@@ -3,8 +3,10 @@ Copyright (c) 2026 William M. Feldman. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: William M. Feldman
 -/
-import ViscositySolns.Existence.Perron.Bump.Contradiction
-import ViscositySolns.Existence.Perron.Method.Core
+module
+
+public import ViscositySolns.Existence.Perron.Bump.Contradiction
+public import ViscositySolns.Existence.Perron.Method.Core
 
 /-!
 # Upper-half-relaxed Perron interfaces
@@ -12,7 +14,7 @@ import ViscositySolns.Existence.Perron.Method.Core
 Perron existence theorems using a supplied upper-half-relaxed upper-side realization.
 -/
 
-noncomputable section
+@[expose] public noncomputable section
 
 open Filter
 

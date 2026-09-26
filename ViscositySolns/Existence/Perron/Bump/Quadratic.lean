@@ -3,9 +3,11 @@ Copyright (c) 2026 William M. Feldman. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: William M. Feldman
 -/
-import ViscositySolns.Existence.Perron.Basic
-import ViscositySolns.Stability.Max
-import ViscositySolns.TestFunctions.Smooth
+module
+
+public import ViscositySolns.Existence.Perron.Basic
+public import ViscositySolns.Stability.Max
+public import ViscositySolns.TestFunctions.Smooth
 
 /-!
 # Perron quadratic bump certification
@@ -13,7 +15,7 @@ import ViscositySolns.TestFunctions.Smooth
 Quadratic and max-patching lemmas used at the beginning of the Perron bump construction.
 -/
 
-noncomputable section
+@[expose] public noncomputable section
 
 open Filter
 open scoped MatrixOrder

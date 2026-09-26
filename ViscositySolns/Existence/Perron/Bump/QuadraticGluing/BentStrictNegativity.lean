@@ -3,11 +3,13 @@ Copyright (c) 2026 William M. Feldman. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: William M. Feldman
 -/
-import ViscositySolns.Existence.Perron.Bump.Contradiction
-import ViscositySolns.Existence.Perron.Bump.LiftedQuadratic
-import ViscositySolns.Existence.Perron.Bump.QuadraticGluing.AnnulusSelectionPatches
-import ViscositySolns.Existence.Perron.Bump.QuadraticGluing.CompactInactivePatches
-import ViscositySolns.Existence.Perron.Bump.QuadraticGluing.GluingSkeleton
+module
+
+public import ViscositySolns.Existence.Perron.Bump.Contradiction
+public import ViscositySolns.Existence.Perron.Bump.LiftedQuadratic
+public import ViscositySolns.Existence.Perron.Bump.QuadraticGluing.AnnulusSelectionPatches
+public import ViscositySolns.Existence.Perron.Bump.QuadraticGluing.CompactInactivePatches
+public import ViscositySolns.Existence.Perron.Bump.QuadraticGluing.GluingSkeleton
 
 /-!
 # Quadratic gluing data for the Perron bump step (BentStrictNegativity)
@@ -17,7 +19,7 @@ supplied by operator continuity to the strict local max-patch formulation.
 Split from `QuadraticGluing.lean`; see the umbrella module docstring.
 -/
 
-noncomputable section
+@[expose] public noncomputable section
 
 open Filter
 open scoped MatrixOrder

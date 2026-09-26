@@ -3,11 +3,13 @@ Copyright (c) 2026 William M. Feldman. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: William M. Feldman
 -/
-import ViscositySolns.Foundation
-import Mathlib.Analysis.Calculus.TangentCone.Real
-import Mathlib.Analysis.Normed.Module.Convex
-import Mathlib.Analysis.Normed.Module.RCLike.Real
-import Mathlib.Topology.MetricSpace.ProperSpace
+module
+
+public import ViscositySolns.Foundation
+public import Mathlib.Analysis.Calculus.TangentCone.Real
+public import Mathlib.Analysis.Normed.Module.Convex
+public import Mathlib.Analysis.Normed.Module.RCLike.Real
+public import Mathlib.Topology.MetricSpace.ProperSpace
 
 /-!
 # Compact neighborhoods for local stability
@@ -21,7 +23,7 @@ it adds the convexity and differentiability hypotheses consumed by the smooth
 selection lemmas.
 -/
 
-noncomputable section
+@[expose] public noncomputable section
 
 open Filter
 

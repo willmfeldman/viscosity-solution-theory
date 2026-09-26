@@ -3,9 +3,11 @@ Copyright (c) 2026 William M. Feldman. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: William M. Feldman
 -/
-import ViscositySolns.Applications.Laplace.WeakHarmonic.SupConvolution
-import ViscositySolns.Analysis.SemiconvexJensen.ExternalAleksandrov
-import ViscositySolns.Applications.Laplace.Comparison
+module
+
+public import ViscositySolns.Applications.Laplace.WeakHarmonic.SupConvolution
+public import ViscositySolns.Analysis.SemiconvexJensen.ExternalAleksandrov
+public import ViscositySolns.Applications.Laplace.Comparison
 
 /-!
 # Viscosity subharmonic functions are distributionally subharmonic
@@ -29,7 +31,7 @@ The proof follows the sup-convolution route:
 4. Since `w → u` uniformly on `K` as `λ → ∞`, `0 ≤ ∫ Δχ · u`.
 -/
 
-noncomputable section
+@[expose] public noncomputable section
 
 open Filter MeasureTheory Metric Set
 open scoped Topology ENNReal

@@ -3,8 +3,10 @@ Copyright (c) 2026 William M. Feldman. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: William M. Feldman
 -/
-import ViscositySolns.Existence.Perron.Bump.Definitions
-import ViscositySolns.Existence.Perron.Envelopes
+module
+
+public import ViscositySolns.Existence.Perron.Bump.Definitions
+public import ViscositySolns.Existence.Perron.Envelopes
 
 /-!
 # Lifted quadratic data for the Perron bump step
@@ -13,7 +15,7 @@ Continuity packages for the lifted quadratic produced at a failed lower
 Perron-envelope subjet inequality.
 -/
 
-noncomputable section
+@[expose] public noncomputable section
 
 open Filter
 open scoped MatrixOrder

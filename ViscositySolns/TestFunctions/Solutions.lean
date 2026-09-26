@@ -3,9 +3,11 @@ Copyright (c) 2026 William M. Feldman. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: William M. Feldman
 -/
-import ViscositySolns.Solutions
-import ViscositySolns.TestFunctions.Smooth
-import ViscositySolns.TestFunctions.Taylor
+module
+
+public import ViscositySolns.Solutions
+public import ViscositySolns.TestFunctions.Smooth
+public import ViscositySolns.TestFunctions.Taylor
 
 /-!
 # Smooth test functions for viscosity solutions
@@ -14,7 +16,7 @@ This file packages the Taylor bridge for `C^2` test functions into the
 subsolution and supersolution inequalities.
 -/
 
-noncomputable section
+@[expose] public noncomputable section
 
 open scoped ContDiff MatrixOrder
 

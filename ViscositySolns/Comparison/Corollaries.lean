@@ -3,8 +3,10 @@ Copyright (c) 2026 William M. Feldman. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: William M. Feldman
 -/
-import ViscositySolns.Solutions
-import ViscositySolns.Comparison.ProperComparison.Core
+module
+
+public import ViscositySolns.Solutions
+public import ViscositySolns.Comparison.ProperComparison.Core
 
 /-!
 # Corollaries of comparison
@@ -12,7 +14,7 @@ import ViscositySolns.Comparison.ProperComparison.Core
 This file records elementary consequences of the comparison theorems.
 -/
 
-noncomputable section
+@[expose] public noncomputable section
 
 namespace ViscositySolns
 

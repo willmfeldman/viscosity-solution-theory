@@ -3,7 +3,9 @@ Copyright (c) 2026 William M. Feldman. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: William M. Feldman
 -/
-import ViscositySolns.Existence.Perron.Bump.GlobalBridges
+module
+
+public import ViscositySolns.Existence.Perron.Bump.GlobalBridges
 
 /-!
 # Perron bump contradiction
@@ -12,7 +14,7 @@ Conversion from bump interfaces to the lower-envelope contradiction, subjet
 inequality, and supersolution conclusion.
 -/
 
-noncomputable section
+@[expose] public noncomputable section
 
 open Filter
 open scoped MatrixOrder

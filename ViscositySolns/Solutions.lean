@@ -3,10 +3,12 @@ Copyright (c) 2026 William M. Feldman. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: William M. Feldman
 -/
-import ViscositySolns.Operators.Continuity
-import Mathlib.Topology.Semicontinuity.Basic
-import Mathlib.Tactic.Linarith
-import ViscositySolns.Semijets.Closure
+module
+
+public import ViscositySolns.Operators.Continuity
+public import Mathlib.Topology.Semicontinuity.Basic
+public import Mathlib.Tactic.Linarith
+public import ViscositySolns.Semijets.Closure
 
 /-!
 # Viscosity subsolutions, supersolutions, and solutions
@@ -15,7 +17,7 @@ This file contains viscosity solution predicates, their test-function
 formulation, closed-semijet consequences, and solution-level negation duality.
 -/
 
-noncomputable section
+@[expose] public noncomputable section
 
 open Filter
 open scoped MatrixOrder

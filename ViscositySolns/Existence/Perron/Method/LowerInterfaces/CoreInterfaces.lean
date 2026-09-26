@@ -3,11 +3,13 @@ Copyright (c) 2026 William M. Feldman. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: William M. Feldman
 -/
-import ViscositySolns.Existence.Perron.Bump.QuadraticGluing.CertifiedPatches
-import ViscositySolns.Existence.Perron.Bump.QuadraticGluing.OpenBumpMaxPatches
-import ViscositySolns.Existence.Perron.Bump.QuadraticGluing.OpenBumpPatches
-import ViscositySolns.Existence.Perron.Bump.Supersolution
-import ViscositySolns.Existence.Perron.Method.PerronFamily
+module
+
+public import ViscositySolns.Existence.Perron.Bump.QuadraticGluing.CertifiedPatches
+public import ViscositySolns.Existence.Perron.Bump.QuadraticGluing.OpenBumpMaxPatches
+public import ViscositySolns.Existence.Perron.Bump.QuadraticGluing.OpenBumpPatches
+public import ViscositySolns.Existence.Perron.Bump.Supersolution
+public import ViscositySolns.Existence.Perron.Method.PerronFamily
 
 /-!
 # Perron-family lower conclusion interfaces (CoreInterfaces)
@@ -17,7 +19,7 @@ upper side and lower-side conclusions from the bump argument. Split from
 `LowerInterfaces.lean`; see the umbrella module docstring.
 -/
 
-noncomputable section
+@[expose] public noncomputable section
 
 open Filter
 

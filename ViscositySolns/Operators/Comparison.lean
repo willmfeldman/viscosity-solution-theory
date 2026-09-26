@@ -3,9 +3,11 @@ Copyright (c) 2026 William M. Feldman. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: William M. Feldman
 -/
-import ViscositySolns.Operators.SupInf
-import Mathlib.Topology.Order.Lattice
-import ViscositySolns.Operators.Examples
+module
+
+public import ViscositySolns.Operators.SupInf
+public import Mathlib.Topology.Order.Lattice
+public import ViscositySolns.Operators.Examples
 
 /-!
 # Operator hypotheses for comparison
@@ -17,7 +19,7 @@ later instantiate that parameter with the block-matrix relation obtained from
 the maximum principle for semicontinuous functions.
 -/
 
-noncomputable section
+@[expose] public noncomputable section
 
 open Filter
 open scoped MatrixOrder

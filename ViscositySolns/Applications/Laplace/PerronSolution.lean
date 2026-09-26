@@ -3,8 +3,10 @@ Copyright (c) 2026 William M. Feldman. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: William M. Feldman
 -/
-import ViscositySolns.Applications.Laplace.Comparison
-import ViscositySolns.Existence.Perron.Method.StrictBoundary.EnvelopeAssembly
+module
+
+public import ViscositySolns.Applications.Laplace.Comparison
+public import ViscositySolns.Existence.Perron.Method.StrictBoundary.EnvelopeAssembly
 
 /-!
 # The Perron solution of the Laplace Dirichlet problem
@@ -17,7 +19,7 @@ principle, a viscosity solution `w` of `-Δw = 0` on `C` that is continuous on
 `closure C`, equals `g` on `frontier C`, and lies between the barriers.
 -/
 
-noncomputable section
+@[expose] public noncomputable section
 
 open Filter Topology
 

@@ -3,11 +3,13 @@ Copyright (c) 2026 The Tau Ceti contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: The Tau Ceti contributors
 -/
-import Mathlib.Analysis.Distribution.AEEqOfIntegralContDiff
-import Mathlib.Analysis.Calculus.BumpFunction.Normed
-import Mathlib.MeasureTheory.Integral.IntervalIntegral.FundThmCalculus
-import Mathlib.MeasureTheory.Measure.Lebesgue.Basic
-import Mathlib.Analysis.Calculus.ContDiff.Deriv
+module
+
+public import Mathlib.Analysis.Distribution.AEEqOfIntegralContDiff
+public import Mathlib.Analysis.Calculus.BumpFunction.Normed
+public import Mathlib.MeasureTheory.Integral.IntervalIntegral.FundThmCalculus
+public import Mathlib.MeasureTheory.Measure.Lebesgue.Basic
+public import Mathlib.Analysis.Calculus.ContDiff.Deriv
 
 /-!
 # The du Bois-Reymond lemma on an interval (ported from TauCeti)
@@ -42,6 +44,8 @@ everywhere by continuity.
   removed; namespace `TauCeti` → `ViscositySolns.Analysis`; the two theorems are no longer
   stated in the root namespaces `ContDiff`/`ContinuousOn`.
 -/
+
+@[expose] public section
 
 namespace ViscositySolns
 

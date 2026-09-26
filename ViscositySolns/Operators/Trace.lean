@@ -3,8 +3,10 @@ Copyright (c) 2026 William M. Feldman. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: William M. Feldman
 -/
-import Mathlib.LinearAlgebra.Matrix.Trace
-import ViscositySolns.Operators.Linear
+module
+
+public import Mathlib.LinearAlgebra.Matrix.Trace
+public import ViscositySolns.Operators.Linear
 
 /-!
 # Trace-form linear second-order operators
@@ -19,7 +21,7 @@ separate future theorem: if `A x` is positive semidefinite and `Y ≤ X`, then
 `- trace ((A x) * X) ≤ - trace ((A x) * Y)`.
 -/
 
-noncomputable section
+@[expose] public noncomputable section
 
 open Matrix
 open scoped MatrixOrder

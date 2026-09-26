@@ -3,7 +3,9 @@ Copyright (c) 2026 William M. Feldman. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: William M. Feldman
 -/
-import ViscositySolns.Analysis.SemiconvexJensen.Aleksandrov.Basic.Core
+module
+
+public import ViscositySolns.Analysis.SemiconvexJensen.Aleksandrov.Basic.Core
 
 /-!
 # Strictification and jet bridges for the Aleksandrov--Jensen argument (CoordinateQuartic)
@@ -14,7 +16,7 @@ development used before the contact-set and approximation arguments in
 module docstring.
 -/
 
-noncomputable section
+@[expose] public noncomputable section
 
 open scoped ContDiff MatrixOrder Topology
 open scoped ENNReal

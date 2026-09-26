@@ -3,9 +3,11 @@ Copyright (c) 2026 William M. Feldman. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: William M. Feldman
 -/
-import AleksandrovDifferentiability.Foundation.SecondOrder
-import AleksandrovDifferentiability.Statements.Aleksandrov.Final
-import ViscositySolns.Analysis.SemiconvexJensen.Aleksandrov.Theorems.Core
+module
+
+public import AleksandrovDifferentiability.Foundation.SecondOrder
+public import AleksandrovDifferentiability.Statements.Aleksandrov.Final
+public import ViscositySolns.Analysis.SemiconvexJensen.Aleksandrov.Theorems.Core
 
 /-!
 # Adapter from the external Aleksandrov formalization
@@ -15,7 +17,7 @@ This module connects the completed convex Aleksandrov theorem in the sibling
 comparison proof in this project.
 -/
 
-noncomputable section
+@[expose] public noncomputable section
 
 open MeasureTheory
 open scoped Topology ENNReal

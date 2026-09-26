@@ -3,11 +3,13 @@ Copyright (c) 2026 William M. Feldman. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: William M. Feldman
 -/
-import ViscositySolns.Analysis.SemiconvexJensen.Jensen
-import ViscositySolns.Analysis.SemiconvexJensen.Strictification
-import ViscositySolns.Comparison.Semiconvex
-import ViscositySolns.Analysis.SemiconvexJensen.ContactSelection
-import ViscositySolns.Analysis.SemiconvexJensen.MatrixConclusion
+module
+
+public import ViscositySolns.Analysis.SemiconvexJensen.Jensen
+public import ViscositySolns.Analysis.SemiconvexJensen.Strictification
+public import ViscositySolns.Comparison.Semiconvex
+public import ViscositySolns.Analysis.SemiconvexJensen.ContactSelection
+public import ViscositySolns.Analysis.SemiconvexJensen.MatrixConclusion
 
 /-!
 # Aleksandrov--Jensen theorem for semiconvex functions
@@ -21,3 +23,5 @@ comparison proof. The remaining development lives in the
 `ContactSelection` and `MatrixConclusion` submodules; this file re-exports
 both of them.
 -/
+
+@[expose] public section

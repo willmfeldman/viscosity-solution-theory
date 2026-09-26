@@ -3,8 +3,10 @@ Copyright (c) 2026 William M. Feldman. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: William M. Feldman
 -/
-import ViscositySolns.TestFunctions.Solutions
-import ViscositySolns.Operators.Proper
+module
+
+public import ViscositySolns.TestFunctions.Solutions
+public import ViscositySolns.Operators.Proper
 
 /-!
 # Smooth test-function characterization of viscosity solutions
@@ -32,7 +34,7 @@ test-function inequality to the epsilon-inflated quadratic models
 - `viscositySupersolution_iff_smoothTestFunctionSupersolution`
 -/
 
-noncomputable section
+@[expose] public noncomputable section
 
 open Filter
 open Matrix

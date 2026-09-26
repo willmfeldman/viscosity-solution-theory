@@ -3,11 +3,13 @@ Copyright (c) 2026 William M. Feldman. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: William M. Feldman
 -/
-import ViscositySolns.Applications.Laplace.Geometry
-import ViscositySolns.Semijets.Calculus.QuadraticControl
-import Mathlib.Analysis.Calculus.MeanValue
-import Mathlib.Analysis.SpecialFunctions.ExpDeriv
-import Mathlib.Analysis.InnerProductSpace.PiL2
+module
+
+public import ViscositySolns.Applications.Laplace.Geometry
+public import ViscositySolns.Semijets.Calculus.QuadraticControl
+public import Mathlib.Analysis.Calculus.MeanValue
+public import Mathlib.Analysis.SpecialFunctions.ExpDeriv
+public import Mathlib.Analysis.InnerProductSpace.PiL2
 
 /-!
 # Radial test functions for Laplace barriers
@@ -29,7 +31,7 @@ the Laplace operator.
   point have ordered traces.
 -/
 
-noncomputable section
+@[expose] public noncomputable section
 
 open Filter Topology Asymptotics
 open scoped MatrixOrder

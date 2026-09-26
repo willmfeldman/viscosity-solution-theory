@@ -3,9 +3,11 @@ Copyright (c) 2026 The Tau Ceti contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: The Tau Ceti contributors
 -/
-import Mathlib.Analysis.InnerProductSpace.Calculus
-import Mathlib.Analysis.InnerProductSpace.Laplacian
-import Mathlib.Analysis.InnerProductSpace.PiL2
+module
+
+public import Mathlib.Analysis.InnerProductSpace.Calculus
+public import Mathlib.Analysis.InnerProductSpace.Laplacian
+public import Mathlib.Analysis.InnerProductSpace.PiL2
 
 /-!
 # Invariance of the Laplacian and radial Laplacians (ported from TauCeti)
@@ -36,6 +38,8 @@ The invariance statements need no differentiability hypothesis on `f`.
   removed; namespace `TauCeti` → `ViscositySolns.Analysis`; the affine-isometry, homothety and
   `laplacian_norm_sq` statements are not ported (not needed here).
 -/
+
+@[expose] public section
 
 open InnerProductSpace
 open scoped Laplacian

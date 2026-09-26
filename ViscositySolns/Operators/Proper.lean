@@ -3,7 +3,9 @@ Copyright (c) 2026 William M. Feldman. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: William M. Feldman
 -/
-import ViscositySolns.Foundation
+module
+
+public import ViscositySolns.Foundation
 
 /-!
 # Proper and degenerate elliptic operators
@@ -13,7 +15,7 @@ second-order operators, together with small operator-level constructions used
 by the solution theory.
 -/
 
-noncomputable section
+@[expose] public noncomputable section
 
 open scoped MatrixOrder
 

@@ -3,8 +3,10 @@ Copyright (c) 2026 William M. Feldman. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: William M. Feldman
 -/
-import ViscositySolns.Comparison.OperatorCondition.IshiiCondition
-import ViscositySolns.Comparison.OperatorCondition.TraceForm
+module
+
+public import ViscositySolns.Comparison.OperatorCondition.IshiiCondition
+public import ViscositySolns.Comparison.OperatorCondition.TraceForm
 
 /-!
 # Operator comparison condition for the Ishii matrix inequality
@@ -14,3 +16,5 @@ matrix relation used in the quadratic doubling-of-variables argument. The
 development lives in the `OperatorCondition/` submodules; this file re-exports
 all of them.
 -/
+
+@[expose] public section

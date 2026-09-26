@@ -3,7 +3,9 @@ Copyright (c) 2026 William M. Feldman. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: William M. Feldman
 -/
-import ViscositySolns.Solutions
+module
+
+public import ViscositySolns.Solutions
 
 /-!
 # Stability under finite maxima and minima
@@ -12,7 +14,7 @@ This file proves the first finite lattice stability results for viscosity
 solutions: maxima of subsolutions and minima of supersolutions.
 -/
 
-noncomputable section
+@[expose] public noncomputable section
 
 namespace ViscositySolns
 

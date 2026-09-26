@@ -3,9 +3,11 @@ Copyright (c) 2026 William M. Feldman. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: William M. Feldman
 -/
-import ViscositySolns.Applications.Laplace.Barriers.Radial
-import ViscositySolns.Applications.Laplace.Comparison
-import ViscositySolns.Existence.Perron.Envelopes
+module
+
+public import ViscositySolns.Applications.Laplace.Barriers.Radial
+public import ViscositySolns.Applications.Laplace.Comparison
+public import ViscositySolns.Existence.Perron.Envelopes
 
 /-!
 # Exterior-sphere barriers for the Laplace operator
@@ -34,7 +36,7 @@ nonpositive Laplacian because `2 α |x - c|² ≥ n + 1`. Hence every subjet of
 *Lower barrier.* `-U_{-g}`, using that the Laplace operator is self-dual.
 -/
 
-noncomputable section
+@[expose] public noncomputable section
 
 open Filter Topology
 

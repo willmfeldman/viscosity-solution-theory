@@ -3,8 +3,10 @@ Copyright (c) 2026 William M. Feldman. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: William M. Feldman
 -/
-import ViscositySolns.Existence.Perron.Bump.Quadratic
-import ViscositySolns.Existence.Perron.Envelopes
+module
+
+public import ViscositySolns.Existence.Perron.Bump.Quadratic
+public import ViscositySolns.Existence.Perron.Envelopes
 
 /-!
 # Perron bump definitions
@@ -13,7 +15,7 @@ Local and global formulations of the Perron lower-envelope bump input,
 plus quadratic bump certification interfaces.
 -/
 
-noncomputable section
+@[expose] public noncomputable section
 
 open Filter
 open scoped MatrixOrder

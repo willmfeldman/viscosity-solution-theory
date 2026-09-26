@@ -3,12 +3,14 @@ Copyright (c) 2026 William M. Feldman. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: William M. Feldman
 -/
-import ViscositySolns.Existence.Perron.Bump.Contradiction
-import ViscositySolns.Existence.Perron.Bump.LiftedQuadratic
-import ViscositySolns.Existence.Perron.Bump.QuadraticGluing.AnnulusSelectionPatches
-import ViscositySolns.Existence.Perron.Bump.QuadraticGluing.CompactInactivePatches
-import ViscositySolns.Existence.Perron.Bump.QuadraticGluing.GluingSkeleton
-import ViscositySolns.Existence.Perron.Bump.QuadraticGluing.OuterSemijetPatches
+module
+
+public import ViscositySolns.Existence.Perron.Bump.Contradiction
+public import ViscositySolns.Existence.Perron.Bump.LiftedQuadratic
+public import ViscositySolns.Existence.Perron.Bump.QuadraticGluing.AnnulusSelectionPatches
+public import ViscositySolns.Existence.Perron.Bump.QuadraticGluing.CompactInactivePatches
+public import ViscositySolns.Existence.Perron.Bump.QuadraticGluing.GluingSkeleton
+public import ViscositySolns.Existence.Perron.Bump.QuadraticGluing.OuterSemijetPatches
 
 /-!
 # Quadratic gluing data for the Perron bump step (CertifiedPatches)
@@ -16,7 +18,7 @@ import ViscositySolns.Existence.Perron.Bump.QuadraticGluing.OuterSemijetPatches
 This module connects lifted quadratics to strict local max patches.
 -/
 
-noncomputable section
+@[expose] public noncomputable section
 
 open Filter
 open scoped MatrixOrder
@@ -208,8 +210,7 @@ theorem PerronLowerEnvelopeBentQuadraticSourceAnnulusSelectionPatch.strictPatch
     (hCopen : IsOpen C) :
     PerronLowerEnvelopeStrictPatch C boundary F g B := by
   intro x hx J hJ hneg
-  exact (hpatch x hx J hJ hneg).strictPatchAt
-    hcomparison hFell hFinv hCopen
+  exact (hpatch x hx J hJ hneg).strictPatchAt hcomparison hFell hFinv hCopen
 
 /--
 Lower-barrier exterior data supplies exterior compact-inactive data.
@@ -804,8 +805,7 @@ theorem PerronLowerEnvelopeLocalQuadraticBumpAt.maxPatchAt_of_compactInactiveSub
   have hpatched : PerronClass C boundary F g B.lower B.upper patched :=
     ⟨hdirichlet, hlower, hupper⟩
   refine ⟨κ, V, old, hκpos, hV, hWltq, hqCont, hneg, hold, ?_⟩
-  simpa [patched, q]
-    using hpatched
+  simpa [patched, q] using hpatched
 
 /--
 Global local lifted-quadratic data plus compact-inactive local
