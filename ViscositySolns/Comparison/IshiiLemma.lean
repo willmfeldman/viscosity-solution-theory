@@ -88,7 +88,7 @@ theorem hasQuadraticPenaltyLocalMaximumOn_of_isMaxOn_doubledObjective
     HasQuadraticPenaltyLocalMaximumOn C D u v α x y := by
   refine ⟨hxy, ?_⟩
   simpa [doubledObjective, HasQuadraticPenaltyLocalMaximumOn, HasDoubledLocalMaximumOn] using
-    hmax.localize
+    hmax.isLocalMaxOn
 
 /--
 If the doubled objective attains a maximum on `K × L`, then there are

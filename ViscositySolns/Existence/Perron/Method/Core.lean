@@ -155,18 +155,18 @@ theorem PerronMethodExistenceTheorem.of_viscosityEnvelopes_of_localBounded
       (upperEnvelope C (perronEnvelope C boundary F g B.lower B.upper)) := by
   have hupperSemi := upperSemicontinuousOn_upperEnvelope_on
     hperronBddAbove (fun x hx => by
-      letI : (nhdsWithin x C).NeBot := hne x hx
+      let : (nhdsWithin x C).NeBot := hne x hx
       exact (hperronBddBelow x hx).isCoboundedUnder_le)
   have hlowerSemi := lowerSemicontinuousOn_lowerEnvelope_on
     hperronBddBelow (fun x hx => by
-      letI : (nhdsWithin x C).NeBot := hne x hx
+      let : (nhdsWithin x C).NeBot := hne x hx
       exact (hperronBddAbove x hx).isCoboundedUnder_ge)
   refine PerronMethodExistenceTheorem.of_viscosityEnvelopes B hcomparison
     hupperVisc hupperSemi hlowerVisc hlowerSemi hlowerTrace hupperTrace
     hperronCobddBelowOnBoundary hupperBddAboveOnBoundary
     hlowerBddBelowOnBoundary hperronCobddAboveOnBoundary ?_
   intro x hx
-  letI : (nhdsWithin x C).NeBot := hne x hx
+  let : (nhdsWithin x C).NeBot := hne x hx
   exact lowerEnvelope_le_upperEnvelope (hperronBddAbove x hx) (hperronBddBelow x hx)
 
 /--
@@ -200,14 +200,14 @@ theorem PerronMethodExistenceTheorem.of_viscosityEnvelopes_of_barrierLocalBounde
     B hcomparison hupperVisc hlowerVisc hlowerTrace hupperTrace
     ?_ ?_ ?_ ?_ hne ?_ ?_
   · intro x hx
-    letI : (nhdsWithin x C).NeBot := hne x (Or.inr hx)
+    let : (nhdsWithin x C).NeBot := hne x (Or.inr hx)
     exact B.perronEnvelope_isCoboundedUnder_le (hlowerBddBelow x (Or.inr hx))
   · intro x hx
     exact hupperBddAbove x (Or.inr hx)
   · intro x hx
     exact hlowerBddBelow x (Or.inr hx)
   · intro x hx
-    letI : (nhdsWithin x C).NeBot := hne x (Or.inr hx)
+    let : (nhdsWithin x C).NeBot := hne x (Or.inr hx)
     exact B.perronEnvelope_isCoboundedUnder_ge (hupperBddAbove x (Or.inr hx))
   · intro x hx
     exact B.perronEnvelope_isBoundedUnder_le (hupperBddAbove x hx)
@@ -245,7 +245,7 @@ theorem DirichletBarrierPair.upperEnvelope_perronEnvelope_mem_perronClass
             (hupperBddAbove x (Or.inl hxC))))
     · have hlower_le_g : B.lower x <= g x :=
         B.lower_dirichlet.boundary_le hxBoundary
-      letI : (nhdsWithin x C).NeBot := hne x (Or.inr hxBoundary)
+      let : (nhdsWithin x C).NeBot := hne x (Or.inr hxBoundary)
       have hlowerEnv_le :
           lowerEnvelope C B.lower x <=
             lowerEnvelope C (perronEnvelope C boundary F g B.lower B.upper) x :=
@@ -353,12 +353,12 @@ theorem PerronMethodExistenceTheorem.of_upperHalfRelaxed_and_lowerViscosity_of_b
     · intro x hx
       exact hlowerBddBelow x (Or.inr hx)
     · intro x hx
-      letI : (nhdsWithin x C).NeBot := hne x (Or.inr hx)
+      let : (nhdsWithin x C).NeBot := hne x (Or.inr hx)
       exact B.perronEnvelope_isCoboundedUnder_ge (hupperBddAbove x (Or.inr hx))
     · exact B.perronLowerEnvelope_lowerSemicontinuousOn hne
         hupperBddAbove hlowerBddBelow
   · intro x hx
-    letI : (nhdsWithin x C).NeBot := hne x hx
+    let : (nhdsWithin x C).NeBot := hne x hx
     exact lowerEnvelope_le_upperEnvelope
       (B.perronEnvelope_isBoundedUnder_le (hupperBddAbove x hx))
       (B.perronEnvelope_isBoundedUnder_ge (hlowerBddBelow x hx))
@@ -409,7 +409,7 @@ theorem PerronMethodExistenceTheorem.of_upperHalfRelaxed_and_bumpInequality
   · exact B.perronLowerEnvelope_dirichletSupersolution_of_bumpInequality
       hlowerTrace hne hupperBddAbove hlowerBddBelow hineq
   · intro x hx
-    letI : (nhdsWithin x C).NeBot := hne x hx
+    let : (nhdsWithin x C).NeBot := hne x hx
     exact lowerEnvelope_le_upperEnvelope
       (B.perronEnvelope_isBoundedUnder_le (hupperBddAbove x hx))
       (B.perronEnvelope_isBoundedUnder_ge (hlowerBddBelow x hx))
@@ -460,7 +460,7 @@ theorem PerronMethodExistenceTheorem.of_upperHalfRelaxed_and_bumpContradiction
   · exact B.perronLowerEnvelope_dirichletSupersolution_of_bumpContradiction
       hlowerTrace hne hupperBddAbove hlowerBddBelow hbump
   · intro x hx
-    letI : (nhdsWithin x C).NeBot := hne x hx
+    let : (nhdsWithin x C).NeBot := hne x hx
     exact lowerEnvelope_le_upperEnvelope
       (B.perronEnvelope_isBoundedUnder_le (hupperBddAbove x hx))
       (B.perronEnvelope_isBoundedUnder_ge (hlowerBddBelow x hx))

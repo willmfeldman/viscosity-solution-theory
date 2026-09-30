@@ -140,7 +140,7 @@ theorem tailClosureSuperjetGraph_upperHalfRelaxedLimit_superjet_hessian_add_iden
       (J.hessian + (δ / 2) • (1 : Hessian n)) y}
   have hhalf : 0 < δ / 2 := half_pos hδ
   have hP : P ∈ nhdsWithin x C := by
-    simpa [ubar, P] using
+    exact
       eventually_le_quadraticModel_hessian_add_identity_of_superjet
         (C := C) (u := ubar) (x := x) (J := J) hhalf hJ
   rcases exists_inter_closedBall_compactRelativeNeighborhood_subset_of_mem_nhdsWithin
@@ -214,7 +214,7 @@ theorem tailClosureSubjetGraph_lowerHalfRelaxedLimit_subjet_hessian_sub_identity
       (J.hessian - (δ / 2) • (1 : Hessian n)) y <= uunder y}
   have hhalf : 0 < δ / 2 := half_pos hδ
   have hP : P ∈ nhdsWithin x C := by
-    simpa [uunder, P] using
+    exact
       eventually_quadraticModel_hessian_sub_identity_le_of_subjet
         (C := C) (u := uunder) (x := x) (J := J) hhalf hJ
   rcases exists_inter_closedBall_compactRelativeNeighborhood_subset_of_mem_nhdsWithin

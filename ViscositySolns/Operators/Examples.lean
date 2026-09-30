@@ -120,19 +120,19 @@ theorem Proper.smul_nonneg {F : Operator n} {a : Real}
 
 theorem operatorContinuous_constOperator (c : Real) :
     OperatorContinuous (constOperator (n := n) c) := by
-  simpa [OperatorContinuous, operatorGraphEval, constOperator] using
+  exact
     (continuous_const : Continuous fun _ : (Point n × Real) × Jet n => c)
 
 theorem OperatorContinuous.add {F G : Operator n}
     (hF : OperatorContinuous F) (hG : OperatorContinuous G) :
     OperatorContinuous (addOperator F G) := by
-  simpa [OperatorContinuous, operatorGraphEval, addOperator] using
+  exact
     hF.continuous.add hG.continuous
 
 theorem OperatorContinuous.smul {F : Operator n} (a : Real)
     (hF : OperatorContinuous F) :
     OperatorContinuous (smulOperator a F) := by
-  simpa [OperatorContinuous, operatorGraphEval, smulOperator] using
+  exact
     (continuous_const.mul hF.continuous : Continuous fun z => a * operatorGraphEval F z)
 
 theorem operatorLocallyBounded_constOperator (c : Real) :

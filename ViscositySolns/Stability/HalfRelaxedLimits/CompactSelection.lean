@@ -228,7 +228,6 @@ theorem exists_isMaxOn_mem_nhds_upperHalfRelaxedLimit_sub_test_sub_lt
   have hηleε : η <= ε := min_le_left ε (δ / 3)
   have hzvalε :
       upperHalfRelaxedLimit uᵢ l C x - φ x - ε < uᵢ i z - φ z := by
-    dsimp [M] at hzval ⊢
     linarith
   exact ⟨i, hiAB.1, z, hzK, hOV hzO, hmax, hzvalε⟩
 
@@ -305,7 +304,6 @@ theorem exists_isMinOn_mem_nhds_lowerHalfRelaxedLimit_sub_test_add
   have hηleε : η <= ε := min_le_left ε (δ / 3)
   have hzvalε :
       uᵢ i z - φ z < lowerHalfRelaxedLimit uᵢ l C x - φ x + ε := by
-    dsimp [M] at hzval ⊢
     linarith
   exact ⟨i, hiAB.1, z, hzK, hOV hzO, hmin, hzvalε⟩
 

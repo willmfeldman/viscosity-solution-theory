@@ -52,8 +52,8 @@ theorem OperatorContinuous.eventually_quadraticModelJetAt_lt_of_lt
       F z (quadraticModel x0 r p X z)
           (quadraticModelJetAt x0 p X z).gradient
           (quadraticModelJetAt x0 p X z).hessian := by
-    simpa [operatorGraphEval] using hF.continuous.comp hpath
-  simpa using hcont.continuousAt (isOpen_Iio.mem_nhds hneg)
+    exact hF.continuous.comp hpath
+  exact hcont.continuousAt (isOpen_Iio.mem_nhds hneg)
 
 /--
 Strict operator negativity for a quadratic model persists after a sufficiently
@@ -88,14 +88,14 @@ theorem OperatorContinuous.exists_pos_eventually_quadraticModelJetAt_lift_lt_of_
     exact Continuous.prodMk (Continuous.prodMk continuous_const hval) continuous_const
   have hcontκ : Continuous fun κ : Real =>
       F x (quadraticModel x0 (r + κ) p X x) A.gradient A.hessian := by
-    simpa [operatorGraphEval, A] using hF.continuous.comp hpath
+    exact hF.continuous.comp hpath
   have hnearκ : ∀ᶠ κ in nhds (0 : Real),
       F x (quadraticModel x0 (r + κ) p X x) A.gradient A.hessian < 0 := by
     have hzero :
         F x (quadraticModel x0 (r + 0) p X x) A.gradient A.hessian < 0 := by
       simpa [A] using hneg
-    simpa using hcontκ.continuousAt (isOpen_Iio.mem_nhds hzero)
-  haveI : NeBot (nhdsWithin (0 : Real) (Set.Ioi 0)) := by infer_instance
+    exact hcontκ.continuousAt (isOpen_Iio.mem_nhds hzero)
+  have : NeBot (nhdsWithin (0 : Real) (Set.Ioi 0)) := by infer_instance
   have hnearκWithin : ∀ᶠ κ in nhdsWithin (0 : Real) (Set.Ioi 0),
       F x (quadraticModel x0 (r + κ) p X x) A.gradient A.hessian < 0 :=
     hnearκ.filter_mono nhdsWithin_le_nhds

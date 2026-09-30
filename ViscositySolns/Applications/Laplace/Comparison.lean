@@ -49,7 +49,8 @@ theorem degenerateElliptic_laplaceOperator : DegenerateElliptic (laplaceOperator
 
 theorem operatorContinuous_laplaceOperator : OperatorContinuous (laplaceOperator (n := n)) := by
   apply operatorContinuous_traceSecondOrderOperator
-  · simpa using (Jet.continuous_hessian.comp continuous_snd).matrix_trace.neg
+  · simp only [one_mul]
+    exact (Jet.continuous_hessian.comp continuous_snd).matrix_trace.neg
   · simp only [zero_dotProduct]
     exact continuous_const
   · simp only [zero_mul]

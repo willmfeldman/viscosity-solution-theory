@@ -72,7 +72,7 @@ theorem DirichletBarrierPair.perronLowerEnvelope_viscositySupersolution_of_bumpI
   · intro x hx
     exact B.perronEnvelope_isBoundedUnder_ge (hlowerBddBelow x hx)
   · intro x hx
-    letI : (nhdsWithin x C).NeBot := hne x hx
+    let : (nhdsWithin x C).NeBot := hne x hx
     exact B.perronEnvelope_isCoboundedUnder_ge (hupperBddAbove x hx)
 
 /--
@@ -103,7 +103,7 @@ theorem DirichletBarrierPair.perronLowerEnvelope_dirichletSupersolution_of_bumpI
   · intro x hx
     exact hlowerBddBelow x (Or.inr hx)
   · intro x hx
-    letI : (nhdsWithin x C).NeBot := hne x (Or.inr hx)
+    let : (nhdsWithin x C).NeBot := hne x (Or.inr hx)
     exact B.perronEnvelope_isCoboundedUnder_ge (hupperBddAbove x (Or.inr hx))
   · exact B.perronLowerEnvelope_lowerSemicontinuousOn hne
       hupperBddAbove hlowerBddBelow

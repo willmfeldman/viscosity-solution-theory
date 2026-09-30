@@ -196,7 +196,7 @@ theorem blockDiagonal_of_tendsto_twoSidedJet_blockFunctionToPointFunction_sub
     intro i
     refine continuous_pi ?_
     intro j
-    simpa [pointHessianToBlockHessian] using
+    exact
       (continuous_apply (finSumFinEquiv j)).comp
         (continuous_apply (finSumFinEquiv i) :
           Continuous fun X : Hessian (n + n) => X (finSumFinEquiv i))
@@ -212,7 +212,7 @@ theorem blockDiagonal_of_tendsto_twoSidedJet_blockFunctionToPointFunction_sub
     | inl i =>
         cases j with
         | inl j =>
-            simpa [comparisonBlockDiagonal, leftPointHessian] using
+            exact
               (continuous_apply (Fin.castAdd n j)).comp
                 (continuous_apply (Fin.castAdd n i) :
                   Continuous fun X : Hessian (n + n) => X (Fin.castAdd n i))
@@ -225,10 +225,10 @@ theorem blockDiagonal_of_tendsto_twoSidedJet_blockFunctionToPointFunction_sub
             simpa [comparisonBlockDiagonal] using
               (continuous_const : Continuous fun _X : Hessian (n + n) => (0 : Real))
         | inr j =>
-            simpa [comparisonBlockDiagonal, rightPointHessian] using
-              (continuous_apply (Fin.natAdd n j)).comp
+            refine ((continuous_apply (Fin.natAdd n j)).comp
                 (continuous_apply (Fin.natAdd n i) :
-                  Continuous fun X : Hessian (n + n) => X (Fin.natAdd n i))
+                  Continuous fun X : Hessian (n + n) => X (Fin.natAdd n i))).congr fun X => ?_
+            exact (neg_neg (X (Fin.natAdd n i) (Fin.natAdd n j))).symm
   have hblockLim :
       Filter.Tendsto
         (fun k : Nat => pointHessianToBlockHessian (n := n) (JSeq (φ k)).hessian)
@@ -323,7 +323,7 @@ theorem closedSemijets_and_blockBounds_of_tendsto_twoSidedJet_regularizedDoubled
           (fun q : BlockPoint n => G (blockPointLeft q) - H (blockPointRight q)))
         (zSeq k) (JSeq k).gradient (JSeq k).hessian := by
     intro k
-    simpa [G, H, regularizedDoubledConvolution] using hJ k
+    exact hJ k
   have hdiag :
       pointHessianToBlockHessian (n := n) Z =
         comparisonBlockDiagonal (leftPointHessian (n := n) Z)

@@ -88,9 +88,9 @@ theorem tendsto_valueGap_zero_of_continuousAt_of_tendsto_pair_diagonal
     (hxy : Tendsto (fun i : ι => (x i, y i)) l (nhds (z, z))) :
     Tendsto (fun i : ι => u (x i) - u (y i)) l (nhds 0) := by
   have hx : Tendsto x l (nhds z) := by
-    simpa using (continuous_fst.tendsto (z, z)).comp hxy
+    exact (continuous_fst.tendsto (z, z)).comp hxy
   have hy : Tendsto y l (nhds z) := by
-    simpa using (continuous_snd.tendsto (z, z)).comp hxy
+    exact (continuous_snd.tendsto (z, z)).comp hxy
   exact tendsto_valueGap_zero_of_continuousAt_of_tendsto_same hu hx hy
 
 /--

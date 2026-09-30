@@ -38,7 +38,8 @@ theorem dirichletComparisonPrinciple_traceReactionDiffusion
     (proper_traceSecondOrderOperator_of_posSemidef
       (fun _ => Matrix.PosSemidef.one) (fun _ => zero_le_one))
   · apply operatorContinuous_traceSecondOrderOperator
-    · simpa using (Jet.continuous_hessian.comp continuous_snd).matrix_trace.neg
+    · simp only [one_mul]
+      exact (Jet.continuous_hessian.comp continuous_snd).matrix_trace.neg
     · simp only [zero_dotProduct]
       exact continuous_const
     · fun_prop

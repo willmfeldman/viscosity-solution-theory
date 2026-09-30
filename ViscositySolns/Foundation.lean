@@ -428,8 +428,7 @@ theorem hessian_eventually_entrywise_abs_sub_lt (X : Hessian n) {η : Real} (hη
   have hcont : Continuous fun Y : Hessian n => Y i j :=
     continuous_hessian_apply_apply i j
   have htarget : ∀ᶠ z in nhds (X i j), |z - X i j| < η := by
-    simpa [Metric.mem_ball, dist_eq_norm, Real.norm_eq_abs, abs_sub_comm] using
-      (Metric.ball_mem_nhds (X i j) hη : Metric.ball (X i j) η ∈ nhds (X i j))
+    exact Metric.eventually_nhds_iff.mpr ⟨η, hη, fun z hz => by rwa [Real.dist_eq] at hz⟩
   have hpre := (hcont.continuousAt).eventually htarget
   simpa [Pi.sub_apply] using hpre
 
@@ -830,7 +829,8 @@ theorem continuous_quadraticModelJetAt (x0 : Point n) (p : Point n)
   have hXt : Continuous fun _x : Point n => (Xᵀ : Hessian n) := continuous_const
   have hgrad : Continuous fun x : Point n =>
       p + (1 / 2 : Real) • (Matrix.mulVec X (x - x0) + Matrix.mulVec Xᵀ (x - x0)) :=
-    continuous_const.add (((hX.matrix_mulVec hdx).add (hXt.matrix_mulVec hdx)).const_smul _)
+    continuous_const.add (((hX.matrix_mulVec hdx).add (hXt.matrix_mulVec hdx)).const_smul
+      (1 / 2 : Real))
   apply continuous_induced_rng.mpr
   change Continuous fun x : Point n =>
     ((quadraticModelJetAt x0 p X x).gradient, (quadraticModelJetAt x0 p X x).hessian)

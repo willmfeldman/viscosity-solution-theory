@@ -149,7 +149,8 @@ theorem continuous_quadraticPenalty (α : Real) :
     Continuous fun q : DoubledPoint n => quadraticPenalty α q.1 q.2 := by
   have hdiff : Continuous fun q : DoubledPoint n => q.1 - q.2 :=
     continuous_fst.sub continuous_snd
-  simpa [quadraticPenalty] using continuous_const.mul (hdiff.dotProduct hdiff)
+  change Continuous fun q : DoubledPoint n => (α / 2) * dotProduct (q.1 - q.2) (q.1 - q.2)
+  exact continuous_const.mul (hdiff.dotProduct hdiff)
 
 theorem continuous_doubledObjective {u v : Point n -> Real} {α : Real}
     (hu : Continuous u) (hv : Continuous v) :

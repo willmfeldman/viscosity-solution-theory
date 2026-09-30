@@ -75,7 +75,7 @@ theorem DirichletBarrierPair.localizedImprovementAt_of_continuousMaxPatchAt
   rcases hpatch with ⟨w, hwCont, hWltw, hmaxSub⟩
   rcases exists_between hWltw with ⟨a, hWlta, hawx⟩
   let W : Point n -> Real := perronEnvelope C boundary F g B.lower B.upper
-  letI : (nhdsWithin x C).NeBot := hne
+  let : (nhdsWithin x C).NeBot := hne
   have hWcobdd : (nhdsWithin x C).IsCoboundedUnder (· >= ·) W :=
     B.perronEnvelope_isCoboundedUnder_ge hupperBddAbove
   have hfreqW : ∃ᶠ y in nhdsWithin x C, W y < a :=
@@ -106,7 +106,7 @@ theorem DirichletBarrierPair.localizedImprovementAt_of_pointwiseStrictSubsolutio
   rcases hpatch with ⟨w, hwLsc, hWltw, hwsub, hlower⟩
   rcases exists_between hWltw with ⟨a, hWlta, hawx⟩
   let W : Point n -> Real := perronEnvelope C boundary F g B.lower B.upper
-  letI : (nhdsWithin x C).NeBot := hne
+  let : (nhdsWithin x C).NeBot := hne
   have hWcobdd : (nhdsWithin x C).IsCoboundedUnder (· >= ·) W :=
     B.perronEnvelope_isCoboundedUnder_ge hupperBddAbove
   have hfreqW : ∃ᶠ y in nhdsWithin x C, W y < a :=

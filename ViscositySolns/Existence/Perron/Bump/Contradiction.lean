@@ -38,7 +38,7 @@ theorem DirichletBarrierPair.perronLowerEnvelope_bumpContradictionAt_of_strictPa
         perronEnvelope C boundary F g B.lower B.upper y < w y := by
   let W : Point n -> Real := perronEnvelope C boundary F g B.lower B.upper
   rcases hpatch with ⟨a, V, w, hV, hwAbove, hWlower, hw⟩
-  letI : (nhdsWithin x C).NeBot := hne
+  let : (nhdsWithin x C).NeBot := hne
   have hWcobdd : (nhdsWithin x C).IsCoboundedUnder (· >= ·) W :=
     B.perronEnvelope_isCoboundedUnder_ge hupperBddAbove
   have hVC : V ∩ C ∈ nhdsWithin x C := Filter.inter_mem hV self_mem_nhdsWithin
@@ -67,7 +67,7 @@ theorem DirichletBarrierPair.neighborhoodImprovementAt_of_strictPatchAt
   · intro y hy
     exact hw.lower_le hy
   · intro U hU
-    letI : (nhdsWithin x C).NeBot := hne
+    let : (nhdsWithin x C).NeBot := hne
     have hWcobdd : (nhdsWithin x C).IsCoboundedUnder (· >= ·) W :=
       B.perronEnvelope_isCoboundedUnder_ge hupperBddAbove
     have hUVC : (U ∩ V) ∩ C ∈ nhdsWithin x C :=
@@ -151,7 +151,7 @@ theorem DirichletBarrierPair.upperEnvelopeLocalizedImprovementAt_of_strictPatchA
     PerronUpperEnvelopeLocalizedImprovementAt C boundary F g B x := by
   let W : Point n -> Real := perronEnvelope C boundary F g B.lower B.upper
   rcases hpatch with ⟨a, V, w, hV, hwAbove, hWlower, hw⟩
-  letI : (nhdsWithin x C).NeBot := hne
+  let : (nhdsWithin x C).NeBot := hne
   have hWcobdd : (nhdsWithin x C).IsCoboundedUnder (· >= ·) W :=
     B.perronEnvelope_isCoboundedUnder_ge hupperBddAbove
   refine ⟨w, hw.dirichletSubsolution, ?_, ?_⟩
@@ -328,7 +328,7 @@ theorem DirichletBarrierPair.perronLowerEnvelope_maxPatchBumpAt_of_strictLocalPa
     PerronLowerEnvelopeMaxPatchBumpAt C boundary F g B x := by
   let W : Point n -> Real := perronEnvelope C boundary F g B.lower B.upper
   rcases hpatch with ⟨a, V, old, bump, hV, hbumpAbove, hWlower, hold, hmax⟩
-  letI : (nhdsWithin x C).NeBot := hne
+  let : (nhdsWithin x C).NeBot := hne
   have hWcobdd : (nhdsWithin x C).IsCoboundedUnder (· >= ·) W :=
     B.perronEnvelope_isCoboundedUnder_ge hupperBddAbove
   have hVC : V ∩ C ∈ nhdsWithin x C := Filter.inter_mem hV self_mem_nhdsWithin

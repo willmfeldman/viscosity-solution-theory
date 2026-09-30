@@ -386,7 +386,7 @@ theorem ishiiOperatorComparisonConditionOn_const_traceSecondOrderOperator
     IshiiOperatorComparisonConditionOn C R
       (traceSecondOrderOperator (fun _x : Point n => A)
         (fun _x : Point n => b) (fun _x : Point n => c) (fun _x : Point n => f)) := by
-  simpa [traceSecondOrderOperator, affineSecondOrderOperator, traceHessianContribution] using
+  exact
     ishiiOperatorComparisonConditionOn_of_independent_spatial_degenerateElliptic
       (C := C) (R := R)
       (G := fun r : Real => fun p : Point n => fun X : Hessian n =>
@@ -394,7 +394,6 @@ theorem ishiiOperatorComparisonConditionOn_const_traceSecondOrderOperator
       (by
         intro r p X Y hYX
         have htrace := trace_mul_antitone_of_posSemidef hA X Y hYX
-        dsimp
         linarith)
 
 /--

@@ -227,7 +227,7 @@ theorem uniformExteriorSphere_of_contDiff_levelSet {d : ℕ} {U : Set (Euclidean
     refine (hΛ w (hball hw) x₀ (hball (mem_closedBall_self (norm_nonneg _)))).trans ?_
     exact mul_le_mul_of_nonneg_left (by rwa [mem_closedBall, dist_eq_norm] at hw) hΛ0
   have hLs : fderiv ℝ ρ x₀ h = s := by
-    rw [hs_def, hg_def, inner_gradient_left (hρd x₀)]
+    rw [hs_def, hg_def, inner_gradient_left]
   rw [← hh_def, hLs] at htaylor
   have hρx := hcl x hx
   have hρx₀ := hfr x₀ hx₀

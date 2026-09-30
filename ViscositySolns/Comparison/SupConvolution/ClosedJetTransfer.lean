@@ -62,7 +62,7 @@ theorem continuous_supConvolutionTransferGraphPoint (lambda : Real) :
   have hgrad : Continuous fun z => (J z).gradient := Jet.continuous_gradient.comp hJ
   have hy : Continuous y := by
     dsimp [y]
-    exact hxi.add (continuous_const.smul hgrad)
+    exact hxi.add (hgrad.const_smul lambda⁻¹)
   have hvalue : Continuous fun z =>
       supConvolutionTransferValue (n := n) lambda (xi z) (r z) (J z) := by
     dsimp [supConvolutionTransferValue, supConvolutionTransferPoint, y]
@@ -495,7 +495,7 @@ theorem lowerSemicontinuousOn_infConvolutionKernel
         (fun x : Point n => (lambda / 2) * dotProduct (x - ξ) (x - ξ)) K := by
     have hdiff : Continuous fun x : Point n => x - ξ :=
       continuous_id.sub continuous_const
-    simpa using (continuous_const.mul (hdiff.dotProduct hdiff)).continuousOn
+    exact (continuous_const.mul (hdiff.dotProduct hdiff)).continuousOn
   have hpenLower :
       LowerSemicontinuousOn
         (fun x : Point n => (lambda / 2) * dotProduct (x - ξ) (x - ξ)) K :=

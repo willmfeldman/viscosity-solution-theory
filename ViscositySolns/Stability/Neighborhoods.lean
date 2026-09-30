@@ -156,7 +156,7 @@ theorem exists_isCompact_inter_closedBall_of_locallyCompactSpace
     intro y hy
     apply hεS
     have hydist : dist (y : Point n) x < ε := lt_of_le_of_lt hy hrε
-    simpa [Metric.mem_ball, xC] using hydist
+    exact hydist
   have hTclosed : IsClosed T := by
     exact Metric.isClosed_closedBall.preimage continuous_subtype_val
   have hTcompact : IsCompact T := by

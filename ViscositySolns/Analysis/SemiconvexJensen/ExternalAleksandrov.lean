@@ -104,8 +104,8 @@ private theorem hasSomeSecondOrderJet_of_external_secondOrderDifferentiableAt
       Dφ, D2φ, externalFirstDerivativeCLM, externalSecondDerivativeCLM, S, e] at *
     rw [map_add]
     rw [show (EuclideanSpace.equiv (Fin n) ℝ)
-        (WithLp.toLp 2 x) = x by
-      simpa using (EuclideanSpace.equiv (Fin n) ℝ).apply_symm_apply x]
+        ((EuclideanSpace.equiv (Fin n) ℝ).symm x) = x by
+      exact (EuclideanSpace.equiv (Fin n) ℝ).apply_symm_apply x]
     rw [show (EuclideanSpace.equiv (Fin n) ℝ)
         ((EuclideanSpace.equiv (Fin n) ℝ).symm w) = w by
       exact (EuclideanSpace.equiv (Fin n) ℝ).apply_symm_apply w]
@@ -154,8 +154,7 @@ private theorem convex_openBall_badSet_volume_eq_zero_external
   have hconvBall : ConvexOn ℝ (Metric.ball x0 r) f :=
     hconv.subset Metric.ball_subset_closedBall (convex_ball x0 r)
   have hconvE : ConvexOn ℝ Ω u := by
-    simpa [Ω, u] using
-      hconvBall.comp_linearMap (e.toContinuousLinearMap.toLinearMap)
+    exact hconvBall.comp_linearMap (e.toContinuousLinearMap.toLinearMap)
   have haeSecond :
       ∀ᵐ y ∂((volume : Measure E).restrict Ω),
         AleksandrovDifferentiability.SecondOrderDifferentiableAt u y :=
@@ -184,7 +183,7 @@ private theorem convex_openBall_badSet_volume_eq_zero_external
     simpa [Measure.restrict_apply' hΩopen.measurableSet, Set.inter_comm]
       using hnullRestrict
   have hmp : MeasurePreserving (fun x : Point n => e.symm x) volume (volume : Measure E) := by
-    simpa [e] using (PiLp.volume_preserving_toLp (Fin n))
+    exact PiLp.volume_preserving_toLp (Fin n)
   let badE : Set E := Ω ∩ {y : E | ¬ HasSomeSecondOrderJet f (e y)}
   have hpre :
       (fun x : Point n => e.symm x) ⁻¹' badE =

@@ -78,8 +78,10 @@ lake exe cache get
 lake build
 ```
 
-Lake obtains `AleksandrovDifferentiability` from its public Git repository; the
-committed manifest locks the resolved revision for reproducible builds.
+Lake obtains `AleksandrovDifferentiability` from its public Git repository at
+a release tag, and downloads that release's prebuilt build archive when one is
+available for your platform (otherwise it builds the dependency from source).
+The committed manifest locks the resolved revision for reproducible builds.
 
 ## Layout
 

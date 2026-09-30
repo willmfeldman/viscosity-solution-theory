@@ -233,7 +233,7 @@ theorem exists_continuous_extension_eqOn_intermediate_closedBall_of_convexOn_clo
   have hcont_s : ContinuousOn g s :=
     hcont_ball.mono hsub
   let grestrict : C(s, Real) :=
-    ⟨fun x : s => g x, continuousOn_iff_continuous_restrict.mp hcont_s⟩
+    ⟨fun x : s => g x, continuousOn_iff_continuous_domRestrict.mp hcont_s⟩
   rcases ContinuousMap.exists_restrict_eq (Y := Real) Metric.isClosed_closedBall grestrict with
     ⟨G, hG⟩
   refine ⟨Rmid, hrRmid, hRmidR, G, G.continuous, ?_⟩
@@ -242,7 +242,7 @@ theorem exists_continuous_extension_eqOn_intermediate_closedBall_of_convexOn_clo
       (G.restrict s : s -> Real) = (grestrict : s -> Real) := by
     exact congrArg (fun F : C(s, Real) => (F : s -> Real)) hG
   have hx_eq := congrFun hfun ⟨x, hx⟩
-  simpa [grestrict] using hx_eq
+  exact hx_eq
 
 /--
 The remaining convolution-only smooth approximation theorem after extending
@@ -473,11 +473,11 @@ theorem convexOn_normedBumpConvolution_of_convexOn_extension
   have hp : p ∈ Metric.closedBall x0 r :=
     (convex_closedBall x0 r) hx hy ha hb hab
   have hIp : Integrable (fun z : Point n => k z * G (p - z)) volume := by
-    simpa [k, p, lsmul_apply, smul_eq_mul] using hconv_exists p
+    exact hconv_exists p
   have hIx : Integrable (fun z : Point n => k z * G (x - z)) volume := by
-    simpa [k, lsmul_apply, smul_eq_mul] using hconv_exists x
+    exact hconv_exists x
   have hIy : Integrable (fun z : Point n => k z * G (y - z)) volume := by
-    simpa [k, lsmul_apply, smul_eq_mul] using hconv_exists y
+    exact hconv_exists y
   have hRight :
       Integrable
         (fun z : Point n => k z * (a * G (x - z) + b * G (y - z))) volume := by

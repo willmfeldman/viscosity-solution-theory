@@ -470,7 +470,7 @@ theorem exists_semiconvex_twoSidedJet_sequence_subsequence_graph_tendsto
       Continuous fun x : Point n => quadraticModel 0 0 0 (lambda • (1 : Hessian n)) x :=
     continuous_quadraticModel 0 0 0 (lambda • (1 : Hessian n))
   have hg : Continuous g := by
-    simpa [g, semiconvexConvexification] using hf.add hcontQ
+    exact hf.add hcontQ
   have hlambdaI : (lambda • (1 : Hessian n)).IsHermitian :=
     Matrix.isHermitian_one.smul (IsSelfAdjoint.all lambda)
   have hB' : B'.IsHermitian := by

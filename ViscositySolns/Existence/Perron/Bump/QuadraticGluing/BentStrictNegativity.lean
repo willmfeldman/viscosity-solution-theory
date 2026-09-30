@@ -249,7 +249,7 @@ theorem OperatorContinuous.exists_sourceOuterClosedBall_smallRadius_bentStrictNe
         change Continuous fun γ : Real =>
           ((jetPath γ).gradient, (jetPath γ).hessian)
         simpa [jetPath] using Continuous.prodMk continuous_const hH
-      simpa [jetPath] using (continuous_quadraticModel_jet x (W x) x).comp hJet
+      exact (continuous_quadraticModel_jet x (W x) x).comp hJet
     have hjet : Continuous fun γ : Real =>
         quadraticModelJetAt x J.gradient
           (J.hessian - γ • (1 : Hessian n)) x := by
@@ -269,7 +269,7 @@ theorem OperatorContinuous.exists_sourceOuterClosedBall_smallRadius_bentStrictNe
             (J.hessian - γ • (1 : Hessian n)) x).gradient
           (quadraticModelJetAt x J.gradient
             (J.hessian - γ • (1 : Hessian n)) x).hessian := by
-    simpa [operatorGraphEval] using hF.continuous.comp hpathγ
+    exact hF.continuous.comp hpathγ
   have hnearγ : ∀ᶠ γ in nhds (0 : Real),
       F x
           (quadraticModel x (W x) J.gradient
@@ -278,8 +278,8 @@ theorem OperatorContinuous.exists_sourceOuterClosedBall_smallRadius_bentStrictNe
             (J.hessian - γ • (1 : Hessian n)) x).gradient
           (quadraticModelJetAt x J.gradient
             (J.hessian - γ • (1 : Hessian n)) x).hessian < 0 := by
-    simpa using hcontγ.continuousAt (isOpen_Iio.mem_nhds hzero)
-  haveI : NeBot (nhdsWithin (0 : Real) (Set.Ioi 0)) := by infer_instance
+    exact hcontγ.continuousAt (isOpen_Iio.mem_nhds hzero)
+  have : NeBot (nhdsWithin (0 : Real) (Set.Ioi 0)) := by infer_instance
   have hnearγWithin : ∀ᶠ γ in nhdsWithin (0 : Real) (Set.Ioi 0),
       F x
           (quadraticModel x (W x) J.gradient
@@ -329,9 +329,9 @@ theorem OperatorContinuous.exists_sourceOuterClosedBall_smallRadius_bentStrictNe
             quadraticModel x (W x + γ * y.2 ^ 2 / 8) J.gradient Xb y.1),
           quadraticModelJetAt x J.gradient Xb y.1) :=
       Continuous.prodMk (Continuous.prodMk continuous_fst hq) hjet
-    simpa [sourceEval, operatorGraphEval] using hF.continuous.comp hpath
+    exact hF.continuous.comp hpath
   have hsourceOpen : IsOpen sourceNegSet := by
-    simpa [sourceNegSet, sourceEval] using isOpen_Iio.preimage hsourceCont
+    exact isOpen_Iio.preimage hsourceCont
   have hbaseSource : (x, (0 : Real)) ∈ sourceNegSet := by
     simpa [sourceNegSet, sourceEval, Xb, W, quadraticModel] using hbaseBent
   have hsourceNhds : sourceNegSet ∈ nhds (x, (0 : Real)) :=
@@ -731,7 +731,7 @@ theorem outerClosedBallLowerEnvelopeLscSelectionPatchAt
     ∀ δ : Real, δ < ((1 / 4 : Real) * γ) * ‖z - x‖ ^ 2 ->
       quadraticModel x (W x + δ) J.gradient Xb z < W z}
   have hS : S ∈ nhdsWithin x C := by
-    simpa [S, W, Xb] using
+    exact
       (eventually_forall_quadraticModel_lift_hessian_sub_identity_lt_of_subjet
         (C := C) (u := W) (x := x) (J := J) hγpos hJ)
   rcases hchoose S hS with

@@ -445,7 +445,7 @@ theorem tailClosureSuperjetGraph_of_locallyUniform_superjet_hessian_add_identity
       (J.hessian + (δ / 2) • (1 : Hessian n)) y}
   have hhalf : 0 < δ / 2 := half_pos hδ
   have hP : P ∈ nhdsWithin x C := by
-    simpa [P] using
+    exact
       eventually_le_quadraticModel_hessian_add_identity_of_superjet hhalf hJ
   rcases exists_inter_closedBall_compactRelativeNeighborhood_subset_of_mem_nhdsWithin
       (C := C) (P := P) hxC hP with
@@ -511,7 +511,7 @@ theorem tailClosureSubjetGraph_of_locallyUniform_subjet_hessian_sub_identity
       (J.hessian - (δ / 2) • (1 : Hessian n)) y <= u y}
   have hhalf : 0 < δ / 2 := half_pos hδ
   have hP : P ∈ nhdsWithin x C := by
-    simpa [P] using
+    exact
       eventually_quadraticModel_hessian_sub_identity_le_of_subjet hhalf hJ
   rcases exists_inter_closedBall_compactRelativeNeighborhood_subset_of_mem_nhdsWithin
       (C := C) (P := P) hxC hP with

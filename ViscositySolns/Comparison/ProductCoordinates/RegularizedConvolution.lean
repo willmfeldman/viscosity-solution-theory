@@ -139,7 +139,7 @@ theorem closedSemijets_and_blockBounds_of_regularizedDoubledConvolution
   have hJ' : ({ gradient := 0, hessian := Z } : Jet (n + n)) ∈ ClosedSuperjet Set.univ
       (blockFunctionToPointFunction (n := n)
         (fun q : BlockPoint n => G (blockPointLeft q) - H (blockPointRight q))) 0 := by
-    simpa [G, H, regularizedDoubledConvolution] using hJ
+    exact hJ
   exact
     closedSemijets_and_blockBounds_of_blockDiagonal_closedSuperjet
       (n := n) (G := G) (H := H) hG hH hdiag hlower hupper hJ'

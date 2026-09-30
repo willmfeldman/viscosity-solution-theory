@@ -55,7 +55,8 @@ theorem isCompact_hessianEntryBox (R : Real) :
       exact hA i j
     · intro hA i j
       exact hA i (Set.mem_univ i) j (Set.mem_univ j)
-  simpa [hset] using hcompact
+  rw [hset]
+  exact hcompact
 
 /--
 Every eventually entrywise-bounded sequence of Hessian matrices has a
@@ -71,7 +72,7 @@ theorem exists_hessian_subsequence_tendsto_of_eventually_entrywise_abs_le
     (hbound : ∀ᶠ k in Filter.atTop, ∀ i j : Fin n, |A k i j| <= R) :
     ∃ Z : Hessian n, ∃ φ : Nat -> Nat, StrictMono φ ∧
       Filter.Tendsto (fun k : Nat => A (φ k)) Filter.atTop (𝓝 Z) := by
-  haveI : FirstCountableTopology (Hessian n) :=
+  have : FirstCountableTopology (Hessian n) :=
     inferInstanceAs (FirstCountableTopology (Fin n -> Fin n -> Real))
   have hevent :
       ∀ᶠ k in Filter.atTop, A k ∈ hessianEntryBox n R := by

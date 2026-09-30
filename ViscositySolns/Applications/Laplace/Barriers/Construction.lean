@@ -61,7 +61,7 @@ theorem isClosed_exteriorSphereParams (C : Set (Point n)) (R : Real) :
   have h2 : IsClosed {p : Point n × Point n | eucSq p.1 p.2 = R ^ 2} :=
     isClosed_eq continuous_eucSq continuous_const
   have h3 : IsClosed {p : Point n × Point n | ∀ x ∈ closure C, R ^ 2 <= eucSq x p.2} := by
-    simp only [Set.setOf_forall]
+    simp only [Set.ofPred_forall]
     exact isClosed_iInter fun x => isClosed_iInter fun _ =>
       isClosed_le continuous_const
         (continuous_eucSq.comp (continuous_const.prodMk continuous_snd))
@@ -259,7 +259,7 @@ theorem continuous_laplaceUpperBarrier (hCbdd : Bornology.IsBounded C)
     (hgc : ContinuousOn g (closure C)) :
     Continuous (laplaceUpperBarrier C R A g) := by
   have hPc := isCompact_exteriorSphereParams hCbdd (n := n) R
-  haveI : CompactSpace (exteriorSphereParams C R) := isCompact_iff_compactSpace.mp hPc
+  have : CompactSpace (exteriorSphereParams C R) := isCompact_iff_compactSpace.mp hPc
   have h1 : Continuous fun q : Point n × exteriorSphereParams C R => g q.2.1.1 :=
     hgc.comp_continuous (continuous_fst.comp (continuous_subtype_val.comp continuous_snd))
       fun q => frontier_subset_closure q.2.2.1

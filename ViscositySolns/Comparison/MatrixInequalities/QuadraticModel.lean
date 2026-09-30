@@ -275,9 +275,7 @@ theorem comparisonPenaltyBlock_le_two_smul_blockDiagonalIdentity
     have hpenalty : (comparisonPenaltyBlock (n := n) α).IsHermitian :=
       Matrix.IsHermitian.fromBlocks hαI hnegαI hαI
     have hdiag : ((2 * α) • blockDiagonalIdentity n).IsHermitian := by
-      simpa [blockDiagonalIdentity_eq_one] using
-        (Matrix.isHermitian_one.smul (IsSelfAdjoint.all (2 * α)) :
-          ((2 * α) • (1 : BlockHessian n)).IsHermitian)
+      simp [blockDiagonalIdentity_eq_one]
     exact hdiag.sub hpenalty
   · intro q
     let x : Point n := blockPointLeft q

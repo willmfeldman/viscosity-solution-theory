@@ -1,8 +1,9 @@
 name = "viscosity_solns"
-version = "0.2.0"
+version = "0.3.0"
 description = "Lean 4 formalization of viscosity-solution theory for second-order degenerate elliptic PDE"
 keywords = ["math"]
 defaultTargets = ["ViscositySolns", "ViscositySolnsComparator"]
+preferReleaseBuild = true
 
 [leanOptions]
 pp.unicode.fun = true # pretty-prints `fun a ↦ b`
@@ -13,12 +14,12 @@ maxSynthPendingDepth = 3
 [[require]]
 name = "mathlib"
 scope = "leanprover-community"
-rev = "v4.30.0"
+rev = "v4.34.1"
 
 [[require]]
 name = "AleksandrovDifferentiability"
 git = "https://github.com/willmfeldman/aleksandrov-differentiability"
-rev = "730e7e9256c7e8018abad3bbc50a0598c656b61c"
+rev = "v0.3.0"
 
 [[lean_lib]]
 name = "ViscositySolns"

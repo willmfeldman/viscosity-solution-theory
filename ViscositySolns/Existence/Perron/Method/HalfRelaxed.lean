@@ -68,7 +68,7 @@ theorem PerronMethodExistenceTheorem.of_upperHalfRelaxed_and_maxPatchBump
   · exact B.perronLowerEnvelope_dirichletSupersolution_of_maxPatchBump
       hlowerTrace hne hupperBddAbove hlowerBddBelow hbump
   · intro x hx
-    letI : (nhdsWithin x C).NeBot := hne x hx
+    let : (nhdsWithin x C).NeBot := hne x hx
     exact lowerEnvelope_le_upperEnvelope
       (B.perronEnvelope_isBoundedUnder_le (hupperBddAbove x hx))
       (B.perronEnvelope_isBoundedUnder_ge (hlowerBddBelow x hx))
@@ -118,7 +118,7 @@ theorem PerronMethodExistenceTheorem.of_upperHalfRelaxed_and_interiorQuadraticBu
       hcomparison hFell hinterior hlowerTrace hne hupperBddAbove hlowerBddBelow
       hbump
   · intro x hx
-    letI : (nhdsWithin x C).NeBot := hne x hx
+    let : (nhdsWithin x C).NeBot := hne x hx
     exact lowerEnvelope_le_upperEnvelope
       (B.perronEnvelope_isBoundedUnder_le (hupperBddAbove x hx))
       (B.perronEnvelope_isBoundedUnder_ge (hlowerBddBelow x hx))

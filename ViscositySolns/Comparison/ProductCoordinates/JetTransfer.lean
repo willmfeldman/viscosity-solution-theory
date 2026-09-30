@@ -338,7 +338,7 @@ theorem mixed_dot_zero_of_hasSecondOrderExpansionWithin_blockFunctionToPointFunc
   have hconst_to_half : Tendsto (fun _t : Real => (1 / 2 : Real) * B) l
       (nhds ((1 / 2 : Real) * B)) :=
     tendsto_const_nhds
-  haveI : NeBot l := by
+  have : NeBot l := by
     simpa [l, Set.compl_singleton_eq] using
       (inferInstance : NeBot (nhdsWithin (0 : Real) ({0}ᶜ : Set Real)))
   have hhalf : (1 / 2 : Real) * B = 0 :=

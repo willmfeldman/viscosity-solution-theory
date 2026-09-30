@@ -120,8 +120,8 @@ theorem eq_zero_of_eventually_nonneg_linear_add_sq_add_isLittleO_sq
     have htneg' : t < 0 := htneg
     dsimp [q]
     exact div_nonpos_of_nonneg_of_nonpos ht htneg'.le
-  haveI hright_ne : NeBot (nhdsWithin (0 : Real) (Set.Ioi 0)) := by infer_instance
-  haveI hleft_ne : NeBot (nhdsWithin (0 : Real) (Set.Iio 0)) := by infer_instance
+  have hright_ne : NeBot (nhdsWithin (0 : Real) (Set.Ioi 0)) := by infer_instance
+  have hleft_ne : NeBot (nhdsWithin (0 : Real) (Set.Iio 0)) := by infer_instance
   have ha_nonneg : 0 <= a :=
     le_of_tendsto_of_tendsto tendsto_const_nhds hq_tendsto_right hright_eventual
   have ha_nonpos : a <= 0 :=
@@ -161,8 +161,8 @@ theorem nonpos_of_eventually_mul_sq_le_isLittleO_sq
     · simpa [div_eq_mul_inv] using hf_ne
     · filter_upwards [self_mem_nhdsWithin] with t htne htzero
       exact (htne (sq_eq_zero_iff.mp htzero)).elim
-  haveI : NeBot (nhdsWithin (0 : Real) {t : Real | t ≠ 0}) := by
-    simpa only [Set.mem_setOf_eq, ne_eq] using (NormedField.nhdsNE_neBot (0 : Real))
+  have : NeBot (nhdsWithin (0 : Real) {t : Real | t ≠ 0}) :=
+    NormedField.nhdsNE_neBot (0 : Real)
   exact le_of_tendsto_of_tendsto tendsto_const_nhds htendsto hle_ne
 
 /--

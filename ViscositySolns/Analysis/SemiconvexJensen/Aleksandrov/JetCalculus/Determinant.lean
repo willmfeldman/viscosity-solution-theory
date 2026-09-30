@@ -81,7 +81,7 @@ theorem Matrix.PosSemidef.det_le_pow_of_le_smul_one
     A.det = ∏ i : Fin n, hHerm.eigenvalues i := by
       simpa [hHerm] using hHerm.det_eq_prod_eigenvalues
     _ <= ∏ _i : Fin n, lambda := by
-      exact Finset.prod_le_prod
+      exact Finset.prod_le_prod₀
         (fun i _hi => hA.eigenvalues_nonneg i)
         (fun i _hi => heigen_upper i)
     _ = lambda ^ n := by

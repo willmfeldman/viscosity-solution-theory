@@ -164,7 +164,7 @@ theorem hessianBilinearMap_bilinearMapHessian
       D2 v w = (∑ i : Fin n, v i • D2 (coordinateVector i)) w := by
         rw [hD2v]
       _ = ∑ i : Fin n, v i * D2 (coordinateVector i) w := by
-        simp [Finset.sum_apply, smul_eq_mul]
+        simp [smul_eq_mul]
       _ = ∑ i : Fin n, v i * (∑ j : Fin n,
           w j * D2 (coordinateVector i) (coordinateVector j)) := by
         simp [hD2iw]

@@ -86,7 +86,7 @@ theorem operatorContinuous_affineSecondOrderOperator
     (hc : Continuous fun z : (Point n × Real) × Jet n => c z.1.1 * z.1.2)
     (hf : Continuous fun z : (Point n × Real) × Jet n => f z.1.1) :
     OperatorContinuous (affineSecondOrderOperator G b c f) := by
-  simpa [OperatorContinuous, operatorGraphEval, affineSecondOrderOperator] using
+  exact
     ((hG.add hb).add hc).sub hf
 
 /-- A first-order operator, independent of its Hessian argument. -/
@@ -118,7 +118,7 @@ theorem operatorContinuous_firstOrderOperator
     {G : Point n -> Real -> Point n -> Real}
     (hG : Continuous fun z : (Point n × Real) × Jet n => G z.1.1 z.1.2 z.2.gradient) :
     OperatorContinuous (firstOrderOperator (n := n) G) := by
-  simpa [OperatorContinuous, operatorGraphEval, firstOrderOperator] using hG
+  exact hG
 
 /-- A zero-order operator, independent of gradient and Hessian arguments. -/
 def zeroOrderOperator (g : Point n -> Real -> Real) : Operator n :=
@@ -147,6 +147,6 @@ theorem operatorContinuous_zeroOrderOperator
     {g : Point n -> Real -> Real}
     (hg : Continuous fun z : (Point n × Real) × Jet n => g z.1.1 z.1.2) :
     OperatorContinuous (zeroOrderOperator (n := n) g) := by
-  simpa [OperatorContinuous, operatorGraphEval, zeroOrderOperator] using hg
+  exact hg
 
 end ViscositySolns

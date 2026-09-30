@@ -461,13 +461,15 @@ theorem closedSemijets_of_tendsto_twoSidedJet_blockFunctionToPointFunction_sub
         Filter.atTop (nhds (0 : Point n)) := by
     have hraw :=
       (continuous_pointLeft (n := n)).tendsto (0 : Point (n + n)) |>.comp hz
-    simpa [pointLeft_zero] using hraw
+    rw [pointLeft_zero] at hraw
+    exact hraw
   have hzRight :
       Filter.Tendsto (fun k : Nat => pointRight (n := n) (zSeq k))
         Filter.atTop (nhds (0 : Point n)) := by
     have hraw :=
       (continuous_pointRight (n := n)).tendsto (0 : Point (n + n)) |>.comp hz
-    simpa [pointRight_zero] using hraw
+    rw [pointRight_zero] at hraw
+    exact hraw
   have hGvalue :
       Filter.Tendsto (fun k : Nat => G (pointLeft (n := n) (zSeq k)))
         Filter.atTop (nhds (G 0)) :=

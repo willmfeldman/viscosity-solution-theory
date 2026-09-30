@@ -85,13 +85,13 @@ theorem exists_eucSq_le_of_isBounded {C : Set (Point n)} (hC : Bornology.IsBound
 theorem upperEnvelope_eq_of_continuous {C : Set (Point n)} {u : Point n -> Real}
     (hu : Continuous u) {x : Point n} (hx : x ∈ closure C) :
     upperEnvelope C u x = u x := by
-  haveI : (𝓝[C] x).NeBot := mem_closure_iff_nhdsWithin_neBot.mp hx
+  have : (𝓝[C] x).NeBot := mem_closure_iff_nhdsWithin_neBot.mp hx
   exact ((hu.tendsto x).mono_left nhdsWithin_le_nhds).limsup_eq
 
 theorem lowerEnvelope_eq_of_continuous {C : Set (Point n)} {u : Point n -> Real}
     (hu : Continuous u) {x : Point n} (hx : x ∈ closure C) :
     lowerEnvelope C u x = u x := by
-  haveI : (𝓝[C] x).NeBot := mem_closure_iff_nhdsWithin_neBot.mp hx
+  have : (𝓝[C] x).NeBot := mem_closure_iff_nhdsWithin_neBot.mp hx
   exact ((hu.tendsto x).mono_left nhdsWithin_le_nhds).liminf_eq
 
 section Assembly

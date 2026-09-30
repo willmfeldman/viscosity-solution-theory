@@ -44,7 +44,7 @@ theorem indicator_boundary_jump_not_upperSemicontinuousOn
     filter_upwards [hloc] with x hx
     by_contra hxC
     norm_num [hxC] at hx
-  letI : (nhdsWithin b C).NeBot := mem_closure_iff_nhdsWithin_neBot.mp hbclose
+  let : (nhdsWithin b C).NeBot := mem_closure_iff_nhdsWithin_neBot.mp hbclose
   have hnotC' : ∀ᶠ x in nhdsWithin b C, x ∉ C :=
     hnotC.filter_mono (nhdsWithin_mono b Set.subset_union_left)
   obtain ⟨x, hxnotC, hxC⟩ := (hnotC'.and self_mem_nhdsWithin).exists

@@ -396,7 +396,7 @@ theorem CoordinateSemiconvexOn.continuousOn_sphere_of_closedBall
     ContinuousOn f (Metric.sphere x0 r) := by
   exact hsemi.continuousOn_ball_of_closedBall.mono fun x hx => by
     have hxdist : dist x x0 = r := by
-      simpa [Metric.mem_sphere] using hx
+      exact hx
     simpa [Metric.mem_ball, hxdist] using hrR
 
 /--
@@ -538,7 +538,7 @@ theorem continuous_compactInfConvolution_of_isCompact
   have hsup :
       Continuous (fun ξ : Point n => compactSupConvolution lambda K (fun x => -v x) ξ) :=
     continuous_compactSupConvolution_of_isCompact hKne hKcompact hvneg
-  simpa [compactInfConvolution] using hsup.neg
+  exact hsup.neg
 
 /--
 The function whose maximum at the origin is used in the semiconvex matrix
@@ -642,7 +642,7 @@ theorem closedSuperjet_of_closedSuperjet_semiconvexConvexification_at_zero
         (C := Set.univ) 0 0 0 (lambda • (1 : Hessian n)) y
     · exact continuous_quadraticModel 0 0 0 (lambda • (1 : Hessian n))
     · exact continuous_quadraticModelJetAt 0 0 (lambda • (1 : Hessian n))
-    · simpa [semiconvexConvexification, Q] using hZ
+    · exact hZ
   have hjet :
       ({ gradient := 0, hessian := Z } : Jet n) - A 0 =
         ({ gradient := 0, hessian := Z - lambda • (1 : Hessian n) } : Jet n) := by

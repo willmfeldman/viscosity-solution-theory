@@ -304,6 +304,7 @@ theorem closedSuperjet_translate_add_left
     rcases hw with ⟨hyK, hr, hKJ⟩
     exact ⟨⟨y, hyK, rfl⟩, by simpa using hr,
       superjet_translate_add_left hKJ⟩
+  change ((x0 + x, u (x0 + x)), J) ∈ closure (SuperjetGraph ((fun y : Point n => x0 + y) '' K) u)
   simpa [shift] using closure_mono hsubset hshift_mem
 
 /--
@@ -339,6 +340,7 @@ theorem closedSubjet_translate_add_left
     rcases hw with ⟨hyK, hr, hKJ⟩
     exact ⟨⟨y, hyK, rfl⟩, by simpa using hr,
       subjet_translate_add_left hKJ⟩
+  change ((x0 + x, u (x0 + x)), J) ∈ closure (SubjetGraph ((fun y : Point n => x0 + y) '' K) u)
   simpa [shift] using closure_mono hsubset hshift_mem
 
 /-- For fixed base point, the closed superjet fiber is topologically closed. -/
@@ -515,6 +517,7 @@ theorem closedSuperjet_sub_of_add_hasSecondOrderExpansionWithin
     change K ∈ Superjet C (fun y => u y + φ y) y at hK
     subst r
     exact ⟨hyC, by ring, superjet_sub_of_add_hasSecondOrderExpansionWithin hK (hφ y hyC)⟩
+  change ((x, u x), J - A x) ∈ closure (SuperjetGraph C u)
   simpa [shift] using closure_mono hsubset hshift_mem
 
 /--
@@ -633,6 +636,7 @@ theorem closedSubjet_sub_of_add_hasSecondOrderExpansionWithin
     change K ∈ Subjet C (fun y => u y + φ y) y at hK
     subst r
     exact ⟨hyC, by ring, subjet_sub_of_add_hasSecondOrderExpansionWithin hK (hφ y hyC)⟩
+  change ((x, u x), J - A x) ∈ closure (SubjetGraph C u)
   simpa [shift] using closure_mono hsubset hshift_mem
 
 /--
@@ -659,8 +663,6 @@ theorem closedSubjet_neg_to_closedSuperjet
     have hhess : Continuous fun z : (Point n × Real) × Jet n => z.2.neg.hessian :=
       (Jet.continuous_hessian.comp continuous_snd).neg
     have hjet : Continuous fun z : (Point n × Real) × Jet n => z.2.neg := by
-      change Continuous fun z : (Point n × Real) × Jet n =>
-        ({ gradient := z.2.neg.gradient, hessian := z.2.neg.hessian } : Jet n)
       rw [continuous_iff_continuousAt]
       intro z
       rw [ContinuousAt, nhds_induced, Filter.tendsto_comap_iff]
@@ -706,8 +708,6 @@ theorem closedSuperjet_neg_to_closedSubjet
     have hhess : Continuous fun z : (Point n × Real) × Jet n => z.2.neg.hessian :=
       (Jet.continuous_hessian.comp continuous_snd).neg
     have hjet : Continuous fun z : (Point n × Real) × Jet n => z.2.neg := by
-      change Continuous fun z : (Point n × Real) × Jet n =>
-        ({ gradient := z.2.neg.gradient, hessian := z.2.neg.hessian } : Jet n)
       rw [continuous_iff_continuousAt]
       intro z
       rw [ContinuousAt, nhds_induced, Filter.tendsto_comap_iff]

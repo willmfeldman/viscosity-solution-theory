@@ -83,7 +83,7 @@ The coordinate quartic is continuous.
 -/
 theorem continuous_coordinateQuartic :
     Continuous (coordinateQuartic (n := n)) := by
-  simpa [coordinateQuartic] using
+  exact
     ((continuous_id : Continuous fun x : Point n => x).dotProduct continuous_id).pow 2
 
 /--
@@ -299,7 +299,7 @@ theorem hasFDerivWithinAt_coordinateSquareSum_zero :
         have hcoord : HasFDerivWithinAt (fun x : Point n => x i)
             (ContinuousLinearMap.proj i : Point n →L[Real] Real) Set.univ 0 := by
           exact (ContinuousLinearMap.proj i : Point n →L[Real] Real).hasFDerivWithinAt
-        simpa using hcoord.mul hcoord))
+        (convert hcoord.mul hcoord using 1; simp)))
 
 /--
 The coordinate formula for the first derivative of the coordinate square-sum
@@ -340,8 +340,10 @@ theorem hasFDerivWithinAt_coordinateQuarticFDeriv_zero :
   have hterm : HasFDerivWithinAt
       (fun x : Point n => coordinateSquareSum x • coordinateSquareSumFDeriv x)
       (0 : Point n →L[Real] (Point n →L[Real] Real)) Set.univ 0 := by
-    simpa [coordinateSquareSum, coordinateSquareSumFDeriv] using hs.smul hD.hasFDerivWithinAt
-  simpa [coordinateQuarticFDeriv] using hterm.add hterm
+    convert hs.smul hD.hasFDerivWithinAt using 1
+    simp [coordinateSquareSum]
+  convert hterm.add hterm using 1
+  all_goals first | rfl | simp
 
 /--
 At every point, the coordinate quartic has the first Fréchet derivative given
@@ -364,12 +366,12 @@ theorem hasFDerivWithinAt_coordinateQuartic (x : Point n) :
           have hcoord : HasFDerivWithinAt (fun y : Point n => y i)
               (ContinuousLinearMap.proj i : Point n →L[Real] Real) Set.univ x := by
             exact (ContinuousLinearMap.proj i : Point n →L[Real] Real).hasFDerivWithinAt
-          simpa using hcoord.mul hcoord))
+          exact hcoord.mul hcoord))
   have hquartic := hsum.mul hsum
-  change HasFDerivWithinAt (fun y : Point n => (dotProduct y y) ^ 2)
-    (coordinateQuarticFDeriv x) Set.univ x
-  simpa [coordinateSquareSum, coordinateQuarticFDeriv, coordinateQuartic,
-    dotProduct, pow_two] using hquartic
+  convert hquartic using 1
+  all_goals first
+    | rfl
+    | (funext y; simp [coordinateQuartic, coordinateSquareSum, dotProduct, pow_two])
 
 /--
 At the origin, the coordinate quartic has zero first Fréchet derivative.

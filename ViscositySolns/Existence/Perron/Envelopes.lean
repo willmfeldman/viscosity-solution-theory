@@ -333,7 +333,7 @@ theorem DirichletBarrierPair.perronUpperEnvelope_upperSemicontinuousOn
   refine upperSemicontinuousOn_upperEnvelope_on
     (fun x hx => B.perronEnvelope_isBoundedUnder_le (hupper x hx)) ?_
   intro x hx
-  letI : (nhdsWithin x C).NeBot := hne x hx
+  let : (nhdsWithin x C).NeBot := hne x hx
   exact B.perronEnvelope_isCoboundedUnder_le (hlower x hx)
 
 /-- Barrier bounds give lower semicontinuity of the Perron lower envelope
@@ -351,7 +351,7 @@ theorem DirichletBarrierPair.perronLowerEnvelope_lowerSemicontinuousOn
   refine lowerSemicontinuousOn_lowerEnvelope_on
     (fun x hx => B.perronEnvelope_isBoundedUnder_ge (hlower x hx)) ?_
   intro x hx
-  letI : (nhdsWithin x C).NeBot := hne x hx
+  let : (nhdsWithin x C).NeBot := hne x hx
   exact B.perronEnvelope_isCoboundedUnder_ge (hupper x hx)
 
 theorem DirichletBarrierPair.perronUpperEnvelope_boundarySubsolution

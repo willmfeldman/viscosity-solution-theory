@@ -71,7 +71,7 @@ theorem isOpen_image_toPoint {U : Set (EuclideanSpace ℝ (Fin d))} (hU : IsOpen
 
 theorem isBounded_image_toPoint {U : Set (EuclideanSpace ℝ (Fin d))}
     (hU : Bornology.IsBounded U) : Bornology.IsBounded (toPoint '' U) :=
-  (toPoint (d := d)).lipschitz.isBounded_image hU
+  (toPoint (d := d)).lipschitzWith.isBounded_image hU
 
 /-- The Euclidean exterior sphere condition in `Point d` coordinates. -/
 theorem UniformExteriorSphere.image_toPoint {U : Set (EuclideanSpace ℝ (Fin d))}

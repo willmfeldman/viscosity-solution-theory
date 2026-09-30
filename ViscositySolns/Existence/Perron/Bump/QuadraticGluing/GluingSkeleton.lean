@@ -229,7 +229,7 @@ theorem PerronClass.pointwiseMaxList
       (ViscositySolns.pointwiseMaxList base us) := by
   induction us with
   | nil =>
-      simpa [pointwiseMaxList] using hbase
+      exact hbase
   | cons u us ih =>
       have hu : PerronClass C boundary F g lower upper u := by
         exact hus u List.mem_cons_self
@@ -238,7 +238,7 @@ theorem PerronClass.pointwiseMaxList
         refine ih ?_
         intro v hv
         exact hus v (List.mem_cons_of_mem u hv)
-      simpa [pointwiseMaxList] using hu.max hrest
+      exact hu.max hrest
 
 /--
 Finite maxima of Perron-family witnesses remain Perron-admissible.

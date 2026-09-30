@@ -7,7 +7,7 @@ authors:
     given-names: William M.
 repository-code: "https://github.com/willmfeldman/viscosity-solution-theory"
 license: Apache-2.0
-version: 0.2.0
+version: 0.3.0
 abstract: >-
   A Lean 4 formalization of viscosity-solution theory for second-order
   degenerate elliptic partial differential equations. A paper describing the

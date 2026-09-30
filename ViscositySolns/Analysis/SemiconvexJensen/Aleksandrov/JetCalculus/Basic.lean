@@ -104,13 +104,15 @@ theorem HasSecondOrderJet.linearPerturbation
         (C := Set.univ) (u := f) (φ := fun y : Point n => dotProduct q y)
         (x := x) (J := ({ gradient := p, hessian := X } : Jet n))
         h.1 (hasSecondOrderExpansionWithin_linear (C := Set.univ) q x)
-    simpa [linearPerturbation, hjet] using hsuper
+    unfold ViscositySolns.linearPerturbation
+    simpa [hjet] using hsuper
   · have hsub :=
       subjet_add_hasSecondOrderExpansionWithin
         (C := Set.univ) (u := f) (φ := fun y : Point n => dotProduct q y)
         (x := x) (J := ({ gradient := p, hessian := X } : Jet n))
         h.2 (hasSecondOrderExpansionWithin_linear (C := Set.univ) q x)
-    simpa [linearPerturbation, hjet] using hsub
+    unfold ViscositySolns.linearPerturbation
+    simpa [hjet] using hsub
 
 /--
 Subtracting the quadratic function used for semiconvex convexification
@@ -141,26 +143,26 @@ theorem HasSecondOrderJet.of_semiconvexConvexification
         (C := Set.univ) (u := f) (φ := Q) (x := x)
         (J := ({ gradient := p, hessian := X } : Jet n))
         (A := A)
-        (by simpa [semiconvexConvexification, Q] using h.1)
+        h.1
         (by
           simpa [Q, A] using
             hasSecondOrderExpansionWithin_quadraticModel_recenter
               (C := Set.univ) (x0 := 0) (r := 0) (p := 0)
               (X := lambda • (1 : Hessian n)) x)
-    simpa [A] using hsuper
+    exact hsuper
   · have hsub :
         ({ gradient := p, hessian := X } : Jet n) - A ∈ Subjet Set.univ f x :=
       subjet_sub_of_add_hasSecondOrderExpansionWithin
         (C := Set.univ) (u := f) (φ := Q) (x := x)
         (J := ({ gradient := p, hessian := X } : Jet n))
         (A := A)
-        (by simpa [semiconvexConvexification, Q] using h.2)
+        h.2
         (by
           simpa [Q, A] using
             hasSecondOrderExpansionWithin_quadraticModel_recenter
               (C := Set.univ) (x0 := 0) (r := 0) (p := 0)
               (X := lambda • (1 : Hessian n)) x)
-    simpa [A] using hsub
+    exact hsub
 
 /--
 Existential form of the semiconvex-to-convex reduction for two-sided jets.
@@ -294,11 +296,8 @@ theorem quadraticModel_zero_zero_isLittleO_sub (x : Point n) (X : Hessian n) :
     have h0 : (fun h : Point n => ‖h‖ ^ 2) =o[𝓝 0] (fun h : Point n => h) :=
       Asymptotics.isLittleO_norm_pow_id (E' := Point n) (n := 2) (by norm_num : 1 < 2)
     have htend : Filter.Tendsto (fun y : Point n => y - x) (𝓝 x) (𝓝 0) := by
-      have hcont :=
-        (continuous_id.sub (continuous_const : Continuous fun _ : Point n => x)).continuousAt
-          (x := x)
-      simpa [ContinuousAt] using hcont
-    simpa using h0.comp_tendsto htend
+      simpa using (continuous_sub_right x).tendsto x
+    exact h0.comp_tendsto htend
   exact hquad.trans_isLittleO hsquare
 
 /--
@@ -326,11 +325,8 @@ theorem HasSecondOrderExpansionWithin.hasFDerivAt
     have h0 : (fun h : Point n => ‖h‖ ^ 2) =o[𝓝 0] (fun h : Point n => h) :=
       Asymptotics.isLittleO_norm_pow_id (E' := Point n) (n := 2) (by norm_num : 1 < 2)
     have htend : Filter.Tendsto (fun y : Point n => y - x) (𝓝 x) (𝓝 0) := by
-      have hcont :=
-        (continuous_id.sub (continuous_const : Continuous fun _ : Point n => x)).continuousAt
-          (x := x)
-      simpa [ContinuousAt] using hcont
-    simpa using h0.comp_tendsto htend
+      simpa using (continuous_sub_right x).tendsto x
+    exact h0.comp_tendsto htend
   have hrho_nhds : rho =o[𝓝 x] (fun y : Point n => ‖y - x‖ ^ 2) := by
     simpa [SemijetRemainder, nhdsWithin_univ] using hrho
   have hrho_first : rho =o[𝓝 x] (fun y : Point n => y - x) :=
@@ -366,7 +362,10 @@ theorem HasSecondOrderJet.gradient_eq_zero_of_isLocalMax
   have hzero : gradientLinearMap p = 0 :=
     hmax.hasFDerivAt_eq_zero hfderiv
   have hgrad := congrArg linearMapGradient hzero
-  simpa using hgrad
+  rw [linearMapGradient_gradientLinearMap] at hgrad
+  rw [hgrad]
+  ext i
+  simp
 
 /--
 At a local maximum point, the quadratic form determined by the Hessian
@@ -514,7 +513,9 @@ theorem superjet_zero_of_isLocalMax
   refine ⟨fun _ => 0, ?_, ?_⟩
   · exact Asymptotics.isLittleO_zero (fun y : Point n => ‖y - x‖ ^ 2)
       (nhdsWithin x Set.univ)
-  · simpa [nhdsWithin_univ, quadraticModel] using hmax
+  · rw [nhdsWithin_univ]
+    filter_upwards [hmax] with y hy
+    simpa [quadraticModel] using hy
 
 /--
 At a local maximum point, the zero jet belongs to the closed superjet.

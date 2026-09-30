@@ -78,7 +78,8 @@ theorem hasFDerivAt_linearPerturbation
   have hmap : gradientLinearMap p + gradientLinearMap q = gradientLinearMap (p + q) := by
     ext y
     simp [dotProduct, Finset.sum_add_distrib, add_mul]
-  simpa [linearPerturbation, hmap] using hsum
+  rw [← hmap]
+  exact hsum
 
 /--
 The coordinate-gradient-to-Fréchet-derivative map as a continuous linear map.
@@ -96,7 +97,7 @@ def gradientLinearMapCLM : Point n →L[Real] Point n →L[Real] Real :=
 theorem gradientLinearMapCLM_apply (p : Point n) :
     gradientLinearMapCLM p = gradientLinearMap p := by
   ext v
-  simp [gradientLinearMapCLM, gradientLinearMap, Finset.sum_apply,
+  simp [gradientLinearMapCLM, gradientLinearMap,
     ContinuousLinearMap.smulRightL_apply_apply]
 
 /--
@@ -115,7 +116,10 @@ theorem gradient_add_eq_zero_of_isLocalMax_linearPerturbation_hasFDerivAt
   have hzero : gradientLinearMap (p + q) = 0 :=
     hmax.hasFDerivAt_eq_zero (hasFDerivAt_linearPerturbation (q := q) hf)
   have hgrad := congrArg linearMapGradient hzero
-  simpa using hgrad
+  rw [linearMapGradient_gradientLinearMap] at hgrad
+  rw [hgrad]
+  ext i
+  simp
 
 /--
 Second-order differentiability expressed through ordinary superjets and

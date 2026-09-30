@@ -128,7 +128,7 @@ theorem measurableSet_jensenGradientGlobalContactSet
       simp [E, K]
     rw [hset]
     exact hEclosed.measurableSet
-  simpa [JensenGradientGlobalContactSet, Set.setOf_and] using
+  simpa [JensenGradientGlobalContactSet, Set.ofPred_and] using
     (hball.inter (hgradBall.inter hmaxSet))
 
 /--
@@ -655,7 +655,7 @@ theorem exists_mem_jensenContactSet_of_boundary_gap
     (continuous_const.dotProduct continuous_id).continuousOn
   have hpert_cont :
       ContinuousOn (linearPerturbation f p) (Metric.closedBall x0 r) := by
-    simpa [linearPerturbation] using hf.add hlin_cont
+    exact hf.add hlin_cont
   rcases (isCompact_closedBall x0 r).exists_isMaxOn hne hpert_cont with
     ⟨z, hzClosed, hmax⟩
   have hzBall :

@@ -62,7 +62,7 @@ theorem PerronMethodExistenceTheorem.perronFamily_top_upperEnvelope_eqOn_domain
       hupperBddAbove hlowerBddBelow⟩
     exact B.perronUpperEnvelope_boundarySubsolution hupperTrace
       (fun x hx => by
-        letI : (nhdsWithin x C).NeBot := hne x (Or.inr hx)
+        let : (nhdsWithin x C).NeBot := hne x (Or.inr hx)
         exact B.perronEnvelope_isCoboundedUnder_le
           (hlowerBddBelow x (Or.inr hx)))
       (fun x hx => hupperBddAbove x (Or.inr hx))
@@ -297,7 +297,7 @@ theorem upperEnvelopeLocalizedImprovement_of_sourceOuterClosedBallLowerEnvelope
     dsimp [old, W]
     exact B.perronUpperEnvelope_boundarySubsolution hupperTrace
       (fun x hx => by
-        letI : (nhdsWithin x C).NeBot := hne x (Or.inr hx)
+        let : (nhdsWithin x C).NeBot := hne x (Or.inr hx)
         exact B.perronEnvelope_isCoboundedUnder_le
           (hlowerBddBelow x (Or.inr hx)))
       (fun x hx => hupperBddAbove x (Or.inr hx))

@@ -879,7 +879,7 @@ theorem strictPatchAt_of_old_eq_perronEnvelope
     intro y hy
     have hyP : y ∉ P := hboundaryAway y hy
     change (if y ∈ P then Max.max (old y) (q y) else old y) <= g y
-    rw [if_neg hyP]
+    rw [ite_eq_right hyP]
     exact hold.dirichletSubsolution.boundary_le hy
   have hboundarySC : ∀ y ∈ boundary,
       UpperSemicontinuousWithinAt patched (C ∪ boundary) y := by
@@ -901,10 +901,10 @@ theorem strictPatchAt_of_old_eq_perronEnvelope
     intro z hz
     by_cases hzP : z ∈ P
     · change B.lower z <= (if z ∈ P then Max.max (old z) (q z) else old z)
-      rw [if_pos hzP]
+      rw [ite_eq_left hzP]
       exact (hold.lower_le hz).trans (le_max_left (old z) (q z))
     · change B.lower z <= (if z ∈ P then Max.max (old z) (q z) else old z)
-      rw [if_neg hzP]
+      rw [ite_eq_right hzP]
       exact hold.lower_le hz
   have hupper : ∀ z : Point n, z ∈ C ∪ boundary -> patched z <= B.upper z :=
     hcomparison hdirichlet B.upper_dirichlet

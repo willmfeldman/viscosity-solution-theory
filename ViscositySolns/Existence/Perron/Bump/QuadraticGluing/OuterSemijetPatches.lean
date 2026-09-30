@@ -339,7 +339,7 @@ theorem outerClosedBallLowerEnvelopePatchAt
     ∀ δ : Real, δ < ((1 / 4 : Real) * γ) * ‖z - x‖ ^ 2 ->
       quadraticModel x (W x + δ) J.gradient Xb z < W z}
   have hS : S ∈ nhdsWithin x C := by
-    simpa [S, W, Xb] using
+    exact
       (eventually_forall_quadraticModel_lift_hessian_sub_identity_lt_of_subjet
         (C := C) (u := W) (x := x) (J := J) hγpos hJ)
   rcases hchoose S hS with

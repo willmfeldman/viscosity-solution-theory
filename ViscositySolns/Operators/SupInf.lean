@@ -101,7 +101,7 @@ theorem Proper.infOperator {α : Type*} [Fintype α] [Nonempty α]
 theorem OperatorContinuous.supOperator {α : Type*} [Fintype α] [Nonempty α]
     {F : α -> Operator n} (hF : ∀ a : α, OperatorContinuous (F a)) :
     OperatorContinuous (supOperator F) := by
-  simpa [OperatorContinuous, operatorGraphEval, supOperator] using
+  exact
     (Continuous.finset_sup'_apply
       (s := Finset.univ) (f := fun a z => operatorGraphEval (F a) z)
       Finset.univ_nonempty fun a _ha => (hF a).continuous)
@@ -109,7 +109,7 @@ theorem OperatorContinuous.supOperator {α : Type*} [Fintype α] [Nonempty α]
 theorem OperatorContinuous.infOperator {α : Type*} [Fintype α] [Nonempty α]
     {F : α -> Operator n} (hF : ∀ a : α, OperatorContinuous (F a)) :
     OperatorContinuous (infOperator F) := by
-  simpa [OperatorContinuous, operatorGraphEval, infOperator] using
+  exact
     (Continuous.finset_inf'_apply
       (s := Finset.univ) (f := fun a z => operatorGraphEval (F a) z)
       Finset.univ_nonempty fun a _ha => (hF a).continuous)

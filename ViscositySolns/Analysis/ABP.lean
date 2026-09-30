@@ -19,7 +19,7 @@ with that convex envelope, and a measure estimate obtained from second-order
 information on that contact set. The exact convex-envelope and measure-theory
 statement will be added here when that proof is developed.
 
-For the comparison theorem, the downstream consequence needed from ABP is the
+For the comparison theorem, the consequence needed from ABP is the
 Aleksandrov--Jensen semiconvex matrix theorem recorded in
 `Analysis/SemiconvexJensen.lean`. The proposition below names the current ABP
 formalization target precisely as that family of consequences.

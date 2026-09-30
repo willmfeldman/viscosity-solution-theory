@@ -31,14 +31,14 @@ variable {n : Nat}
 theorem upperEnvelope_eq_of_continuousOn_closure {C : Set (Point n)} {f : Point n -> Real}
     (hf : ContinuousOn f (closure C)) {x : Point n} (hx : x ∈ closure C) :
     upperEnvelope C f x = f x := by
-  haveI : (nhdsWithin x C).NeBot := mem_closure_iff_nhdsWithin_neBot.mp hx
+  have : (nhdsWithin x C).NeBot := mem_closure_iff_nhdsWithin_neBot.mp hx
   exact ((hf x hx).mono subset_closure).tendsto.limsup_eq
 
 /-- The liminf along `𝓝[C] x` of a function continuous on `closure C` is its value. -/
 theorem lowerEnvelope_eq_of_continuousOn_closure {C : Set (Point n)} {f : Point n -> Real}
     (hf : ContinuousOn f (closure C)) {x : Point n} (hx : x ∈ closure C) :
     lowerEnvelope C f x = f x := by
-  haveI : (nhdsWithin x C).NeBot := mem_closure_iff_nhdsWithin_neBot.mp hx
+  have : (nhdsWithin x C).NeBot := mem_closure_iff_nhdsWithin_neBot.mp hx
   exact ((hf x hx).mono subset_closure).tendsto.liminf_eq
 
 theorem isBoundedUnder_le_of_continuousOn_closure {C : Set (Point n)}
@@ -70,7 +70,7 @@ theorem exists_laplace_dirichlet_of_barrierPair (hn : 0 < n)
     ∃ w : Point n -> Real, ViscositySolution C laplaceOperator w ∧
       ContinuousOn w (closure C) ∧ (∀ x ∈ frontier C, w x = g x) ∧
       ∀ x ∈ closure C, B.lower x <= w x ∧ w x <= B.upper x := by
-  haveI : LocallyCompactSpace C := hCopen.locallyCompactSpace
+  have : LocallyCompactSpace C := hCopen.locallyCompactSpace
   have hunion : C ∪ frontier C = closure C := (closure_eq_self_union_frontier C).symm
   have hne : ∀ x : Point n, x ∈ C ∪ frontier C -> (nhdsWithin x C).NeBot := fun x hx =>
     mem_closure_iff_nhdsWithin_neBot.mp (hunion ▸ hx)
@@ -112,7 +112,7 @@ theorem exists_laplace_dirichlet_of_barrierPair (hn : 0 < n)
     intro x hx
     rw [← hunion] at hx
     rcases hx with hxC | hxB
-    · haveI : (nhdsWithin x C).NeBot := hne x (Or.inl hxC)
+    · have : (nhdsWithin x C).NeBot := hne x (Or.inl hxC)
       constructor
       · calc B.lower x <= P x := B.lower_le_perronEnvelope (Or.inl hxC)
           _ <= w x := le_upperEnvelope hxC (hPle x)

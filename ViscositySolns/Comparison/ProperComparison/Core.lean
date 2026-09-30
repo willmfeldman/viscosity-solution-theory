@@ -183,7 +183,7 @@ theorem mem_interior_of_mem_closure_of_not_mem_frontier
     (hxclosure : x ∈ closure C) (hxfrontier : x ∉ frontier C) :
     x ∈ interior C := by
   have hx : x ∈ closure C \ frontier C := ⟨hxclosure, hxfrontier⟩
-  simpa [closure_diff_frontier] using hx
+  simpa [closure_sdiff_frontier] using hx
 
 /--
 If `x ∈ closure C` and `x ∉ frontier C`, then `x ∈ C`.
@@ -251,7 +251,7 @@ theorem BoundaryComparisonOn.eventually_pair_mem_of_tendsto_of_shifted_gap
   have hx0interior : x0 ∈ interior C := by
     by_contra hx0not
     have hx0frontier : x0 ∈ frontier C := by
-      rw [← closure_diff_interior]
+      rw [← closure_sdiff_interior]
       exact ⟨hx0closure, hx0not⟩
     have hlt : u x0 - δ < v x0 :=
       hboundary.sub_const_lt_on_frontier hδ x0 hx0frontier

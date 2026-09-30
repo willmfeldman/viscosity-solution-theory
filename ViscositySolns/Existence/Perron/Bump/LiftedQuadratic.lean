@@ -143,7 +143,7 @@ theorem OperatorContinuous.exists_pos_pos_eventually_lowerEnvelope_bentQuadratic
     have hval : Continuous fun γ : Real =>
         quadraticModel x (W x + δ) J.gradient
           (J.hessian - γ • (1 : Hessian n)) x := by
-      simpa using (continuous_quadraticModel_jet x (W x + δ) x).comp hJetγ
+      exact (continuous_quadraticModel_jet x (W x + δ) x).comp hJetγ
     have hjet : Continuous fun γ : Real =>
         quadraticModelJetAt x J.gradient
           (J.hessian - γ • (1 : Hessian n)) x := by
@@ -163,7 +163,7 @@ theorem OperatorContinuous.exists_pos_pos_eventually_lowerEnvelope_bentQuadratic
             (J.hessian - γ • (1 : Hessian n)) x).gradient
           (quadraticModelJetAt x J.gradient
             (J.hessian - γ • (1 : Hessian n)) x).hessian := by
-    simpa [operatorGraphEval] using hF.continuous.comp hpathγ
+    exact hF.continuous.comp hpathγ
   have hnearγ : ∀ᶠ γ in nhds (0 : Real),
       F x
           (quadraticModel x (W x + δ) J.gradient
@@ -172,8 +172,8 @@ theorem OperatorContinuous.exists_pos_pos_eventually_lowerEnvelope_bentQuadratic
             (J.hessian - γ • (1 : Hessian n)) x).gradient
           (quadraticModelJetAt x J.gradient
             (J.hessian - γ • (1 : Hessian n)) x).hessian < 0 := by
-    simpa using hcontγ.continuousAt (isOpen_Iio.mem_nhds hzero)
-  haveI : NeBot (nhdsWithin (0 : Real) (Set.Ioi 0)) := by infer_instance
+    exact hcontγ.continuousAt (isOpen_Iio.mem_nhds hzero)
+  have : NeBot (nhdsWithin (0 : Real) (Set.Ioi 0)) := by infer_instance
   have hnearγWithin : ∀ᶠ γ in nhdsWithin (0 : Real) (Set.Ioi 0),
       F x
           (quadraticModel x (W x + δ) J.gradient
@@ -495,11 +495,11 @@ theorem OperatorContinuous.perronLowerEnvelope_localQuadraticOpenBump
       F z (q z)
           (quadraticModelJetAt x J.gradient J.hessian z).gradient
           (quadraticModelJetAt x J.gradient J.hessian z).hessian := by
-    simpa [operatorGraphEval] using hF.continuous.comp hpath
+    exact hF.continuous.comp hpath
   have hnegSetOpen : IsOpen negSet := by
-    simpa [negSet] using isOpen_Iio.preimage hcont
+    exact isOpen_Iio.preimage hcont
   have hnegSetNhds : negSet ∈ nhdsWithin x C := by
-    simpa [q, negSet] using hnear
+    exact hnear
   refine ⟨κ, negSet, hκpos, hnegSetOpen, hnegSetNhds, ?_, ?_, ?_⟩
   · simpa [q] using hWlt
   · simpa [q] using
@@ -545,11 +545,11 @@ theorem OperatorContinuous.perronLowerEnvelope_bentQuadraticOpenBump
       F z (q z)
           (quadraticModelJetAt x J.gradient Xb z).gradient
           (quadraticModelJetAt x J.gradient Xb z).hessian := by
-    simpa [operatorGraphEval] using hF.continuous.comp hpath
+    exact hF.continuous.comp hpath
   have hnegSetOpen : IsOpen negSet := by
-    simpa [negSet] using isOpen_Iio.preimage hcont
+    exact isOpen_Iio.preimage hcont
   have hnegSetNhds : negSet ∈ nhdsWithin x C := by
-    simpa [q, Xb, negSet] using hnear
+    exact hnear
   refine ⟨δ, γ, negSet, hδpos, hγpos, hnegSetOpen, hnegSetNhds, ?_, ?_, ?_⟩
   · simpa [q, Xb] using hWlt
   · simpa [q, Xb] using

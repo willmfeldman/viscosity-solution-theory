@@ -50,12 +50,14 @@ project. The Jensen lemma is proved internally and unconditionally.
 
 ## Toolchain
 
-- Lean: `leanprover/lean4:v4.30.0`
-- Mathlib: `v4.30.0`
-- AleksandrovDifferentiability: pinned through the parent `lake-manifest.json`
+- Lean: `leanprover/lean4:v4.34.1`
+- Mathlib: `v4.34.1`
+- AleksandrovDifferentiability: release `v0.3.0`, pinned through the parent
+  `lake-manifest.json`
 - Comparator: `leanprover/comparator`, with a `lean4export` build matching Lean
-  `v4.30.0` and the pinned `landrun` revision; the release workflow runs on a
-  standard GitHub-hosted Linux runner.
+  `v4.34.1` and the pinned `landrun` revision; the release workflow runs on a
+  standard GitHub-hosted Linux runner. The workflow builds every dependency
+  from source rather than from prebuilt release archives.
 
 Every workspace sets `packagesDir = "../../.lake/packages"` in its
 `lakefile.toml` (and records the same folder in its `lake-manifest.json`), so
@@ -108,10 +110,10 @@ The ordinary challenge-build driver does not perform statement comparison.
 
 ### Recorded acceptance
 
-The release Comparator workflow accepted all eight workspaces on 2026-09-26,
-on a standard GitHub-hosted Linux runner, with Lean `v4.30.0`, Mathlib
-`c5ea003`, Comparator `d03acab`, `landrun` `5ed4a3d`, and `lean4export`
-`a3e35a5`:
+The release Comparator workflow accepted all eight workspaces on 2026-09-29,
+on a standard GitHub-hosted Linux runner, with Lean `v4.34.1`, Mathlib
+`d13f23b`, AleksandrovDifferentiability `v0.3.0` (built from source),
+Comparator `5756749`, `landrun` `811cfff`, and `lean4export` `076e8e5`:
 
 | Workspace | Statement comparison and kernel check | Axioms |
 |---|---|---|

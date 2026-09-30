@@ -68,7 +68,7 @@ theorem upperSemicontinuousOn_supConvolutionKernel
         (fun x : Point n => (lambda / 2) * dotProduct (x - ξ) (x - ξ)) K := by
     have hdiff : Continuous fun x : Point n => x - ξ :=
       continuous_id.sub continuous_const
-    simpa using (continuous_const.mul (hdiff.dotProduct hdiff)).continuousOn
+    exact (continuous_const.mul (hdiff.dotProduct hdiff)).continuousOn
   have hnegpen :
       UpperSemicontinuousOn
         (fun x : Point n => -((lambda / 2) * dotProduct (x - ξ) (x - ξ))) K :=
@@ -183,8 +183,7 @@ theorem superjet_of_superjet_supConvolutionMajorant
     change (fun x : Point n => rho (T x)) =o[nhdsWithin y K]
       (fun x : Point n => ‖x - y‖ ^ 2)
     convert hcomp using 1
-    ext x
-    simp [T]
+    all_goals ext x; simp [T]
   refine ⟨fun x : Point n => rho (T x), hrho_comp, ?_⟩
   have hineq_comp :
       ∀ᶠ x in nhdsWithin y K,

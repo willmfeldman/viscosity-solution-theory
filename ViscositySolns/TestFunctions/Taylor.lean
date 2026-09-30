@@ -124,7 +124,7 @@ theorem hasFDerivWithinAt_frechetSecondOrderModel {C : Set (Point n)}
         (D2φ (x - x0)) C x := by
     refine (hquad_raw.const_smul (1 / 2 : Real)).congr_fderiv ?_
     ext v
-    simp only [ContinuousLinearMap.smul_apply, ContinuousLinearMap.add_apply,
+    simp only [smul_apply, add_apply,
       ContinuousLinearMap.precompR_apply, ContinuousLinearMap.precompL_apply,
       ContinuousLinearMap.id_apply]
     rw [hD2φ v dx]

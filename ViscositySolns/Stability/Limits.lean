@@ -139,7 +139,7 @@ theorem isClosed_tailClosureSuperjetGraph
         ext z
         simp [hA]
       simp [hset]
-  rw [TailClosureSuperjetGraph, Set.setOf_forall]
+  rw [TailClosureSuperjetGraph, Set.ofPred_forall]
   exact isClosed_iInter hclosed
 
 /-- Tail closures of subjet graphs are closed sets. -/
@@ -157,7 +157,7 @@ theorem isClosed_tailClosureSubjetGraph
         ext z
         simp [hA]
       simp [hset]
-  rw [TailClosureSubjetGraph, Set.setOf_forall]
+  rw [TailClosureSubjetGraph, Set.ofPred_forall]
   exact isClosed_iInter hclosed
 
 /--
@@ -218,7 +218,7 @@ theorem tailClosureSuperjetGraph_of_nat_hessian_add_identity
           simpa [J] using
             (nhds_induced (fun K : Jet n => (K.gradient, K.hessian)) J)]
     rw [tendsto_comap_iff]
-    simpa [Jδ, J] using hJdata
+    exact hJdata
   have hz : Tendsto (fun k : Nat => ((x, r), Jδ k)) atTop
       (nhds ((x, r), J)) :=
     tendsto_const_nhds.prodMk_nhds hJ
@@ -260,7 +260,7 @@ theorem tailClosureSubjetGraph_of_nat_hessian_sub_identity
           simpa [J] using
             (nhds_induced (fun K : Jet n => (K.gradient, K.hessian)) J)]
     rw [tendsto_comap_iff]
-    simpa [Jδ, J] using hJdata
+    exact hJdata
   have hz : Tendsto (fun k : Nat => ((x, r), Jδ k)) atTop
       (nhds ((x, r), J)) :=
     tendsto_const_nhds.prodMk_nhds hJ

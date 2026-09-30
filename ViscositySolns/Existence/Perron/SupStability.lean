@@ -300,7 +300,7 @@ theorem DirichletBarrierPair.pointwiseSup_perronFamily_isBoundedUnder_le
     (nhdsWithin x C).IsBoundedUnder (· <= ·)
       (pointwiseSup
         (fun w : PerronFamily C boundary F g B.lower B.upper => w.fun)) := by
-  letI : Nonempty (PerronFamily C boundary F g B.lower B.upper) :=
+  let : Nonempty (PerronFamily C boundary F g B.lower B.upper) :=
     B.perronFamily_nonempty
   rcases hupper with ⟨a, ha⟩
   refine ⟨a, eventually_map.2 ?_⟩
@@ -325,7 +325,7 @@ theorem DirichletBarrierPair.pointwiseSup_perronFamily_isBoundedUnder_ge
     (nhdsWithin x C).IsBoundedUnder (· >= ·)
       (pointwiseSup
         (fun w : PerronFamily C boundary F g B.lower B.upper => w.fun)) := by
-  letI : Nonempty (PerronFamily C boundary F g B.lower B.upper) :=
+  let : Nonempty (PerronFamily C boundary F g B.lower B.upper) :=
     B.perronFamily_nonempty
   rcases hlower with ⟨a, ha⟩
   refine ⟨a, eventually_map.2 ?_⟩
@@ -353,14 +353,14 @@ theorem DirichletBarrierPair.upperEnvelope_perronEnvelope_eq_upperHalfRelaxedLim
       upperHalfRelaxedLimit
         (fun w : PerronFamily C boundary F g B.lower B.upper => w.fun)
         (⊤ : Filter (PerronFamily C boundary F g B.lower B.upper)) C x := by
-  letI : Nonempty (PerronFamily C boundary F g B.lower B.upper) :=
+  let : Nonempty (PerronFamily C boundary F g B.lower B.upper) :=
     B.perronFamily_nonempty
-  letI : (nhdsWithin x C).NeBot := hne
+  let : (nhdsWithin x C).NeBot := hne
   have hhrBddAbove :=
     B.perronFamily_halfRelaxed_isBoundedUnder_le_top (x := x) hupper
   have hhrBddBelow :=
     B.perronFamily_halfRelaxed_isBoundedUnder_ge_top (x := x) hlower
-  haveI : NeBot
+  have : NeBot
       (halfRelaxedFilter
         (⊤ : Filter (PerronFamily C boundary F g B.lower B.upper)) C x) := by
     rw [halfRelaxedFilter_def]
@@ -463,7 +463,7 @@ theorem DirichletBarrierPair.perronUpperEnvelope_viscositySubsolution_of_perronF
       (upperEnvelope C (perronEnvelope C boundary F g B.lower B.upper)) := by
   let ιP := PerronFamily C boundary F g B.lower B.upper
   let uP : ιP -> Point n -> Real := fun w => w.fun
-  letI : Nonempty ιP := B.perronFamily_nonempty
+  let : Nonempty ιP := B.perronFamily_nonempty
   have hbddAbove : ∀ x ∈ C,
       (halfRelaxedFilter (⊤ : Filter ιP) C x).IsBoundedUnder (· <= ·)
         (halfRelaxedValue uP) := by
@@ -474,8 +474,8 @@ theorem DirichletBarrierPair.perronUpperEnvelope_viscositySubsolution_of_perronF
       (halfRelaxedFilter (⊤ : Filter ιP) C x).IsCoboundedUnder (· <= ·)
         (halfRelaxedValue uP) := by
     intro x hx
-    letI : (nhdsWithin x C).NeBot := hne x hx
-    haveI : NeBot (halfRelaxedFilter (⊤ : Filter ιP) C x) := by
+    let : (nhdsWithin x C).NeBot := hne x hx
+    have : NeBot (halfRelaxedFilter (⊤ : Filter ιP) C x) := by
       rw [halfRelaxedFilter_def]
       infer_instance
     exact (B.perronFamily_halfRelaxed_isBoundedUnder_ge_top
@@ -554,7 +554,7 @@ theorem DirichletBarrierPair.perronUpperEnvelope_dirichletSubsolution_of_barrier
   refine B.perronUpperEnvelope_dirichletSubsolution hF hsub hbddAbove
     hcobddBelow hEq hupperTrace ?_ hupperBddAboveOnBoundary hupperSemi
   intro x hx
-  letI : (nhdsWithin x C).NeBot := hneBoundary x hx
+  let : (nhdsWithin x C).NeBot := hneBoundary x hx
   exact B.perronEnvelope_isCoboundedUnder_le (hlowerBddBelowOnBoundary x hx)
 
 end ViscositySolns

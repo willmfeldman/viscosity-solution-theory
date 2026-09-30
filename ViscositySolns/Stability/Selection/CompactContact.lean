@@ -111,7 +111,7 @@ theorem exists_isLocalMaxOn_sub_continuousOn_of_upperSemicontinuousOn_isCompact
     ∃ x ∈ K, IsLocalMaxOn (fun y => u y - φ y) K x := by
   rcases exists_isMaxOn_sub_continuousOn_of_upperSemicontinuousOn_isCompact
     hne hK hu hφ with ⟨x, hx, hmax⟩
-  exact ⟨x, hx, hmax.localize⟩
+  exact ⟨x, hx, hmax.isLocalMaxOn⟩
 
 /--
 The compact minimum selected above is also a local minimum on the compact set.
@@ -123,7 +123,7 @@ theorem exists_isLocalMinOn_sub_continuousOn_of_lowerSemicontinuousOn_isCompact
     ∃ x ∈ K, IsLocalMinOn (fun y => u y - φ y) K x := by
   rcases exists_isMinOn_sub_continuousOn_of_lowerSemicontinuousOn_isCompact
     hne hK hu hφ with ⟨x, hx, hmin⟩
-  exact ⟨x, hx, hmin.localize⟩
+  exact ⟨x, hx, hmin.isLocalMinOn⟩
 
 /--
 A local maximum of `u - φ` is exactly a touching from above of `u` by `φ`.
@@ -150,7 +150,7 @@ theorem touchesAboveOn_of_isMaxOn_sub
     {C : Set (Point n)} {u φ : Point n -> Real} {x : Point n}
     (hmax : IsMaxOn (fun y => u y - φ y) C x) :
     TouchesAboveOn C u φ x :=
-  touchesAboveOn_of_isLocalMaxOn_sub hmax.localize
+  touchesAboveOn_of_isLocalMaxOn_sub hmax.isLocalMaxOn
 
 /--
 A global minimum of `u - φ` on `C` gives a touching from below on `C`.
@@ -159,7 +159,7 @@ theorem touchesBelowOn_of_isMinOn_sub
     {C : Set (Point n)} {u φ : Point n -> Real} {x : Point n}
     (hmin : IsMinOn (fun y => u y - φ y) C x) :
     TouchesBelowOn C u φ x :=
-  touchesBelowOn_of_isLocalMinOn_sub hmin.localize
+  touchesBelowOn_of_isLocalMinOn_sub hmin.isLocalMinOn
 
 /--
 If the half-size identity-Hessian perturbation supports `u` from above on `K`,
@@ -325,7 +325,7 @@ theorem superjetGraph_of_isMaxOn_sub_hasSecondOrderExpansionWithin
     (hφ : HasSecondOrderExpansionWithin C φ x J) :
     ((x, u x), J) ∈ SuperjetGraph C u :=
   superjetGraph_of_isLocalMaxOn_sub_hasSecondOrderExpansionWithin hx
-    hmax.localize hφ
+    hmax.isLocalMaxOn hφ
 
 /--
 A selected compact minimum contact gives a subjet graph point.
@@ -337,7 +337,7 @@ theorem subjetGraph_of_isMinOn_sub_hasSecondOrderExpansionWithin
     (hφ : HasSecondOrderExpansionWithin C φ x J) :
     ((x, u x), J) ∈ SubjetGraph C u :=
   subjetGraph_of_isLocalMinOn_sub_hasSecondOrderExpansionWithin hx
-    hmin.localize hφ
+    hmin.isLocalMinOn hφ
 
 /--
 If the set of indices `i` for which there exists a local maximum contact

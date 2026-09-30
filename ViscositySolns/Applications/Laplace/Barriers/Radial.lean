@@ -316,6 +316,7 @@ theorem hasDerivAt_expProfile (a k α ρ s : Real) :
   have h1 : HasDerivAt (fun s => -(α * (s - ρ))) (-(α * 1)) s :=
     (((hasDerivAt_id s).sub_const ρ).const_mul α).neg
   have h := (h1.exp.const_mul k).const_sub a
+  change HasDerivAt (fun s => a - k * Real.exp (-(α * (s - ρ)))) _ s
   convert h using 1
   ring
 

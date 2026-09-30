@@ -239,7 +239,7 @@ theorem hasSecondOrderJet_of_contDiff_two
   have hjet : HasSecondOrderJet f x J.gradient J.hessian :=
     ⟨superjet_of_touchesAbove_hasSecondOrderExpansionWithin hAbove hExpansion,
       subjet_of_touchesBelow_hasSecondOrderExpansionWithin hBelow hExpansion⟩
-  simpa [J] using hjet
+  exact hjet
 
 /--
 At a closed-ball global contact point of a `C^2` function, the coordinate
@@ -324,19 +324,19 @@ theorem hessian_lower_bound_of_convexOn_semiconvexConvexification_contDiff_two
           quadraticModel 0 0 0 (lambda • (1 : Hessian n)) y)
         (x := x) (J := ({ gradient := p, hessian := H } : Jet n))
         hjet.1 hQ
-    simpa [semiconvexConvexification] using h
+    exact h
   have hHherm : H.IsHermitian := by
     simpa [H] using contDiff_two_bilinearMapHessian_isHermitian (n := n) hf x
   have hAherm : (lambda • (1 : Hessian n)).IsHermitian :=
     Matrix.isHermitian_one.smul (IsSelfAdjoint.all lambda)
   have hsumHerm :
       ((({ gradient := p, hessian := H } : Jet n) + A).hessian).IsHermitian := by
-    simpa [A] using hHherm.add hAherm
+    exact hHherm.add hAherm
   have hnonneg :
       0 <= ((({ gradient := p, hessian := H } : Jet n) + A).hessian) :=
     Superjet.hessian_nonneg_of_convexOn hconv hsuper hsumHerm
   have hnonneg' : 0 <= H + lambda • (1 : Hessian n) := by
-    simpa [A] using hnonneg
+    exact hnonneg
   calc
     -(lambda • (1 : Hessian n)) = 0 - lambda • (1 : Hessian n) := by
       simp
@@ -385,19 +385,19 @@ theorem hessian_lower_bound_of_convexOn_closedBall_semiconvexConvexification_con
           quadraticModel 0 0 0 (lambda • (1 : Hessian n)) y)
         (x := x) (J := ({ gradient := p, hessian := H } : Jet n))
         hjet.1 hQ
-    simpa [semiconvexConvexification] using h
+    exact h
   have hHherm : H.IsHermitian := by
     simpa [H] using contDiff_two_bilinearMapHessian_isHermitian (n := n) hf x
   have hAherm : (lambda • (1 : Hessian n)).IsHermitian :=
     Matrix.isHermitian_one.smul (IsSelfAdjoint.all lambda)
   have hsumHerm :
       ((({ gradient := p, hessian := H } : Jet n) + A).hessian).IsHermitian := by
-    simpa [A] using hHherm.add hAherm
+    exact hHherm.add hAherm
   have hnonneg :
       0 <= ((({ gradient := p, hessian := H } : Jet n) + A).hessian) :=
     Superjet.hessian_nonneg_of_convexOn_closedBall hconv hx hsuper hsumHerm
   have hnonneg' : 0 <= H + lambda • (1 : Hessian n) := by
-    simpa [A] using hnonneg
+    exact hnonneg
   calc
     -(lambda • (1 : Hessian n)) = 0 - lambda • (1 : Hessian n) := by
       simp

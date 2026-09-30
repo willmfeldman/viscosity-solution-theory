@@ -40,13 +40,13 @@ theorem smoothTestJetWithin_congr_nhdsWithin
     {C D : Set (Point n)} {φ : Point n -> Real} {x : Point n}
     (h : nhdsWithin x C = nhdsWithin x D) :
     smoothTestJetWithin C φ x = smoothTestJetWithin D φ x := by
-  have hEq : C =ᶠ[nhds x] D := nhdsWithin_eq_iff_eventuallyEq.mp h
+  have hEq : C =ᶠ[nhds x] D := nhdsWithin_eq_iff_eventuallyEqSet.mp h
   have hDφ : fderivWithin Real φ C x = fderivWithin Real φ D x :=
     fderivWithin_congr_set hEq
   have hD2φ :
       fderivWithin Real (fderivWithin Real φ C) C x =
         fderivWithin Real (fderivWithin Real φ D) D x :=
-    fderivWithin_fderivWithin_eq_of_eventuallyEq (𝕜 := Real) (f := φ) hEq
+    fderivWithin_fderivWithin_eq_of_eventuallyEqSet (𝕜 := Real) (f := φ) hEq
   rw [smoothTestJetWithin, smoothTestJetWithin, hDφ, hD2φ]
 
 /--
@@ -67,19 +67,19 @@ theorem continuousOn_smoothTestJetWithin
   have hD2φ_cont :
       ContinuousOn (fderivWithin Real (fderivWithin Real φ C) C) C :=
     hDφ_cd.continuousOn_fderivWithin huniq (by norm_num)
-  rw [continuousOn_iff_continuous_restrict]
+  rw [continuousOn_iff_continuous_domRestrict]
   refine continuous_induced_rng.mpr ?_
   have hgrad :
       Continuous fun x : C =>
         linearMapGradient (fderivWithin Real φ C x) := by
     exact continuous_pi fun i =>
-      hDφ_cont.restrict.clm_apply continuous_const
+      hDφ_cont.domRestrict.clm_apply continuous_const
   have hhess :
       Continuous fun x : C =>
         bilinearMapHessian (fderivWithin Real (fderivWithin Real φ C) C x) := by
     exact continuous_pi fun i =>
       continuous_pi fun j =>
-        ((hD2φ_cont.restrict.clm_apply continuous_const).clm_apply continuous_const)
+        ((hD2φ_cont.domRestrict.clm_apply continuous_const).clm_apply continuous_const)
   exact hgrad.prodMk hhess
 
 /--

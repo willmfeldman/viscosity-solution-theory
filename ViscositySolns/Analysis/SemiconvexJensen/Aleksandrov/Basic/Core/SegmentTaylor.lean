@@ -92,7 +92,7 @@ theorem HasFDerivAt.hasDerivAt_line
     HasDerivAt (fun s : Real => F (x + s • v)) (D v) t := by
   have hline : HasDerivAt (fun s : Real => x + s • v) v t := by
     simpa using ((hasDerivAt_id' t).smul_const v).const_add x
-  simpa using hF.comp_hasDerivAt t hline
+  exact hF.comp_hasDerivAt t hline
 
 /--
 Line-restriction derivative for the residual after subtracting a Fréchet
@@ -575,7 +575,7 @@ theorem DotProductSelfAdjoint.sub
     (hA : DotProductSelfAdjoint A) (hB : DotProductSelfAdjoint B) :
     DotProductSelfAdjoint (A - B) := by
   intro v w
-  simp only [ContinuousLinearMap.sub_apply, sub_dotProduct]
+  simp only [sub_apply, sub_dotProduct]
   rw [hA v w, hB v w]
 
 /--
