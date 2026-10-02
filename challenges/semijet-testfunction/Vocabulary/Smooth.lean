@@ -1,4 +1,8 @@
-import Challenge.Foundation
+module
+
+public import Vocabulary.Foundation
+
+@[expose] public section
 
 /-!
 # Challenge vocabulary: coordinate gradients and Hessians of test functions
@@ -43,3 +47,5 @@ def bilinearMapHessian (D2 : Point n →L[Real] Point n →L[Real] Real) : Hessi
   fun i j => D2 (coordinateVector i) (coordinateVector j)
 
 end ViscositySolns
+
+end

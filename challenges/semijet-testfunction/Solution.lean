@@ -1,4 +1,6 @@
-import ViscositySolns
+module
+
+public import ViscositySolns
 
 /-!
 # Solution: semijet / smooth test-function characterization
@@ -6,7 +8,7 @@ import ViscositySolns
 Discharges the challenge through the public library import.
 -/
 
-noncomputable section
+@[expose] public noncomputable section
 
 open Matrix
 

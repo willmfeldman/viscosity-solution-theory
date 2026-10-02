@@ -1,5 +1,7 @@
-import ViscositySolns
-import ViscositySolns.Existence
+module
+
+public import ViscositySolns
+public import ViscositySolns.Existence
 
 /-!
 # Solution: Perron assembly theorem for the Dirichlet problem
@@ -11,7 +13,7 @@ the Perron conclusion. The Dirichlet predicates require semicontinuity up to
 the boundary, matching the independently stated challenge vocabulary.
 -/
 
-noncomputable section
+@[expose] public noncomputable section
 
 namespace ViscositySolns
 

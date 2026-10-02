@@ -1,4 +1,6 @@
-import ViscositySolns
+module
+
+public import ViscositySolns
 
 /-!
 # Solution: the Crandall–Ishii lemma for the quadratic penalty
@@ -8,7 +10,7 @@ second-differentiability input is supplied by the completed external
 formalization.
 -/
 
-noncomputable section
+@[expose] public noncomputable section
 
 namespace ViscositySolns
 

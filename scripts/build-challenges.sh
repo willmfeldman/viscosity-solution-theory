@@ -10,8 +10,8 @@ usage() {
   cat <<'EOF'
 Usage: scripts/build-challenges.sh --challenge-only|--trusted-all
 
-  --challenge-only  Build only the trusted Challenge target in every workspace.
-  --trusted-all     Build Challenge and Solution explicitly in every workspace.
+  --challenge-only  Build only the trusted Vocabulary and Challenge targets in every workspace.
+  --trusted-all     Build Vocabulary, Challenge and Solution explicitly in every workspace.
 
 Use --challenge-only before an adversarial Comparator run.  --trusted-all is
 only for a reviewed, trusted checkout.
@@ -46,7 +46,6 @@ comparison-compact
 harmonic-dirichlet
 ishii-lemma
 jensen-lemma
-operator-model
 perron-existence
 semijet-testfunction
 uniqueness'
@@ -72,7 +71,7 @@ done
 
 for workspace in $workspaces; do
   workspace_dir="$repo_root/challenges/$workspace"
-  for required_file in Challenge.lean Solution.lean config.json lakefile.toml; do
+  for required_file in Vocabulary.lean Challenge.lean Solution.lean config.json lakefile.toml; do
     if [ ! -f "$workspace_dir/$required_file" ]; then
       echo "Missing $required_file in challenge workspace: $workspace_dir" >&2
       exit 1
@@ -91,10 +90,10 @@ echo "==> root: dependency cache"
 
 for workspace in $workspaces; do
   workspace_dir="$repo_root/challenges/$workspace"
-  echo "==> $workspace: Challenge"
+  echo "==> $workspace: Vocabulary, Challenge"
   (
     cd "$workspace_dir"
-    lake build Challenge
+    lake build Vocabulary Challenge
   )
 done
 

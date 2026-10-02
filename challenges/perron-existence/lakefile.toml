@@ -13,6 +13,9 @@ name = "viscosity_solns"
 path = "../.."
 
 [[lean_lib]]
+name = "Vocabulary"
+
+[[lean_lib]]
 name = "Challenge"
 
 [[lean_lib]]

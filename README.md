@@ -108,3 +108,8 @@ this work, please cite it using [CITATION.cff](CITATION.cff).
 The formalization follows the foundational work of Crandall, Ishii, and Lions,
 and builds on Lean, Mathlib, and the AleksandrovDifferentiability project.
 Authorship and contribution history are recorded in the repository metadata.
+
+The Lean proofs were written by AI coding agents (Claude, by Anthropic) under the
+author's mathematical direction and review. The theorem statements and proof routes
+were reviewed by the author. Correctness rests on Lean's kernel check, together with
+the comparator challenges in `challenges/`.

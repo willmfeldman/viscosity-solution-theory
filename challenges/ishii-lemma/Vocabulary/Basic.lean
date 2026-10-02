@@ -1,4 +1,8 @@
-import Mathlib
+module
+
+public import Mathlib
+
+@[expose] public section
 
 /-!
 # Challenge vocabulary: points, jets, and closed semijets
@@ -111,3 +115,5 @@ abbrev DoubledPoint (n : Nat) : Type :=
   Point n × Point n
 
 end ViscositySolns
+
+end

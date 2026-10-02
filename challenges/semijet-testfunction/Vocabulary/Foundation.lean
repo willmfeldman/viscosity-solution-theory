@@ -1,11 +1,15 @@
-import Mathlib
+module
+
+public import Mathlib
+
+@[expose] public section
 
 /-!
 # Challenge vocabulary: points, jets, semijets, and viscosity solutions
 
 Part of the trusted statement surface of the `semijet-testfunction`
 challenge; imports `Mathlib` only. The vocabulary is split across this file
-and `Challenge/Smooth.lean` only so that Lean names the auxiliary proofs inside
+and `Smooth.lean` only so that Lean names the auxiliary proofs inside
 the definitions exactly as the library does, which Comparator requires.
 -/
 
@@ -95,3 +99,5 @@ def ViscositySupersolution (C : Set (Point n)) (F : Operator n) (u : Point n -> 
       0 <= F x (u x) J.gradient J.hessian
 
 end ViscositySolns
+
+end

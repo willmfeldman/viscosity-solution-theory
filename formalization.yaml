@@ -3,17 +3,17 @@ description: >
   Lean 4 formalization of viscosity-solution theory for second-order
   degenerate elliptic equations, following Crandall, Ishii, and Lions,
   "User's guide to viscosity solutions" (Bull. AMS 27, 1992).
-lean_toolchain: leanprover/lean4:v4.34.1
-mathlib: v4.34.1
+lean_toolchain: leanprover/lean4:v4.35.0-rc3
+mathlib: v4.35.0-rc3
 dependencies:
   - name: AleksandrovDifferentiability
     url: https://github.com/willmfeldman/aleksandrov-differentiability
-    rev: v0.3.0
-    commit: 6b318246f170ac472de4728e22f95a2adae420a5
+    rev: v0.4.0
+    commit: 5e5c2ec4cee4f8851387e9bb309eeb703cd72a25
 # Comparator tool revisions pinned in scripts/release-comparator.sh.
 comparator:
-  comparator_revision: 575674928e239f5bc452aab72d1dd7b0f1326494
-  lean4export_revision: 076e8e57707e813375e8f9da8bf989799ace9680
+  comparator_revision: fd5d5bcf14177b187f66d4502071268d877887c3
+  lean4export_revision: 66f1fb4bc256072069767fce52d39480e4524869
   landrun_revision: 811cfff51ceaf3d9843708aa6d22e9b84ccac8b4
 permitted_axioms: [propext, Quot.sound, Classical.choice]
 automation:
@@ -38,7 +38,17 @@ targets:
       domain with compact closure when the boundary comparison, properness,
       structural continuity, and uniform constant-shift hypotheses hold.
     challenge: challenges/comparison-compact
-    challenge_theorems: [ViscositySolns.challenge_comparison_boundary_compact]
+    # The theorems after the headline are non-vacuity and sign-convention checks of the
+    # semijet, viscosity-solution, and ellipticity definitions, not headline results.
+    challenge_theorems:
+      - ViscositySolns.challenge_comparison_boundary_compact
+      - ViscositySolns.challenge_zero_operator_model_case
+      - ViscositySolns.challenge_zero_jet_mem_superjet
+      - ViscositySolns.challenge_positive_operator_rejects_zero_subsolution
+      - ViscositySolns.challenge_two_identity_mem_superjet_sq
+      - ViscositySolns.challenge_identity_not_mem_superjet_sq
+      - ViscositySolns.challenge_neg_trace_degenerateElliptic
+      - ViscositySolns.challenge_trace_not_degenerateElliptic
   - id: uniqueness
     kind: headline-theorem
     expected_axioms: [propext, Quot.sound, Classical.choice]
@@ -136,15 +146,3 @@ targets:
       - ViscositySolns.challenge_harmonic_dirichlet_c2
       - ViscositySolns.challenge_harmonic_dirichlet_exteriorSphere
       - ViscositySolns.challenge_harmonic_dirichlet_ball
-supplemental_challenges:
-  - id: operator-model
-    title: Operator model cases, semijet sign and Hessian conventions, and degenerate ellipticity
-    challenge: challenges/operator-model
-    challenge_theorems:
-      - ViscositySolns.challenge_zero_operator_model_case
-      - ViscositySolns.challenge_zero_jet_mem_superjet
-      - ViscositySolns.challenge_positive_operator_rejects_zero_subsolution
-      - ViscositySolns.challenge_two_identity_mem_superjet_sq
-      - ViscositySolns.challenge_identity_not_mem_superjet_sq
-      - ViscositySolns.challenge_neg_trace_degenerateElliptic
-      - ViscositySolns.challenge_trace_not_degenerateElliptic

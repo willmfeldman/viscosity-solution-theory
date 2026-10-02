@@ -1,4 +1,6 @@
-import ViscositySolns
+module
+
+public import ViscositySolns
 
 /-!
 # Solution: the Dirichlet problem for harmonic functions
@@ -10,7 +12,7 @@ it with `uniformExteriorSphere_of_contDiff_levelSet`, and the ball form with
 `uniformExteriorSphere_ball`.
 -/
 
-noncomputable section
+@[expose] public noncomputable section
 
 open Filter Topology Set
 open scoped Gradient Laplacian NNReal

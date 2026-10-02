@@ -1,4 +1,6 @@
-import ViscositySolns
+module
+
+public import ViscositySolns
 
 /-!
 # Solution: uniqueness of viscosity solutions on a compact closure
@@ -7,7 +9,7 @@ Discharges the challenge by applying the boundary-value comparison principle
 in both directions through the public library import.
 -/
 
-noncomputable section
+@[expose] public noncomputable section
 
 namespace ViscositySolns
 

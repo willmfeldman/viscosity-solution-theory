@@ -33,6 +33,7 @@ failures << "challenge config inventory differs from manifest: #{(workspace_conf
   abort "missing #{config_path}" unless File.file?(config_path)
   config = JSON.parse(File.read(config_path))
   expected = entry.fetch('challenge_theorems')
+  failures << "#{path}: missing Vocabulary.lean" unless File.file?(File.join(path, 'Vocabulary.lean'))
   failures << "#{path}: missing Challenge.lean" unless File.file?(File.join(path, 'Challenge.lean'))
   failures << "#{path}: missing Solution.lean" unless File.file?(File.join(path, 'Solution.lean'))
   failures << "#{path}: missing lakefile.toml" unless File.file?(File.join(path, 'lakefile.toml'))
