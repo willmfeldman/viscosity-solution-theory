@@ -58,25 +58,6 @@ theorem hasFDerivAt_neg_coordinate_gradient_fderiv
   simpa using (hasFDerivAt_coordinate_gradient_fderiv (n := n) hf x).neg
 
 /--
-The matrix of the derivative of the coordinate-gradient map is the transpose
-of the coordinate Hessian represented by the second Fréchet derivative.
--/
-theorem toMatrix_coordinateGradient_comp
-    (D2 : Point n →L[Real] Point n →L[Real] Real) :
-    LinearMap.toMatrix'
-        (((linearMapGradientCLM (n := n)).comp D2 : Point n →L[Real] Point n) :
-          Point n →ₗ[Real] Point n) =
-      (bilinearMapHessian D2).transpose := by
-  ext i j
-  have hsingle : Pi.single j (1 : Real) = coordinateVector j := by
-    ext k
-    by_cases hjk : j = k
-    · subst k
-      simp [coordinateVector]
-    · simp [coordinateVector, hjk]
-  simp [LinearMap.toMatrix'_apply, bilinearMapHessian, hsingle]
-
-/--
 The absolute determinant of the derivative of the negative coordinate-gradient
 map equals the absolute determinant of the coordinate Hessian represented by
 the second Fréchet derivative.
@@ -809,31 +790,5 @@ theorem volume_pos_jensenContactSet_of_contDiff_two
   · intro z _hz
     simpa using (hfDifferentiable z).hasFDerivAt
   · exact hNegGradient.differentiableOn
-
-/--
-Positive measure of the Jensen contact set for a globally `C^2` function,
-using the strict maximum hypothesis on the whole closed ball.
-
-In quantified mathematical form, if `r > 0`, `delta > 0`, `f : R^n -> R` is
-twice continuously differentiable, and `f x < f x0` for every
-`x ∈ closedBall x0 r` with `x ≠ x0`, then
-`JensenContactSet f x0 r delta` has positive Lebesgue measure.
--/
-theorem volume_pos_jensenContactSet_of_contDiff_two_closedBall_strict
-    {f : Point n -> Real} {x0 : Point n} {r delta : Real}
-    (hr : 0 < r)
-    (hdelta : 0 < delta)
-    (hf : ContDiff Real (2 : ℕ∞ω) f)
-    (hstrict :
-      ∀ x : Point n, x ∈ Metric.closedBall x0 r -> x ≠ x0 -> f x < f x0) :
-    0 < volume (JensenContactSet f x0 r delta) := by
-  refine volume_pos_jensenContactSet_of_contDiff_two
-    (n := n) (f := f) (x0 := x0) (r := r) (delta := delta)
-    hr.le hdelta hf ?_
-  intro x hx hdist
-  exact hstrict x hx (fun hx0 => by
-    subst x
-    simp [dist_self] at hdist
-    linarith)
 
 end ViscositySolns

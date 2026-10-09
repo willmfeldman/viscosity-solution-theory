@@ -36,25 +36,6 @@ def HasQuadraticPenaltyLocalMaximumOn
     (fun q : DoubledPoint n => quadraticPenalty α q.1 q.2) x y
 
 /--
-Subtracting a constant from the first function preserves quadratic-penalty
-local maximum points.
-
-In quantified mathematical form, for every real number `δ`, if `(x, y)` is a
-local maximum point on `C × D` of
-`(x', y') ↦ u x' - v y' - (α / 2) * ∑ i, (x' i - y' i)^2`,
-then `(x, y)` is a local
-maximum point on `C × D` of
-`(x', y') ↦ (u x' - δ) - v y' - (α / 2) * ∑ i, (x' i - y' i)^2`.
--/
-theorem HasQuadraticPenaltyLocalMaximumOn.sub_const_left
-    {C D : Set (Point n)} {u v : Point n -> Real} {α : Real}
-    {x y : Point n} {δ : Real}
-    (h : HasQuadraticPenaltyLocalMaximumOn C D u v α x y) :
-    HasQuadraticPenaltyLocalMaximumOn C D (fun z => u z - δ) v α x y := by
-  simpa [HasQuadraticPenaltyLocalMaximumOn] using
-    (HasDoubledLocalMaximumOn.sub_const_left (δ := δ) h)
-
-/--
 Subtracting a constant from the first function does not change
 quadratic-penalty local maximum points.
 
@@ -91,22 +72,6 @@ theorem hasQuadraticPenaltyLocalMaximumOn_of_isMaxOn_doubledObjective
     hmax.isLocalMaxOn
 
 /--
-If the doubled objective attains a maximum on `K × L`, then there are
-`x ∈ K` and `y ∈ L` satisfying the local maximum hypothesis used in the
-quadratic Ishii lemma.
--/
-theorem exists_hasQuadraticPenaltyLocalMaximumOn_of_isCompact
-    {K L : Set (Point n)} {u v : Point n -> Real} {α : Real}
-    (hKne : K.Nonempty) (hLne : L.Nonempty)
-    (hKcompact : IsCompact K) (hLcompact : IsCompact L)
-    (hu : UpperSemicontinuousOn u K) (hv : LowerSemicontinuousOn v L) :
-    ∃ x ∈ K, ∃ y ∈ L, HasQuadraticPenaltyLocalMaximumOn K L u v α x y := by
-  rcases exists_isMaxOn_doubledObjective_of_isCompact hKne hLne hKcompact hLcompact hu hv with
-    ⟨q, hq, hmax⟩
-  refine ⟨q.1, hq.1, q.2, hq.2, ?_⟩
-  exact hasQuadraticPenaltyLocalMaximumOn_of_isMaxOn_doubledObjective hq hmax
-
-/--
 The theorem-shaped proposition corresponding to Ishii's lemma for the
 quadratic doubled-variable penalty.
 
@@ -122,37 +87,6 @@ def QuadraticPenaltyIshiiLemmaOn
   ∀ x : Point n, ∀ y : Point n,
     HasQuadraticPenaltyLocalMaximumOn C D u v α x y ->
       QuadraticPenaltyIshiiConclusion C D u v α x y
-
-/--
-The two-function maximum principle specialized to the quadratic penalty gives
-the quadratic-penalty Ishii lemma.
-
-In quantified mathematical form, suppose that for every `α > 0`, every
-`x : Point n`, and every `y : Point n`, whenever `(x, y)` is a local maximum
-point on `C × D` of
-
-`(x', y') ↦ u x' - v y' - (α / 2) * ∑ i, (x' i - y' i)^2`,
-
-there exist matrices `X` and `Y` such that
-
-`(α • (x - y), X) ∈ \bar J^{2,+}_C u(x)`,
-
-`(α • (x - y), Y) ∈ \bar J^{2,-}_D v(y)`,
-
-and the Ishii block matrix inequality holds. Then
-`QuadraticPenaltyIshiiLemmaOn C D u v`.
--/
-theorem QuadraticPenaltyIshiiLemmaOn.of_doubledMaximumPrinciple
-    {C D : Set (Point n)} {u v : Point n -> Real}
-    (hMP : ∀ α : Real, 0 < α ->
-      DoubledMaximumPrincipleOn C D u v
-        (fun q : DoubledPoint n => quadraticPenalty α q.1 q.2)
-        (fun q : DoubledPoint n => quadraticPenaltyGradientLeft α q.1 q.2)
-        (fun q : DoubledPoint n => -quadraticPenaltyGradientRight α q.1 q.2)
-        (fun q : DoubledPoint n => QuadraticPenaltyMatrixRelation α q.1 q.2)) :
-    QuadraticPenaltyIshiiLemmaOn C D u v := by
-  intro α hα x y hlocal
-  exact hMP α hα x y hlocal
 
 /--
 The two-function maximum principle with the CIL matrix bounds gives the
@@ -243,70 +177,5 @@ theorem QuadraticPenaltyIshiiLemmaOn.sub_const_left
       (C := C) (D := D) (u := u) (v := v) (α := α) (x := x) (y := y)
       (δ := δ)).1 hlocal
   exact (hIshii α hα x y hlocal_unshifted).sub_const_left
-
-/--
-Assume `QuadraticPenaltyIshiiLemmaOn K L u v`. If the doubled objective
-attains a maximum on `K × L`, as it does when `K` and `L` are nonempty compact
-sets and `u` is upper semicontinuous on `K` while `v` is lower semicontinuous
-on `L`, then there exist `x ∈ K` and `y ∈ L` such that
-`QuadraticPenaltyIshiiConclusion K L u v α x y` holds.
--/
-theorem exists_quadraticPenaltyIshiiConclusion_of_isCompact
-    {K L : Set (Point n)} {u v : Point n -> Real} {α : Real}
-    (hIshii : QuadraticPenaltyIshiiLemmaOn K L u v) (hα : 0 < α)
-    (hKne : K.Nonempty) (hLne : L.Nonempty)
-    (hKcompact : IsCompact K) (hLcompact : IsCompact L)
-    (hu : UpperSemicontinuousOn u K) (hv : LowerSemicontinuousOn v L) :
-    ∃ x ∈ K, ∃ y ∈ L, QuadraticPenaltyIshiiConclusion K L u v α x y := by
-  rcases exists_hasQuadraticPenaltyLocalMaximumOn_of_isCompact
-    hKne hLne hKcompact hLcompact hu hv with ⟨x, hx, y, hy, hlocal⟩
-  exact ⟨x, hx, y, hy, hIshii α hα x y hlocal⟩
-
-/--
-Unpack `QuadraticPenaltyIshiiConclusion` into the matrices `X` and `Y`.
--/
-theorem QuadraticPenaltyIshiiConclusion.exists_matrices
-    {C D : Set (Point n)} {u v : Point n -> Real} {α : Real} {x y : Point n}
-    (h : QuadraticPenaltyIshiiConclusion C D u v α x y) :
-    ∃ X Y : Hessian n,
-      ({ gradient := quadraticPenaltyGradientLeft α x y, hessian := X } : Jet n) ∈
-        ClosedSuperjet C u x ∧
-      ({ gradient := quadraticPenaltyGradientLeft α x y, hessian := Y } : Jet n) ∈
-        ClosedSubjet D v y ∧
-      IshiiMatrixRelation α x y X Y := by
-  rcases MaximumPrincipleConclusion.exists_matrices h with ⟨X, Y, hsuper, hsub, hXY⟩
-  refine ⟨X, Y, hsuper, ?_, hXY⟩
-  simpa using hsub
-
-/--
-Unpack `QuadraticPenaltyIshiiConclusion` into matrices `X` and `Y`, together
-with the individual Loewner-order bounds implied by the Ishii block matrix
-inequality.
-
-In quantified mathematical form, if the quadratic-penalty conclusion holds at
-`(x, y)` with parameter `α`, then there exist matrices `X` and `Y` such that
-`(α(x - y), X)` belongs to the closed superjet of `u` at `x`,
-`(α(x - y), Y)` belongs to the closed subjet of `v` at `y`,
-`X` and `Y` satisfy the Ishii block matrix inequality, and
-
-`-(3α) I ≤ X ≤ 3α I`,     `-(3α) I ≤ Y ≤ 3α I`.
--/
-theorem QuadraticPenaltyIshiiConclusion.exists_matrices_with_bounds
-    {C D : Set (Point n)} {u v : Point n -> Real} {α : Real} {x y : Point n}
-    (h : QuadraticPenaltyIshiiConclusion C D u v α x y) :
-    ∃ X Y : Hessian n,
-      ({ gradient := quadraticPenaltyGradientLeft α x y, hessian := X } : Jet n) ∈
-        ClosedSuperjet C u x ∧
-      ({ gradient := quadraticPenaltyGradientLeft α x y, hessian := Y } : Jet n) ∈
-        ClosedSubjet D v y ∧
-      IshiiMatrixRelation α x y X Y ∧
-      (-(3 * α)) • (1 : Hessian n) <= X ∧
-      X <= (3 * α) • (1 : Hessian n) ∧
-      (-(3 * α)) • (1 : Hessian n) <= Y ∧
-      Y <= (3 * α) • (1 : Hessian n) := by
-  rcases h.exists_matrices with ⟨X, Y, hsuper, hsub, hXY⟩
-  exact ⟨X, Y, hsuper, hsub, hXY,
-    hXY.left_lower_bound, hXY.left_upper_bound,
-    hXY.right_lower_bound, hXY.right_upper_bound⟩
 
 end ViscositySolns

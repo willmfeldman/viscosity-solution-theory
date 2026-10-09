@@ -44,45 +44,6 @@ def JensenContactSetPositiveMeasureOnClosedBallTheorem (n : Nat) : Prop :=
             0 < volume (JensenContactSet f x0 r delta)
 
 /--
-The approximation principle needed to pass from the smooth Jensen theorem to
-the localized Jensen contact-set theorem.
-
-In quantified mathematical form, suppose `f : R^n -> R` is coordinate
-semiconvex on `closedBall x0 r`, `0 < r`, and `f x < f x0` for every
-`x ∈ closedBall x0 r` with `x ≠ x0`. For every `delta > 0`, there exists a
-sequence of functions `f_m : R^n -> R` and a number `c > 0` such that:
-
-* every set `JensenContactSet f_m x0 r (delta / 2)` is measurable;
-* the set-theoretic limsup
-  `⋂ k, ⋃ m, ⋃ (_ : k ≤ m), JensenContactSet f_m x0 r (delta / 2)`
-  is contained in `JensenContactSet f x0 r delta`;
-* for every `m`, the measure of `JensenContactSet f_m x0 r (delta / 2)` is
-  at least `c`.
-
-This is the exact nonsmooth approximation statement needed by the
-measure-theoretic limsup lemma below. The smaller perturbation radius
-`delta / 2` leaves room to pass perturbing vectors to a limit while remaining
-inside `Metric.ball 0 delta`.
--/
-def JensenContactSetLimsupApproximationPrincipleOnClosedBall (n : Nat) : Prop :=
-  ∀ f : Point n -> Real,
-    ∀ x0 : Point n,
-    ∀ r : Real, 0 < r ->
-      (∃ lambda : Real, CoordinateSemiconvexOn lambda (Metric.closedBall x0 r) f) ->
-        (∀ x : Point n, x ∈ Metric.closedBall x0 r -> x ≠ x0 -> f x < f x0) ->
-          ∀ delta : Real, 0 < delta ->
-            ∃ fseq : Nat -> Point n -> Real,
-            ∃ c : ℝ≥0∞,
-              0 < c ∧
-                (∀ m : Nat,
-                  MeasurableSet (JensenContactSet (fseq m) x0 r (delta / 2))) ∧
-                ((⋂ k : Nat, ⋃ m : Nat, ⋃ (_hm : k <= m),
-                    JensenContactSet (fseq m) x0 r (delta / 2)) ⊆
-                    JensenContactSet f x0 r delta) ∧
-                (∀ m : Nat,
-                  c <= volume (JensenContactSet (fseq m) x0 r (delta / 2)))
-
-/--
 The approximation principle in the form closest to the proof in the paper.
 
 In quantified mathematical form, suppose `f : R^n -> R` is coordinate

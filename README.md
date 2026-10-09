@@ -7,7 +7,7 @@ equations*](https://doi.org/10.1090/S0273-0979-1992-00266-5). It formalizes
 semijets and test functions, the Jensen–Aleksandrov machinery and the
 Crandall–Ishii maximum principle used in comparison, and Perron's method for
 Dirichlet existence. As an application, it solves the Dirichlet problem for
-harmonic functions on bounded `C²` domains. The approximately 59,000 lines of
+harmonic functions on bounded `C²` domains. The approximately 41,000 lines of
 Lean source are `sorry`-free and introduce no project axioms beyond Lean and
 Mathlib's trusted principles.
 

@@ -24,24 +24,6 @@ namespace ViscositySolns
 variable {n : Nat}
 
 /--
-The superjet part of a second-order jet belongs to the closed superjet.
--/
-theorem HasSecondOrderJet.closedSuperjet
-    {f : Point n -> Real} {x p : Point n} {X : Hessian n}
-    (h : HasSecondOrderJet f x p X) :
-    ({ gradient := p, hessian := X } : Jet n) ∈ ClosedSuperjet Set.univ f x :=
-  superjet_subset_closedSuperjet (C := Set.univ) (x := x) trivial h.1
-
-/--
-The subjet part of a second-order jet belongs to the closed subjet.
--/
-theorem HasSecondOrderJet.closedSubjet
-    {f : Point n -> Real} {x p : Point n} {X : Hessian n}
-    (h : HasSecondOrderJet f x p X) :
-    ({ gradient := p, hessian := X } : Jet n) ∈ ClosedSubjet Set.univ f x :=
-  subjet_subset_closedSubjet (C := Set.univ) (x := x) trivial h.2
-
-/--
 A linear function has its expected second-order expansion at every point.
 
 In quantified mathematical form, for every `q : R^n`, the function
@@ -55,34 +37,6 @@ theorem hasSecondOrderExpansionWithin_linear
     hasSecondOrderExpansionWithin_quadraticModel_recenter
       (C := C) (x0 := 0) (r := 0) (p := q) (X := (0 : Hessian n)) x
   simpa [quadraticModel, quadraticModelJetAt] using h
-
-/--
-If `f + q · x` has a second-order jet at `x`, then subtracting the linear jet
-gives a second-order jet of `f` at `x`.
--/
-theorem HasSecondOrderJet.of_linearPerturbation
-    {f : Point n -> Real} {x p q : Point n} {X : Hessian n}
-    (h : HasSecondOrderJet (linearPerturbation f q) x p X) :
-    HasSecondOrderJet f x (p - q) X := by
-  have hjet :
-      ({ gradient := p, hessian := X } : Jet n) -
-          ({ gradient := q, hessian := 0 } : Jet n) =
-        ({ gradient := p - q, hessian := X } : Jet n) := by
-    apply (Jet.equivProd n).injective
-    simp [Jet.equivProd]
-  constructor
-  · have hsuper :=
-      superjet_sub_of_add_hasSecondOrderExpansionWithin
-        (C := Set.univ) (u := f) (φ := fun y : Point n => dotProduct q y)
-        (x := x) (J := ({ gradient := p, hessian := X } : Jet n))
-        h.1 (hasSecondOrderExpansionWithin_linear (C := Set.univ) q x)
-    simpa [linearPerturbation, hjet] using hsuper
-  · have hsub :=
-      subjet_sub_of_add_hasSecondOrderExpansionWithin
-        (C := Set.univ) (u := f) (φ := fun y : Point n => dotProduct q y)
-        (x := x) (J := ({ gradient := p, hessian := X } : Jet n))
-        h.2 (hasSecondOrderExpansionWithin_linear (C := Set.univ) q x)
-    simpa [linearPerturbation, hjet] using hsub
 
 /--
 If `f` has a second-order jet at `x`, then `f + q · x` has the corresponding
@@ -461,24 +415,6 @@ theorem HasSecondOrderJet.quadraticForm_nonpos_of_isLocalMax
   exact hfalse
 
 /--
-If `f` has a strict local maximum at `x0`, then `f` has a local maximum at
-`x0`.
-
-In quantified mathematical form, this says: if there is a neighborhood `U` of
-`x0` such that every `x ∈ U` with `x ≠ x0` satisfies `f x < f x0`, then there
-is a neighborhood `V` of `x0` such that every `x ∈ V` satisfies
-`f x ≤ f x0`.
--/
-theorem StrictLocalMax.isLocalMax
-    {f : Point n -> Real} {x0 : Point n} (h : StrictLocalMax f x0) :
-    IsLocalMax f x0 := by
-  rcases h with ⟨U, hU, hstrict⟩
-  filter_upwards [hU] with x hxU
-  by_cases hx : x = x0
-  · simp [hx]
-  · exact le_of_lt (hstrict x hxU hx)
-
-/--
 A strict local maximum is strict on a sufficiently small closed ball.
 
 In quantified mathematical form, if `x0` is a strict local maximum point of
@@ -499,36 +435,6 @@ theorem StrictLocalMax.exists_closedBall_strict
   refine ⟨r, hr_pos, hr_le_R, ?_⟩
   intro x hx hxne
   exact hstrict x (hr0U (Metric.closedBall_subset_closedBall hr_le_r0 hx)) hxne
-
-/--
-At a local maximum point, the zero jet is a superjet.
-
-In quantified mathematical form, if there is a neighborhood `U` of `x` such
-that `f y ≤ f x` for every `y ∈ U`, then `(0, 0)` belongs to
-`J^{2,+}_{R^n} f(x)`.
--/
-theorem superjet_zero_of_isLocalMax
-    {f : Point n -> Real} {x : Point n} (hmax : IsLocalMax f x) :
-    ({ gradient := 0, hessian := 0 } : Jet n) ∈ Superjet Set.univ f x := by
-  refine ⟨fun _ => 0, ?_, ?_⟩
-  · exact Asymptotics.isLittleO_zero (fun y : Point n => ‖y - x‖ ^ 2)
-      (nhdsWithin x Set.univ)
-  · rw [nhdsWithin_univ]
-    filter_upwards [hmax] with y hy
-    simpa [quadraticModel] using hy
-
-/--
-At a local maximum point, the zero jet belongs to the closed superjet.
-
-In quantified mathematical form, if there is a neighborhood `U` of `x` such
-that `f y ≤ f x` for every `y ∈ U`, then `(0, 0)` belongs to
-`\overline J^{2,+}_{R^n} f(x)`.
--/
-theorem closedSuperjet_zero_of_isLocalMax
-    {f : Point n -> Real} {x : Point n} (hmax : IsLocalMax f x) :
-    ({ gradient := 0, hessian := 0 } : Jet n) ∈ ClosedSuperjet Set.univ f x :=
-  superjet_subset_closedSuperjet (C := Set.univ) (x := x) trivial
-    (superjet_zero_of_isLocalMax hmax)
 
 /--
 The second-order calculus theorem needed after applying Jensen's lemma.

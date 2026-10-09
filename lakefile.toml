@@ -1,5 +1,5 @@
 name = "viscosity_solns"
-version = "0.4.0"
+version = "0.4.1"
 description = "Lean 4 formalization of viscosity-solution theory for second-order degenerate elliptic PDE"
 keywords = ["math"]
 defaultTargets = ["ViscositySolns", "ViscositySolnsComparator"]

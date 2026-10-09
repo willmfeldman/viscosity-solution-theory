@@ -88,14 +88,10 @@ public import ViscositySolns.Comparison.SupConvolution.SuperjetTransfer
 public import ViscositySolns.Existence
 public import ViscositySolns.Existence.Perron
 public import ViscositySolns.Existence.Perron.Basic
-public import ViscositySolns.Existence.Perron.BoundarySemicontinuityRegression
 public import ViscositySolns.Existence.Perron.Bump
-public import ViscositySolns.Existence.Perron.Bump.Bridges
 public import ViscositySolns.Existence.Perron.Bump.Contradiction
 public import ViscositySolns.Existence.Perron.Bump.Definitions
-public import ViscositySolns.Existence.Perron.Bump.GlobalBridges
 public import ViscositySolns.Existence.Perron.Bump.Interfaces
-public import ViscositySolns.Existence.Perron.Bump.LiftedQuadratic
 public import ViscositySolns.Existence.Perron.Bump.Quadratic
 public import ViscositySolns.Existence.Perron.Bump.QuadraticGluing
 public import ViscositySolns.Existence.Perron.Bump.QuadraticGluing.AnnulusSelectionPatches
@@ -103,7 +99,6 @@ public import ViscositySolns.Existence.Perron.Bump.QuadraticGluing.BentStrictNeg
 public import ViscositySolns.Existence.Perron.Bump.QuadraticGluing.CertifiedPatches
 public import ViscositySolns.Existence.Perron.Bump.QuadraticGluing.CompactInactivePatches
 public import ViscositySolns.Existence.Perron.Bump.QuadraticGluing.GluingSkeleton
-public import ViscositySolns.Existence.Perron.Bump.QuadraticGluing.OpenBumpMaxPatches
 public import ViscositySolns.Existence.Perron.Bump.QuadraticGluing.OpenBumpPatches
 public import ViscositySolns.Existence.Perron.Bump.QuadraticGluing.OuterSemijetPatches
 public import ViscositySolns.Existence.Perron.Bump.Supersolution
@@ -112,15 +107,11 @@ public import ViscositySolns.Existence.Perron.ConcreteComparisonExample
 public import ViscositySolns.Existence.Perron.Envelopes
 public import ViscositySolns.Existence.Perron.Method
 public import ViscositySolns.Existence.Perron.Method.Core
-public import ViscositySolns.Existence.Perron.Method.HalfRelaxed
 public import ViscositySolns.Existence.Perron.Method.LowerInterfaces
 public import ViscositySolns.Existence.Perron.Method.LowerInterfaces.BentSourcePatches
 public import ViscositySolns.Existence.Perron.Method.LowerInterfaces.CoreInterfaces
-public import ViscositySolns.Existence.Perron.Method.PerronFamily
 public import ViscositySolns.Existence.Perron.Method.StrictBoundary
-public import ViscositySolns.Existence.Perron.Method.StrictBoundary.BentAnnulusPatches
 public import ViscositySolns.Existence.Perron.Method.StrictBoundary.EnvelopeAssembly
-public import ViscositySolns.Existence.Perron.Method.StrictBoundary.SubsolutionPatches
 public import ViscositySolns.Existence.Perron.SupStability
 public import ViscositySolns.Foundation
 public import ViscositySolns.Operators.Comparison
@@ -149,7 +140,6 @@ public import ViscositySolns.Stability.Neighborhoods
 public import ViscositySolns.Stability.Selection
 public import ViscositySolns.Stability.Selection.CompactContact
 public import ViscositySolns.Stability.Selection.LocallyUniformApproximation
-public import ViscositySolns.Stability.SmoothSelection
 public import ViscositySolns.TestFunctions.Characterization
 public import ViscositySolns.TestFunctions.Smooth
 public import ViscositySolns.TestFunctions.Solutions

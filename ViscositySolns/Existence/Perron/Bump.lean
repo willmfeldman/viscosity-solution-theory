@@ -7,9 +7,6 @@ module
 
 public import ViscositySolns.Existence.Perron.Bump.Quadratic
 public import ViscositySolns.Existence.Perron.Bump.Definitions
-public import ViscositySolns.Existence.Perron.Bump.LiftedQuadratic
-public import ViscositySolns.Existence.Perron.Bump.Bridges
-public import ViscositySolns.Existence.Perron.Bump.GlobalBridges
 public import ViscositySolns.Existence.Perron.Bump.Interfaces
 public import ViscositySolns.Existence.Perron.Bump.Contradiction
 public import ViscositySolns.Existence.Perron.Bump.QuadraticGluing

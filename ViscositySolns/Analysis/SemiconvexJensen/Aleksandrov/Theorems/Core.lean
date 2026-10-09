@@ -51,27 +51,6 @@ def AleksandrovSecondDifferentiabilityByJetsForConvexTheorem (n : Nat) :
       volume {x : Point n | ¬ HasSomeSecondOrderJet f x} = 0
 
 /--
-If a set is null on every closed ball centered at the origin with radius
-`k + 1`, then it is null on all of coordinate space.
--/
-theorem volume_eq_zero_of_closedBall_add_one_inter_eq_zero
-    {s : Set (Point n)}
-    (hnull :
-      ∀ k : Nat,
-        volume (Metric.closedBall (0 : Point n) ((k : Real) + 1) ∩ s) = 0) :
-    volume s = 0 := by
-  have hcover :
-      s ⊆ ⋃ k : Nat, Metric.closedBall (0 : Point n) ((k : Real) + 1) ∩ s := by
-    intro x hx
-    have hxcover : x ∈ ⋃ k : Nat, Metric.closedBall (0 : Point n) k := by
-      rw [Metric.iUnion_closedBall_nat (0 : Point n)]
-      trivial
-    rcases Set.mem_iUnion.mp hxcover with ⟨k, hxk⟩
-    refine Set.mem_iUnion.mpr ⟨k, ?_, hx⟩
-    exact Metric.closedBall_subset_closedBall (by norm_num) hxk
-  exact measure_mono_null hcover (measure_iUnion_null hnull)
-
-/--
 Localized Aleksandrov second-differentiability theorem on a closed ball.
 
 In quantified mathematical form, this says: if `f : R^n -> R` is coordinate
@@ -86,21 +65,6 @@ def AleksandrovSecondDifferentiabilityByJetsOnClosedBallTheorem (n : Nat) : Prop
       (∃ lambda : Real, CoordinateSemiconvexOn lambda (Metric.closedBall x0 r) f) ->
         volume (Metric.closedBall x0 r ∩
           {x : Point n | ¬ HasSomeSecondOrderJet f x}) = 0
-
-/--
-Local semiconvex functions on closed balls admit globally semiconvex
-representatives on the corresponding open balls.
--/
-def CoordinateSemiconvexClosedBallExtensionHypothesis (n : Nat) : Prop :=
-  ∀ f : Point n -> Real,
-    ∀ x0 : Point n,
-    ∀ r : Real, 0 < r ->
-      (∃ lambda : Real,
-        CoordinateSemiconvexOn lambda (Metric.closedBall x0 r) f) ->
-        ∃ g : Point n -> Real,
-          (∃ lambda : Real,
-            CoordinateSemiconvexOn lambda Set.univ g) ∧
-            Set.EqOn g f (Metric.ball x0 r)
 
 /--
 Interior version of the local/global semiconvex bridge.
@@ -212,38 +176,6 @@ theorem AleksandrovSecondDifferentiabilityByJetsOnClosedBallTheorem.of_openBall
     (hAleksandrov f x0 r hr hsemi)
 
 /--
-The global semiconvex Aleksandrov theorem implies the local closed-ball theorem,
-provided each locally semiconvex function has a globally semiconvex
-representative agreeing with it on the open ball.
-
-This is the semiconvex local/global bridge for the source proof: ordinary jets
-are local, and the closed-ball boundary has zero measure.
--/
-theorem AleksandrovSecondDifferentiabilityByJetsOnClosedBallTheorem.of_global
-    (hAleksandrov : AleksandrovSecondDifferentiabilityByJetsTheorem n)
-    (hext : CoordinateSemiconvexClosedBallExtensionHypothesis n) :
-    AleksandrovSecondDifferentiabilityByJetsOnClosedBallTheorem n := by
-  apply AleksandrovSecondDifferentiabilityByJetsOnClosedBallTheorem.of_openBall
-  intro f x0 r hr hsemi
-  rcases hext f x0 r hr hsemi with ⟨g, hgsemi, hgf⟩
-  refine measure_mono_null ?_ (hAleksandrov g hgsemi)
-  rintro x ⟨hxball, hxnoJet⟩ hxgJet
-  have hgf_nhds : g =ᶠ[𝓝 x] f := by
-    filter_upwards [Metric.isOpen_ball.mem_nhds hxball] with y hy
-    exact hgf hy
-  exact hxnoJet (hxgJet.congr_of_eventuallyEq hgf_nhds)
-
-/--
-Named-hypothesis version of the global-to-local semiconvex bridge.
--/
-theorem AleksandrovSecondDifferentiabilityByJetsOnClosedBallTheorem.of_global_extension
-    (hAleksandrov : AleksandrovSecondDifferentiabilityByJetsTheorem n)
-    (hext : CoordinateSemiconvexClosedBallExtensionHypothesis n) :
-    AleksandrovSecondDifferentiabilityByJetsOnClosedBallTheorem n :=
-  AleksandrovSecondDifferentiabilityByJetsOnClosedBallTheorem.of_global
-    hAleksandrov hext
-
-/--
 The global semiconvex Aleksandrov theorem implies the local closed-ball theorem
 from the interior local/global extension bridge.
 
@@ -349,64 +281,6 @@ theorem AleksandrovSecondDifferentiabilityByJetsForConvexTheorem.to_semiconvex
   · exact hsemi.convexOn_semiconvexConvexification convex_univ
 
 /--
-The localized closed-ball semiconvex Aleksandrov theorem implies the global
-semiconvex Aleksandrov theorem by covering coordinate space with closed balls.
--/
-theorem AleksandrovSecondDifferentiabilityByJetsOnClosedBallTheorem.to_global
-    (hAleksandrov :
-      AleksandrovSecondDifferentiabilityByJetsOnClosedBallTheorem n) :
-    AleksandrovSecondDifferentiabilityByJetsTheorem n := by
-  intro f hsemi
-  rcases hsemi with ⟨lambda, hsemi⟩
-  apply volume_eq_zero_of_closedBall_add_one_inter_eq_zero
-  intro k
-  have hkpos : 0 < (k : Real) + 1 := by positivity
-  exact hAleksandrov f (0 : Point n) ((k : Real) + 1) hkpos
-    ⟨lambda, hsemi.mono_set (by intro x _hx; trivial)⟩
-
-/--
-The global convex source-proof theorem implies the local closed-ball
-semiconvex theorem whenever local semiconvex functions admit globally
-semiconvex representatives on the open ball.
--/
-theorem AleksandrovSecondDifferentiabilityByJetsOnClosedBallTheorem.of_global_convex_semiconvex
-    (hAleksandrov :
-      AleksandrovSecondDifferentiabilityByJetsForConvexTheorem n)
-    (hext : CoordinateSemiconvexClosedBallExtensionHypothesis n) :
-    AleksandrovSecondDifferentiabilityByJetsOnClosedBallTheorem n :=
-  AleksandrovSecondDifferentiabilityByJetsOnClosedBallTheorem.of_global
-    hAleksandrov.to_semiconvex hext
-
-/--
-Localized Aleksandrov second-differentiability theorem for convex functions on
-a closed ball.
-
-This is the convex target produced by the source proof after reducing a
-semiconvex function to its convexification.
--/
-def AleksandrovSecondDifferentiabilityByJetsForConvexOnClosedBallTheorem
-    (n : Nat) : Prop :=
-  ∀ f : Point n -> Real,
-    ∀ x0 : Point n,
-    ∀ r : Real, 0 < r ->
-      ConvexOn Real (Metric.closedBall x0 r) f ->
-        volume (Metric.closedBall x0 r ∩
-          {x : Point n | ¬ HasSomeSecondOrderJet f x}) = 0
-
-/--
-Local convex functions on closed balls admit globally convex representatives on
-the corresponding open balls.
--/
-def ConvexClosedBallExtensionHypothesis (n : Nat) : Prop :=
-  ∀ f : Point n -> Real,
-    ∀ x0 : Point n,
-    ∀ r : Real, 0 < r ->
-      ConvexOn Real (Metric.closedBall x0 r) f ->
-        ∃ g : Point n -> Real,
-          ConvexOn Real Set.univ g ∧
-            Set.EqOn g f (Metric.ball x0 r)
-
-/--
 Interior version of the convex local/global bridge.
 
 The globally convex representative is only required to agree with the local
@@ -420,32 +294,6 @@ def ConvexInteriorClosedBallExtensionHypothesis (n : Nat) : Prop :=
         ∃ g : Point n -> Real,
           ConvexOn Real Set.univ g ∧
             Set.EqOn g f (Metric.ball x0 r)
-
-/--
-A convex closed-ball extension theorem implies the corresponding semiconvex
-closed-ball extension theorem by extending the convexification and subtracting
-the same quadratic globally.
--/
-theorem ConvexClosedBallExtensionHypothesis.to_coordinateSemiconvex
-    (hext : ConvexClosedBallExtensionHypothesis n) :
-    CoordinateSemiconvexClosedBallExtensionHypothesis n := by
-  intro f x0 r hr hsemi
-  rcases hsemi with ⟨lambda, hsemi⟩
-  let q : Point n -> Real := semiconvexConvexification lambda f
-  have hqconv : ConvexOn Real (Metric.closedBall x0 r) q :=
-    hsemi.convexOn_semiconvexConvexification (convex_closedBall x0 r)
-  rcases hext q x0 r hr hqconv with ⟨G, hGconv, hGq⟩
-  let g : Point n -> Real :=
-    fun x => G x - quadraticModel 0 0 0 (lambda • (1 : Hessian n)) x
-  refine ⟨g, ⟨lambda, ?_⟩, ?_⟩
-  · have hconv :
-        ConvexOn Real Set.univ (semiconvexConvexification lambda g) :=
-      hGconv.congr fun x _hx => by
-        simp [g, semiconvexConvexification]
-    exact ConvexOn.coordinateSemiconvexOn_of_semiconvexConvexification hconv
-  · intro x hx
-    have hxG := hGq hx
-    simp [g, q, semiconvexConvexification, hxG]
 
 /--
 A convex interior closed-ball extension theorem implies the corresponding
@@ -475,17 +323,6 @@ theorem ConvexInteriorClosedBallExtensionHypothesis.to_coordinateSemiconvex
 
 /--
 The global semiconvex Aleksandrov theorem implies the local closed-ball theorem
-from the more primitive convex extension bridge.
--/
-theorem AleksandrovSecondDifferentiabilityByJetsOnClosedBallTheorem.of_global_convexExtension
-    (hAleksandrov : AleksandrovSecondDifferentiabilityByJetsTheorem n)
-    (hext : ConvexClosedBallExtensionHypothesis n) :
-    AleksandrovSecondDifferentiabilityByJetsOnClosedBallTheorem n :=
-  AleksandrovSecondDifferentiabilityByJetsOnClosedBallTheorem.of_global
-    hAleksandrov hext.to_coordinateSemiconvex
-
-/--
-The global semiconvex Aleksandrov theorem implies the local closed-ball theorem
 from the more primitive convex interior extension bridge.
 -/
 theorem
@@ -507,46 +344,6 @@ theorem
     AleksandrovSecondDifferentiabilityByJetsOnClosedBallTheorem n :=
   AleksandrovSecondDifferentiabilityByJetsOnClosedBallTheorem.of_global_convexInteriorExtension
     hAleksandrov.to_semiconvex hext
-
-/--
-Open-ball version of the convex localized Aleksandrov theorem implies the
-closed-ball convex statement.
--/
-theorem AleksandrovSecondDifferentiabilityByJetsForConvexOnClosedBallTheorem.of_openBall
-    (hAleksandrov :
-      ∀ f : Point n -> Real,
-        ∀ x0 : Point n,
-        ∀ r : Real, 0 < r ->
-          ConvexOn Real (Metric.closedBall x0 r) f ->
-            volume (Metric.ball x0 r ∩
-              {x : Point n | ¬ HasSomeSecondOrderJet f x}) = 0) :
-    AleksandrovSecondDifferentiabilityByJetsForConvexOnClosedBallTheorem n := by
-  intro f x0 r hr hconv
-  exact volume_closedBall_inter_eq_zero_of_ball_inter_eq_zero hr
-    (hAleksandrov f x0 r hr hconv)
-
-/--
-The convex localized Aleksandrov theorem implies the semiconvex localized
-Aleksandrov theorem by adding the convexifying quadratic.
--/
-theorem AleksandrovSecondDifferentiabilityByJetsForConvexOnClosedBallTheorem.to_semiconvex
-    (hAleksandrov :
-      AleksandrovSecondDifferentiabilityByJetsForConvexOnClosedBallTheorem n) :
-    AleksandrovSecondDifferentiabilityByJetsOnClosedBallTheorem n := by
-  intro f x0 r hr hsemi
-  rcases hsemi with ⟨lambda, hsemi⟩
-  refine
-    measure_mono_null ?_
-      (hAleksandrov (semiconvexConvexification lambda f) x0 r hr ?_)
-  · rintro x ⟨hxball, hxnoJet⟩
-    refine ⟨hxball, ?_⟩
-    intro hconvJet
-    exact hxnoJet
-      (HasSomeSecondOrderJet.of_semiconvexConvexification
-        (lambda := lambda) hconvJet)
-  · exact
-      hsemi.convexOn_semiconvexConvexification
-        (convex_closedBall x0 r)
 
 /--
 An open-ball convex Aleksandrov theorem implies the closed-ball semiconvex
@@ -578,80 +375,5 @@ theorem AleksandrovSecondDifferentiabilityByJetsOnClosedBallTheorem.of_convex_op
   · exact
       hsemi.convexOn_semiconvexConvexification
         (convex_closedBall x0 r)
-
-local notation "AleksJetsForConvexClosedBall" =>
-  AleksandrovSecondDifferentiabilityByJetsForConvexOnClosedBallTheorem
-
-namespace AleksandrovSecondDifferentiabilityByJetsForConvexOnClosedBallTheorem
-
-/--
-The localized convex closed-ball theorem implies the global convex theorem by
-covering coordinate space with the closed balls `closedBall 0 (k + 1)`.
--/
-theorem to_global
-    (hAleksandrov : AleksJetsForConvexClosedBall n) :
-    AleksandrovSecondDifferentiabilityByJetsForConvexTheorem n := by
-  intro f hconv
-  apply volume_eq_zero_of_closedBall_add_one_inter_eq_zero
-  intro k
-  have hkpos : 0 < (k : Real) + 1 := by positivity
-  have hconvBall :
-      ConvexOn Real (Metric.closedBall (0 : Point n) ((k : Real) + 1)) f := by
-    exact
-      ⟨convex_closedBall (0 : Point n) ((k : Real) + 1), fun x hx y hy a b ha hb hab =>
-        hconv.2 trivial trivial ha hb hab⟩
-  exact hAleksandrov f (0 : Point n) ((k : Real) + 1) hkpos hconvBall
-
-/--
-The global convex Aleksandrov theorem implies the local closed-ball convex
-theorem, provided each closed-ball convex function has a globally convex
-representative agreeing with it on the open ball.
-
-This is the formal local/global bridge for the source proof: ordinary jets are
-local, and the boundary sphere of the closed ball is null.
--/
-theorem of_global
-    (hAleksandrov :
-      AleksandrovSecondDifferentiabilityByJetsForConvexTheorem n)
-    (hext : ConvexClosedBallExtensionHypothesis n) :
-    AleksJetsForConvexClosedBall n := by
-  apply of_openBall
-  intro f x0 r hr hconv
-  rcases hext f x0 r hr hconv with ⟨g, hgconv, hgf⟩
-  refine measure_mono_null ?_ (hAleksandrov g hgconv)
-  rintro x ⟨hxball, hxnoJet⟩ hxgJet
-  have hgf_nhds : g =ᶠ[𝓝 x] f := by
-    filter_upwards [Metric.isOpen_ball.mem_nhds hxball] with y hy
-    exact hgf hy
-  exact hxnoJet (hxgJet.congr_of_eventuallyEq hgf_nhds)
-
-/--
-Named-hypothesis version of the global-to-local convex bridge.
--/
-theorem of_global_extension
-    (hAleksandrov :
-      AleksandrovSecondDifferentiabilityByJetsForConvexTheorem n)
-    (hext : ConvexClosedBallExtensionHypothesis n) :
-    AleksJetsForConvexClosedBall n :=
-  of_global hAleksandrov hext
-
-end AleksandrovSecondDifferentiabilityByJetsForConvexOnClosedBallTheorem
-
-/--
-The global convex source-proof theorem, plus a local globally convex
-representative on open balls, implies the closed-ball semiconvex Aleksandrov
-theorem.
--/
-theorem AleksandrovSecondDifferentiabilityByJetsOnClosedBallTheorem.of_global_convex
-    (hAleksandrov :
-      AleksandrovSecondDifferentiabilityByJetsForConvexTheorem n)
-    (hext : ConvexClosedBallExtensionHypothesis n) :
-    AleksandrovSecondDifferentiabilityByJetsOnClosedBallTheorem n := by
-  let T := AleksandrovSecondDifferentiabilityByJetsForConvexOnClosedBallTheorem n
-  have hconv : T := by
-    exact
-      AleksandrovSecondDifferentiabilityByJetsForConvexOnClosedBallTheorem.of_global
-        hAleksandrov hext
-  exact hconv.to_semiconvex
 
 end ViscositySolns

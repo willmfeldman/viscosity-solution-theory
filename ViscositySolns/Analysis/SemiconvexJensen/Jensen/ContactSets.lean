@@ -244,51 +244,6 @@ theorem JensenContactSet.measure_pos_of_mono_radius
   lt_of_lt_of_le hpos (measure_mono (JensenContactSet.mono_radius hr))
 
 /--
-The contact set is monotone in the allowed size of the perturbing vector.
-
-In quantified mathematical form, if `δ₁ ≤ δ₂`, then every point obtained using
-a perturbing vector `p ∈ ball 0 δ₁` is also obtained using a perturbing
-vector `p ∈ ball 0 δ₂`.
--/
-theorem JensenContactSet.mono_delta
-    {f : Point n -> Real} {x0 : Point n} {r delta₁ delta₂ : Real}
-    (hdelta : delta₁ <= delta₂) :
-    JensenContactSet f x0 r delta₁ ⊆ JensenContactSet f x0 r delta₂ := by
-  intro x hx
-  rcases hx with ⟨hxBall, p, hp, hmax⟩
-  exact ⟨hxBall, p, Metric.ball_subset_ball hdelta hp, hmax⟩
-
-/--
-Positive measure of the contact set is preserved when the allowed perturbing
-vectors are enlarged.
-
-In quantified mathematical form, if `δ₁ ≤ δ₂` and
-`JensenContactSet f x0 r δ₁` has positive Lebesgue measure, then
-`JensenContactSet f x0 r δ₂` also has positive Lebesgue measure.
--/
-theorem JensenContactSet.measure_pos_of_mono_delta
-    {f : Point n -> Real} {x0 : Point n} {r delta₁ delta₂ : Real}
-    (hdelta : delta₁ <= delta₂)
-    (hpos : 0 < volume (JensenContactSet f x0 r delta₁)) :
-    0 < volume (JensenContactSet f x0 r delta₂) :=
-  lt_of_lt_of_le hpos (measure_mono (JensenContactSet.mono_delta hdelta))
-
-/--
-The strict maximum point belongs to the contact set for the zero perturbation.
-
-In quantified mathematical form, if `0 ≤ r`, `0 < δ`, and `x0` is a strict
-local maximum point of `f`, then `x0 ∈ JensenContactSet f x0 r δ`.
--/
-theorem StrictLocalMax.mem_jensenContactSet
-    {f : Point n -> Real} {x0 : Point n} {r delta : Real}
-    (h : StrictLocalMax f x0) (hr : 0 <= r) (hdelta : 0 < delta) :
-    x0 ∈ JensenContactSet f x0 r delta := by
-  refine ⟨Metric.mem_closedBall_self hr, 0, ?_, ?_⟩
-  · simpa using hdelta
-  · filter_upwards [h.isLocalMax] with x hx
-    simpa [linearPerturbation, dotProduct] using hx
-
-/--
 The linear part of a perturbation is uniformly bounded on a closed ball.
 
 In quantified mathematical form, if `x ∈ closedBall x0 r`, then
@@ -433,36 +388,6 @@ theorem exists_pos_boundary_gap_of_coordinateSemiconvexOn_larger_closedBall
     (CoordinateSemiconvexOn.continuousOn_sphere_of_closedBall hsemi hrR) hstrict
 
 /--
-The boundary-exclusion theorem with the positive boundary gap supplied by
-continuity and strict boundary inequality.
-
-In quantified mathematical form, suppose `f` is continuous on `sphere x0 r`
-and `f x < f x0` for every boundary point of `closedBall x0 r`. Then there
-exists `gamma > 0` such that every perturbing vector `p` satisfying
-`n ‖p‖ r < gamma` has the following property: every maximum of
-`x ↦ f x + p · x` on `closedBall x0 r` lies in `ball x0 r`.
--/
-theorem exists_pos_boundary_gap_eventually_isMaxOn_mem_ball
-    {f : Point n -> Real} {x0 : Point n} {r : Real}
-    (hr : 0 <= r)
-    (hf : ContinuousOn f (Metric.sphere x0 r))
-    (hstrict :
-      ∀ x : Point n, x ∈ Metric.closedBall x0 r -> dist x x0 = r -> f x < f x0) :
-    ∃ gamma : Real, 0 < gamma ∧
-      ∀ p z : Point n,
-        (n : Real) * ‖p‖ * r < gamma ->
-          z ∈ Metric.closedBall x0 r ->
-            IsMaxOn (linearPerturbation f p) (Metric.closedBall x0 r) z ->
-              z ∈ Metric.ball x0 r := by
-  rcases exists_pos_boundary_gap_of_continuousOn_sphere
-      (n := n) (f := f) (x0 := x0) (r := r) hf hstrict with
-    ⟨gamma, hgamma_pos, hgap⟩
-  exact ⟨gamma, hgamma_pos, fun p z hp hz hmax =>
-    isMaxOn_linearPerturbation_closedBall_mem_ball_of_boundary_gap
-      (n := n) (f := f) (z := z) (x0 := x0) (p := p)
-      hr hgap hp hz hmax⟩
-
-/--
 An interior maximum on the closed ball gives a point of Jensen's contact set.
 
 In quantified mathematical form, if `z` maximizes `y ↦ f y + p · y` on
@@ -478,22 +403,6 @@ theorem mem_jensenContactSet_of_isMaxOn_closedBall_of_mem_ball
     z ∈ JensenContactSet f x0 r delta := by
   refine ⟨hzClosed, p, hpDelta, ?_⟩
   exact hmax.isLocalMax (Metric.closedBall_mem_nhds_of_mem hzBall)
-
-/--
-Every closed-ball global contact point is a Jensen contact point.
-
-In quantified mathematical form, if `x ∈ B(x0, r)` and there exists
-`p ∈ B(0, delta)` such that `x` maximizes `y ↦ f y + p · y` on
-`closedBall x0 r`, then `x ∈ JensenContactSet f x0 r delta`.
--/
-theorem JensenGlobalContactSet.subset_jensenContactSet
-    (f : Point n -> Real) (x0 : Point n) (r delta : Real) :
-    JensenGlobalContactSet f x0 r delta ⊆ JensenContactSet f x0 r delta := by
-  intro x hx
-  rcases hx with ⟨hxBall, p, hpDelta, hmax⟩
-  exact mem_jensenContactSet_of_isMaxOn_closedBall_of_mem_ball
-    (n := n) (f := f) (z := x) (x0 := x0) (p := p)
-    (Metric.ball_subset_closedBall hxBall) hxBall hpDelta hmax
 
 /--
 Uniform convergence on a closed ball gives convergence at each point of that

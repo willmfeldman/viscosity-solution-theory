@@ -29,7 +29,6 @@ public import ViscositySolns.Stability.HalfRelaxedLimits
 public import ViscositySolns.Stability.Max
 public import ViscositySolns.Stability.Neighborhoods
 public import ViscositySolns.Stability.Selection
-public import ViscositySolns.Stability.SmoothSelection
 public import ViscositySolns.TestFunctions.Solutions
 
 /-!

@@ -62,18 +62,6 @@ def quadraticPenaltyGradientLeft (α : Real) (x y : Point n) : Point n :=
 def quadraticPenaltyGradientRight (α : Real) (x y : Point n) : Point n :=
   -α • (x - y)
 
-/-- The Hessian block of the quadratic penalty in the first variable. -/
-def quadraticPenaltyHessianLeftLeft (α : Real) : Hessian n :=
-  α • (1 : Hessian n)
-
-/-- The mixed Hessian block of the quadratic penalty. -/
-def quadraticPenaltyHessianLeftRight (α : Real) : Hessian n :=
-  -α • (1 : Hessian n)
-
-/-- The Hessian block of the quadratic penalty in the second variable. -/
-def quadraticPenaltyHessianRightRight (α : Real) : Hessian n :=
-  α • (1 : Hessian n)
-
 @[simp]
 theorem quadraticPenalty_apply (α : Real) (x y : Point n) :
     quadraticPenalty α x y = (α / 2) * dotProduct (x - y) (x - y) :=
@@ -120,20 +108,6 @@ theorem comparisonScale_nonneg {α : Real} (hα : 0 < α) (x y : Point n) :
   have hprod : 0 <= α * ‖x - y‖ ^ 2 := mul_nonneg hα.le hsq
   exact add_nonneg hprod (norm_nonneg _)
 
-/--
-If `α > 0` and `x ≠ y`, then
-`0 < α * ‖x - y‖ ^ 2 + ‖x - y‖`.
--/
-theorem comparisonScale_pos_of_ne {α : Real} (hα : 0 < α) {x y : Point n}
-    (hxy : x ≠ y) :
-    0 < α * ‖x - y‖ ^ 2 + ‖x - y‖ := by
-  have hnorm : 0 < ‖x - y‖ := by
-    rw [norm_pos_iff]
-    exact sub_ne_zero.mpr hxy
-  have hsq : 0 <= ‖x - y‖ ^ 2 := sq_nonneg ‖x - y‖
-  have hprod : 0 <= α * ‖x - y‖ ^ 2 := mul_nonneg hα.le hsq
-  exact add_pos_of_nonneg_of_pos hprod hnorm
-
 @[simp]
 theorem quadraticPenaltyGradientRight_eq_neg_left (α : Real) (x y : Point n) :
     quadraticPenaltyGradientRight α x y = -quadraticPenaltyGradientLeft α x y := by
@@ -151,13 +125,6 @@ theorem continuous_quadraticPenalty (α : Real) :
     continuous_fst.sub continuous_snd
   change Continuous fun q : DoubledPoint n => (α / 2) * dotProduct (q.1 - q.2) (q.1 - q.2)
   exact continuous_const.mul (hdiff.dotProduct hdiff)
-
-theorem continuous_doubledObjective {u v : Point n -> Real} {α : Real}
-    (hu : Continuous u) (hv : Continuous v) :
-    Continuous fun q : DoubledPoint n => doubledObjective u v α q := by
-  have huq : Continuous fun q : DoubledPoint n => u q.1 := hu.comp continuous_fst
-  have hvq : Continuous fun q : DoubledPoint n => v q.2 := hv.comp continuous_snd
-  exact (huq.sub hvq).sub (continuous_quadraticPenalty α)
 
 /--
 If `u` is upper semicontinuous on `K` and `v` is lower semicontinuous on `L`,
@@ -228,24 +195,6 @@ theorem value_right_le_left_of_pos_gap_of_isMaxOn_doubledObjective
   linarith
 
 /--
-If `(x, y)` maximizes the doubled-variable objective on `C × C` and `y ∈ C`,
-then comparison with the diagonal point `(y, y)` gives
-
-`quadraticPenalty α x y ≤ u x - u y`.
--/
-theorem quadraticPenalty_le_value_sub_value_of_isMaxOn_doubledObjective
-    {C : Set (Point n)} {u v : Point n -> Real} {α : Real} {x y : Point n}
-    (hy : y ∈ C)
-    (hmax : IsMaxOn (fun q : DoubledPoint n => doubledObjective u v α q)
-      (C ×ˢ C) (x, y)) :
-    quadraticPenalty α x y <= u x - u y := by
-  have hdiag : (y, y) ∈ C ×ˢ C := ⟨hy, hy⟩
-  have hcompare := hmax hdiag
-  have hcompare' : u y - v y <= u x - v y - quadraticPenalty α x y := by
-    simpa [doubledObjective, quadraticPenalty_self] using hcompare
-  nlinarith
-
-/--
 If `(x, y)` maximizes the doubled-variable objective on `C × C` and `z ∈ C`,
 then comparison with the diagonal point `(z, z)` gives
 
@@ -261,23 +210,6 @@ theorem quadraticPenalty_le_value_sub_value_at_diagonal_of_isMaxOn_doubledObject
   have hcompare := hmax hdiag
   have hcompare' : u z - v z <= u x - v y - quadraticPenalty α x y := by
     simpa [doubledObjective, quadraticPenalty_self] using hcompare
-  nlinarith
-
-/--
-Assume `(x, y)` maximizes the doubled-variable objective on `C × C`, `y ∈ C`,
-`m ≤ u y`, and `u x ≤ M`. Then
-
-`α * ‖x - y‖ ^ 2 ≤ 2 * (M - m)`.
--/
-theorem weightedDistanceSq_le_two_value_range_of_isMaxOn_doubledObjective
-    {C : Set (Point n)} {u v : Point n -> Real} {α m M : Real} {x y : Point n}
-    (hα : 0 <= α) (hy : y ∈ C) (hlo : m <= u y) (hhi : u x <= M)
-    (hmax : IsMaxOn (fun q : DoubledPoint n => doubledObjective u v α q)
-      (C ×ˢ C) (x, y)) :
-    α * ‖x - y‖ ^ 2 <= 2 * (M - m) := by
-  have hpen := quadraticPenalty_le_value_sub_value_of_isMaxOn_doubledObjective
-    (C := C) (u := u) (v := v) (α := α) (x := x) (y := y) hy hmax
-  have hnorm := norm_weightedDistanceSq_le_quadraticPenalty_mul_two hα x y
   nlinarith
 
 /--

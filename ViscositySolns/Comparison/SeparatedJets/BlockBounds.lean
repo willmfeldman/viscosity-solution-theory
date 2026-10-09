@@ -26,89 +26,6 @@ namespace ViscositySolns
 variable {n : Nat}
 
 /--
-The left component of a two-sided jet of a separated difference is a
-two-sided jet of the left function.
-
-In quantified mathematical form, let `G, H : R^n -> R`, let
-`F(ξ, η) = G(ξ) - H(η)`, and suppose `(p, Z)` belongs both to the ordinary
-superjet and to the ordinary subjet of `F` at `(x0, y0)`. Then the left
-component of `p` and the left-left block of `Z` belong both to the ordinary
-superjet and to the ordinary subjet of `G` at `x0`.
--/
-theorem HasSecondOrderJet.left_of_blockFunctionToPointFunction_sub_at
-    {G H : Point n -> Real} {z : Point (n + n)} {p : Point (n + n)}
-    {Z : Hessian (n + n)}
-    (hJ : HasSecondOrderJet
-      (blockFunctionToPointFunction (n := n)
-        (fun q : BlockPoint n => G (blockPointLeft q) - H (blockPointRight q)))
-      z p Z) :
-    HasSecondOrderJet G (pointLeft (n := n) z)
-      (leftPointGradient (n := n) p) (leftPointHessian (n := n) Z) := by
-  constructor
-  · exact
-      superjet_left_of_superjet_blockFunctionToPointFunction_sub_at
-        (n := n) (G := G) (H := H) (z := z)
-        (J := ({ gradient := p, hessian := Z } : Jet (n + n))) hJ.1
-  · exact
-      subjet_left_of_subjet_blockFunctionToPointFunction_sub_at
-        (n := n) (G := G) (H := H) (z := z)
-        (J := ({ gradient := p, hessian := Z } : Jet (n + n))) hJ.2
-
-/--
-The right component of a two-sided jet of a separated difference is a
-two-sided jet of the right function with the signs dictated by subtraction.
-
-In quantified mathematical form, let `G, H : R^n -> R`, let
-`F(ξ, η) = G(ξ) - H(η)`, and suppose `(p, Z)` belongs both to the ordinary
-superjet and to the ordinary subjet of `F` at `(x0, y0)`. Then the negative
-right component of `p` and the negative right-right block of `Z` belong both
-to the ordinary superjet and to the ordinary subjet of `H` at `y0`.
--/
-theorem HasSecondOrderJet.right_of_blockFunctionToPointFunction_sub_at
-    {G H : Point n -> Real} {z : Point (n + n)} {p : Point (n + n)}
-    {Z : Hessian (n + n)}
-    (hJ : HasSecondOrderJet
-      (blockFunctionToPointFunction (n := n)
-        (fun q : BlockPoint n => G (blockPointLeft q) - H (blockPointRight q)))
-      z p Z) :
-    HasSecondOrderJet H (pointRight (n := n) z)
-      (-rightPointGradient (n := n) p) (-rightPointHessian (n := n) Z) := by
-  constructor
-  · exact
-      superjet_right_of_subjet_blockFunctionToPointFunction_sub_at
-        (n := n) (G := G) (H := H) (z := z)
-        (J := ({ gradient := p, hessian := Z } : Jet (n + n))) hJ.2
-  · exact
-      subjet_right_of_superjet_blockFunctionToPointFunction_sub_at
-        (n := n) (G := G) (H := H) (z := z)
-        (J := ({ gradient := p, hessian := Z } : Jet (n + n))) hJ.1
-
-/--
-A two-sided jet of a separated difference gives the two corresponding
-one-function two-sided jets.
-
-In quantified mathematical form, let `G, H : R^n -> R`, let
-`F(ξ, η) = G(ξ) - H(η)`, and suppose `(p, Z)` belongs both to the ordinary
-superjet and to the ordinary subjet of `F` at `(x0, y0)`. Then the left
-component of `(p, Z)` is an ordinary two-sided second-order jet of `G` at
-`x0`, and the negative right component of `(p, Z)` is an ordinary two-sided
-second-order jet of `H` at `y0`.
--/
-theorem HasSecondOrderJet.left_right_of_blockFunctionToPointFunction_sub_at
-    {G H : Point n -> Real} {z : Point (n + n)} {p : Point (n + n)}
-    {Z : Hessian (n + n)}
-    (hJ : HasSecondOrderJet
-      (blockFunctionToPointFunction (n := n)
-        (fun q : BlockPoint n => G (blockPointLeft q) - H (blockPointRight q)))
-      z p Z) :
-    HasSecondOrderJet G (pointLeft (n := n) z)
-        (leftPointGradient (n := n) p) (leftPointHessian (n := n) Z) ∧
-      HasSecondOrderJet H (pointRight (n := n) z)
-        (-rightPointGradient (n := n) p) (-rightPointHessian (n := n) Z) :=
-  ⟨hJ.left_of_blockFunctionToPointFunction_sub_at,
-    hJ.right_of_blockFunctionToPointFunction_sub_at⟩
-
-/--
 A two-sided jet of a separated difference has zero mixed Hessian bilinear
 expression.
 
@@ -611,47 +528,6 @@ theorem closedSemijets_and_blockBounds_original_of_regularizedDoubledConvolution
   rcases exists_twoSidedJet_sequence_subsequence_graph_tendsto_regularizedDoubledConvolution
       (n := n) hJensen hAleksandrov hlambda_nonneg
       hKne hLne hKcompact hLcompact hu hv hB hmax with
-    ⟨zSeq, JSeq, Z, φ, hHerm, hJ, _hφ, hZ, _hZHerm, hlower, hupper, hclosed⟩
-  rcases
-    closedSemijets_and_blockBounds_original_of_tendsto_twoSidedJet_regularizedDoubledConvolution
-      (n := n) (lambda := lambda) hlambda_ne
-      hKne hLne hKcompact hLcompact hu hv
-      (zSeq := zSeq) (JSeq := JSeq) (Z := Z) (φ := φ)
-      (lower := (-lambda) • blockDiagonalIdentity n) (upper := B)
-      hZ hHerm hJ hlower hupper hclosed with
-    ⟨hX, hY, hlower', hupper'⟩
-  exact ⟨leftPointHessian (n := n) Z, -rightPointHessian (n := n) Z,
-    hX, hY, hlower', hupper'⟩
-
-/--
-Closed semijets of the original compact functions from the selected
-two-sided-jet theorem.
-
-In quantified mathematical form, this is
-`closedSemijets_and_blockBounds_original_of_regularizedDoubledConvolution_max`
-with the selected two-sided-jet theorem supplied directly, rather than
-through the localized Jensen and Aleksandrov inputs.
--/
-theorem closedSemijets_and_blockBounds_original_of_selectedTwoSidedJets
-    (hselected : SelectedTwoSidedJetsForRegularizedDoubledConvolutionTheorem n)
-    {lambda : Real} (hlambda_nonneg : 0 <= lambda) (hlambda_ne : lambda ≠ 0)
-    {K L : Set (Point n)} {u v : Point n -> Real}
-    (hKne : K.Nonempty) (hLne : L.Nonempty)
-    (hKcompact : IsCompact K) (hLcompact : IsCompact L)
-    (hu : UpperSemicontinuousOn u K) (hv : LowerSemicontinuousOn v L)
-    {B : BlockHessian n} (hB : B.IsHermitian)
-    (hmax : IsMaxOn
-      (fun q : BlockPoint n =>
-        regularizedDoubledConvolution (n := n) lambda K L u v q -
-          blockQuadraticModel B q)
-      Set.univ 0) :
-    ∃ X Y : Hessian n,
-      ({ gradient := 0, hessian := X } : Jet n) ∈ ClosedSuperjet K u 0 ∧
-      ({ gradient := 0, hessian := Y } : Jet n) ∈ ClosedSubjet L v 0 ∧
-      (-lambda) • blockDiagonalIdentity n <= comparisonBlockDiagonal X Y ∧
-      comparisonBlockDiagonal X Y <= B := by
-  rcases hselected lambda hlambda_nonneg K L u v
-      hKne hLne hKcompact hLcompact hu hv B hB hmax with
     ⟨zSeq, JSeq, Z, φ, hHerm, hJ, _hφ, hZ, _hZHerm, hlower, hupper, hclosed⟩
   rcases
     closedSemijets_and_blockBounds_original_of_tendsto_twoSidedJet_regularizedDoubledConvolution

@@ -296,31 +296,6 @@ theorem volume_ball_div_le_of_ball_subset_image_of_image_le_mul
     simpa [mul_comm] using hball_le)
 
 /--
-A positive-measure consequence of the quantitative image-measure lower bound.
-
-In quantified mathematical form, under the hypotheses of
-`volume_ball_div_le_of_ball_subset_image_of_image_le_mul`, if `rho > 0`, then
-`S` has positive Lebesgue measure.
--/
-theorem volume_pos_of_ball_subset_image_of_image_le_mul
-    {S : Set (Point n)} {G : Point n -> Point n} {c : Point n} {rho : Real}
-    {M : ℝ≥0∞}
-    (hrho : 0 < rho)
-    (hM0 : M ≠ 0)
-    (hMtop : M ≠ (∞ : ℝ≥0∞))
-    (hsubset : Metric.ball c rho ⊆ G '' S)
-    (himage : volume (G '' S) <= M * volume S) :
-    0 < volume S := by
-  have hball_pos : 0 < volume (Metric.ball c rho) :=
-    Metric.measure_ball_pos volume c hrho
-  have hdiv_pos : 0 < volume (Metric.ball c rho) / M :=
-    ENNReal.div_pos hball_pos.ne' hMtop
-  exact lt_of_lt_of_le hdiv_pos
-    (volume_ball_div_le_of_ball_subset_image_of_image_le_mul
-      (n := n) (S := S) (G := G) (c := c) (rho := rho) (M := M)
-      hM0 hMtop hsubset himage)
-
-/--
 A quantitative lower bound from the Jacobian image-measure estimate.
 
 In quantified mathematical form, let `S ⊆ R^n`, let `G : R^n -> R^n`, and
@@ -462,34 +437,6 @@ theorem eventually_boundary_gap_of_uniformOn_closedBall
   linarith
 
 /--
-A positive-measure consequence of the Jacobian image-measure estimate.
-
-In quantified mathematical form, under the hypotheses of
-`volume_ball_div_le_of_ball_subset_image_of_hasFDerivWithinAt_det_le`, if
-`rho > 0`, then `S` has positive Lebesgue measure.
--/
-theorem volume_pos_of_ball_subset_image_of_hasFDerivWithinAt_det_le
-    {S : Set (Point n)} {G : Point n -> Point n}
-    {G' : Point n -> Point n →L[Real] Point n}
-    {c : Point n} {rho : Real} {M : ℝ≥0∞}
-    (hSmeas : MeasurableSet S)
-    (hG' : ∀ x : Point n, x ∈ S -> HasFDerivWithinAt G (G' x) S x)
-    (hrho : 0 < rho)
-    (hM0 : M ≠ 0)
-    (hMtop : M ≠ (∞ : ℝ≥0∞))
-    (hdet : ∀ x : Point n, x ∈ S -> ENNReal.ofReal |(G' x).det| <= M)
-    (hsubset : Metric.ball c rho ⊆ G '' S) :
-    0 < volume S := by
-  have hball_pos : 0 < volume (Metric.ball c rho) :=
-    Metric.measure_ball_pos volume c hrho
-  have hdiv_pos : 0 < volume (Metric.ball c rho) / M :=
-    ENNReal.div_pos hball_pos.ne' hMtop
-  exact lt_of_lt_of_le hdiv_pos
-    (volume_ball_div_le_of_ball_subset_image_of_hasFDerivWithinAt_det_le
-      (n := n) (S := S) (G := G) (G' := G') (c := c) (rho := rho) (M := M)
-      hSmeas hG' hM0 hMtop hdet hsubset)
-
-/--
 Measure lower bounds pass from a sequence of sets to its limsup.
 
 In quantified mathematical form, let `E m` be a sequence of measurable
@@ -570,40 +517,6 @@ theorem measure_pos_of_limsup_subset_of_forall_measure_ge
       (μ := μ) hEmeas hBfinite hsubB hlimsup hlower)
 
 /--
-The limsup measure passage specialized to Jensen contact sets.
-
-In quantified mathematical form, let `f_m : R^n -> R` be a sequence of
-functions and let `f : R^n -> R`. Suppose there exists `c > 0` such that, for
-every natural number `m`, the set `JensenContactSet (f_m) x0 r delta` is
-measurable and has Lebesgue measure at least `c`. If
-
-`⋂ n, ⋃ m, ⋃ (_ : n ≤ m), JensenContactSet (f_m) x0 r delta`
-
-is contained in `JensenContactSet f x0 r delta`, then
-`JensenContactSet f x0 r delta` has positive Lebesgue measure.
--/
-theorem volume_pos_jensenContactSet_of_limsup_contact_sets
-    {f : Point n -> Real} {fseq : Nat -> Point n -> Real}
-    {x0 : Point n} {r delta : Real} {c : ℝ≥0∞}
-    (hc : 0 < c)
-    (hmeas :
-      ∀ m : Nat, MeasurableSet (JensenContactSet (fseq m) x0 r delta))
-    (hlimsup :
-      (⋂ n : Nat, ⋃ m : Nat, ⋃ (_hm : n <= m),
-        JensenContactSet (fseq m) x0 r delta) ⊆
-        JensenContactSet f x0 r delta)
-    (hlower :
-      ∀ m : Nat, c <= volume (JensenContactSet (fseq m) x0 r delta)) :
-    0 < volume (JensenContactSet f x0 r delta) := by
-  refine measure_pos_of_limsup_subset_of_forall_measure_ge
-    (μ := volume) (E := fun m : Nat => JensenContactSet (fseq m) x0 r delta)
-    (B := Metric.closedBall x0 r) (K := JensenContactSet f x0 r delta)
-    hc hmeas ?_ ?_ hlimsup hlower
-  · exact measure_closedBall_lt_top.ne
-  · intro m
-    exact JensenContactSet.subset_closedBall (fseq m) x0 r delta
-
-/--
 Positive measure of the Jensen contact set from differentiability of the
 gradient image map.
 
@@ -639,59 +552,6 @@ theorem volume_pos_jensenContactSet_of_differentiableOn_neg_gradient
     (G := fun z : Point n => -G z)
     (c := 0) (rho := rho)
     hG hrho_pos hsubset
-
-/--
-Quantitative Jensen contact-set lower bound from a determinant bound for the
-negative-gradient map.
-
-In quantified mathematical form, assume the hypotheses which give contact
-points for all sufficiently small linear perturbations, and let `G` be the
-gradient of `f` on `ball x0 r`. Suppose that `JensenContactSet f x0 r delta`
-is measurable, that `z ↦ -G z` has derivative `G' z` at every contact point
-relative to the contact set, and that
-`ofReal |det (G' z)| ≤ M` at every contact point, where `M ≠ 0` and
-`M ≠ ∞`. Then there exists `rho > 0` such that
-`volume (ball 0 rho) / M ≤ volume (JensenContactSet f x0 r delta)`.
--/
-theorem exists_pos_radius_volume_ball_div_le_jensenContactSet_of_neg_gradient_det_le
-    {f : Point n -> Real} {x0 : Point n} {r delta : Real}
-    {G : Point n -> Point n} {G' : Point n -> Point n →L[Real] Point n}
-    {M : ℝ≥0∞}
-    (hr : 0 <= r)
-    (hdelta : 0 < delta)
-    (hfClosed : ContinuousOn f (Metric.closedBall x0 r))
-    (hfSphere : ContinuousOn f (Metric.sphere x0 r))
-    (hstrict :
-      ∀ x : Point n, x ∈ Metric.closedBall x0 r -> dist x x0 = r -> f x < f x0)
-    (hderiv :
-      ∀ z : Point n, z ∈ Metric.ball x0 r ->
-        HasFDerivAt f (gradientLinearMap (G z)) z)
-    (hContactMeas : MeasurableSet (JensenContactSet f x0 r delta))
-    (hM0 : M ≠ 0)
-    (hMtop : M ≠ (∞ : ℝ≥0∞))
-    (hG' :
-      ∀ z : Point n, z ∈ JensenContactSet f x0 r delta ->
-        HasFDerivWithinAt (fun w : Point n => -G w) (G' z)
-          (JensenContactSet f x0 r delta) z)
-    (hdet :
-      ∀ z : Point n, z ∈ JensenContactSet f x0 r delta ->
-        ENNReal.ofReal |(G' z).det| <= M) :
-    ∃ rho : Real,
-      0 < rho ∧
-        volume (Metric.ball (0 : Point n) rho) / M <=
-          volume (JensenContactSet f x0 r delta) := by
-  rcases exists_pos_radius_ball_subset_neg_gradient_image_jensenContactSet
-      (n := n) (f := f) (x0 := x0) (r := r) (delta := delta) (G := G)
-      hr hdelta hfClosed hfSphere hstrict hderiv with
-    ⟨rho, hrho_pos, hsubset⟩
-  refine ⟨rho, hrho_pos, ?_⟩
-  exact volume_ball_div_le_of_ball_subset_image_of_hasFDerivWithinAt_det_le
-    (n := n)
-    (S := JensenContactSet f x0 r delta)
-    (G := fun z : Point n => -G z)
-    (G' := G')
-    (c := 0) (rho := rho) (M := M)
-    hContactMeas hG' hM0 hMtop hdet hsubset
 
 /--
 Quantitative Jensen lower bound for the closed-ball global contact set from a

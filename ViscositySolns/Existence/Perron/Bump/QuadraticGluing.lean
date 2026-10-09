@@ -12,7 +12,6 @@ public import ViscositySolns.Existence.Perron.Bump.QuadraticGluing.BentStrictNeg
 public import ViscositySolns.Existence.Perron.Bump.QuadraticGluing.OuterSemijetPatches
 public import ViscositySolns.Existence.Perron.Bump.QuadraticGluing.OpenBumpPatches
 public import ViscositySolns.Existence.Perron.Bump.QuadraticGluing.CertifiedPatches
-public import ViscositySolns.Existence.Perron.Bump.QuadraticGluing.OpenBumpMaxPatches
 
 /-!
 # Quadratic gluing data for the Perron bump step

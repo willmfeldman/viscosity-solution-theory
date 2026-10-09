@@ -29,68 +29,6 @@ namespace ViscositySolns
 
 variable {n : Nat}
 /--
-Selected data along the sequence `1 / (k + 1)`, retaining ordinary two-sided
-jets of the original function.
-
-In quantified mathematical form, under the hypotheses of the localized
-Aleksandrov--Jensen selected-data theorem, there exist sequences `x_k`,
-`a_k`, `X_k`, and `J_k` such that, for every natural number `k`,
-
-* `‖x_k‖ ≤ 1 / (k + 1)`;
-* `‖a_k‖ < 1 / (k + 1)`;
-* `X_k` and `(J_k).hessian` are Hermitian;
-* `(a_k, X_k)` is an ordinary two-sided second-order jet of
-  `x ↦ g x - (1 / 2) * ⟪B x, x⟫ - (∑ i, x_i^2)^2` at `x_k`;
-* `J_k` is obtained from `(a_k, X_k)` by adding the coordinate-quartic jet at
-  `x_k` and the recentered quadratic jet at `x_k`;
-* `J_k` belongs to the closed superjet of `g` at `x_k`;
-* `(J_k).hessian ≤ B + (coordinate-quartic Hessian at x_k)`;
-* `(J_k).gradient` and `(J_k).hessian` form an ordinary two-sided
-  second-order jet of `g` at `x_k`.
-
-Moreover `x_k -> 0` and `a_k -> 0` as `k -> ∞`.
--/
-theorem exists_strictifiedQuadraticObjective_twoSidedJet_sequence_norm_bounds_hessian
-    (hJensen : JensenContactSetPositiveMeasureOnClosedBallTheorem n)
-    (hAleksandrov : AleksandrovSecondDifferentiabilityByJetsOnClosedBallTheorem n)
-    {g : Point n -> Real} {B : Hessian n}
-    (hB : B.IsHermitian)
-    (hconv : ConvexOn Real Set.univ g)
-    (hmax : IsMaxOn (semiconvexQuadraticObjective g B) Set.univ 0) :
-    ∃ xSeq : Nat -> Point n, ∃ aSeq : Nat -> Point n,
-    ∃ XSeq : Nat -> Hessian n, ∃ JSeq : Nat -> Jet n,
-      (∀ k : Nat, ‖xSeq k‖ <= (1 : Real) / ((k : Real) + 1)) ∧
-      (∀ k : Nat, ‖aSeq k‖ < (1 : Real) / ((k : Real) + 1)) ∧
-      Filter.Tendsto xSeq Filter.atTop (𝓝 (0 : Point n)) ∧
-      Filter.Tendsto aSeq Filter.atTop (𝓝 (0 : Point n)) ∧
-      (∀ k : Nat, (XSeq k).IsHermitian) ∧
-      (∀ k : Nat, (JSeq k).hessian.IsHermitian) ∧
-      (∀ k : Nat,
-        HasSecondOrderJet (strictifiedQuadraticObjective g B)
-          (xSeq k) (aSeq k) (XSeq k)) ∧
-      (∀ k : Nat,
-        JSeq k =
-          (({ gradient := aSeq k, hessian := XSeq k } : Jet n) +
-              coordinateQuarticJetAt (xSeq k)) +
-            quadraticModelJetAt 0 0 B (xSeq k)) ∧
-      (∀ k : Nat, JSeq k ∈ ClosedSuperjet Set.univ g (xSeq k)) ∧
-      (∀ k : Nat,
-        (JSeq k).hessian <= (coordinateQuarticJetAt (xSeq k)).hessian + B) ∧
-      (∀ k : Nat, HasSecondOrderJet g (xSeq k)
-        (JSeq k).gradient (JSeq k).hessian) := by
-  rcases exists_strictifiedQuadraticObjective_closedSuperjet_sequence_norm_bounds_hessian
-      hJensen hAleksandrov hB hconv hmax with
-    ⟨xSeq, aSeq, XSeq, JSeq, hx_bound, ha_bound, hx_tendsto, ha_tendsto,
-      hXherm, hJherm, hjet, hJ, hclosed, hupper⟩
-  have htwoSided :
-      ∀ k : Nat, HasSecondOrderJet g (xSeq k)
-        (JSeq k).gradient (JSeq k).hessian := by
-    intro k
-    exact (hjet k).of_eq_strictifiedQuadraticObjectiveJet (hJ k)
-  exact ⟨xSeq, aSeq, XSeq, JSeq, hx_bound, ha_bound, hx_tendsto, ha_tendsto,
-    hXherm, hJherm, hjet, hJ, hclosed, hupper, htwoSided⟩
-
-/--
 Selected closed-superjet data together with a convergent Hessian subsequence.
 
 In standard mathematical terms, under the hypotheses of the localized
@@ -644,45 +582,5 @@ theorem AleksandrovJensenConvexMatrixTheorem.to_forall_semiconvexMatrixTheoremOn
     (hconvex : AleksandrovJensenConvexMatrixTheorem n) :
     ∀ lambda : Real, AleksandrovJensenSemiconvexMatrixTheoremOn (n := n) lambda :=
   fun lambda => hconvex.to_semiconvexMatrixTheoremOn lambda
-
-/--
-The public Aleksandrov--Jensen theorem target implies the coordinate
-semiconvex formulation used in the comparison files.
--/
-theorem AleksandrovJensenSemiconvexMatrixTheoremOn.to_semiconvexMatrixLemmaOn
-    {lambda : Real}
-    (h : AleksandrovJensenSemiconvexMatrixTheoremOn (n := n) lambda) :
-    SemiconvexMatrixLemmaOn (n := n) lambda :=
-  SemiconvexMatrixLemmaOn.of_convexified h
-
-/--
-The coordinate semiconvex formulation and the public convexified
-Aleksandrov--Jensen formulation are equivalent.
--/
-theorem semiconvexMatrixLemmaOn_iff_aleksandrovJensenSemiconvexMatrixTheoremOn
-    {lambda : Real} :
-    SemiconvexMatrixLemmaOn (n := n) lambda ↔
-      AleksandrovJensenSemiconvexMatrixTheoremOn (n := n) lambda :=
-  semiconvexMatrixLemmaOn_iff_convexifiedSemiconvexMatrixLemmaOn
-
-/--
-Apply the public Aleksandrov--Jensen theorem target to a compact
-sup-convolution.
--/
-theorem AleksandrovJensenSemiconvexMatrixTheoremOn.compactSupConvolution_of_isCompact
-    {lambda : Real}
-    (hAJ : AleksandrovJensenSemiconvexMatrixTheoremOn (n := n) lambda)
-    (hlambda : 0 <= lambda) {K : Set (Point n)} {v : Point n -> Real}
-    (hKne : K.Nonempty) (hKcompact : IsCompact K)
-    (hv : UpperSemicontinuousOn v K) {B : Hessian n}
-    (hB : B.IsHermitian)
-    (hmax : IsMaxOn
-      (semiconvexQuadraticObjective
-        (fun ξ : Point n => compactSupConvolution lambda K v ξ) B)
-      Set.univ 0) :
-    SemiconvexMatrixConclusion lambda
-      (fun ξ : Point n => compactSupConvolution lambda K v ξ) B := by
-  exact hAJ.to_semiconvexMatrixLemmaOn.compactSupConvolution_of_isCompact
-    hlambda hKne hKcompact hv hB hmax
 
 end ViscositySolns

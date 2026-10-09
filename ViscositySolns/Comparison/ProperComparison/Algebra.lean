@@ -21,92 +21,6 @@ namespace ViscositySolns
 variable {n : Nat}
 
 /--
-If the quadratic-penalty conclusion of Ishii's lemma holds at `(x, y)`, then
-the corresponding closed superjet and closed subjet produce the viscosity
-inequalities for the same first-derivative vector `α • (x - y)`.
--/
-theorem exists_closedSemijet_inequalities_of_quadraticPenaltyIshiiConclusion
-    {C : Set (Point n)} {F : Operator n} {u v : Point n -> Real}
-    {α : Real} {x y : Point n}
-    (hu : ViscositySubsolution C F u) (hv : ViscositySupersolution C F v)
-    (hF : OperatorContinuous F)
-    (hI : QuadraticPenaltyIshiiConclusion C C u v α x y) :
-    ∃ X Y : Hessian n,
-      ({ gradient := quadraticPenaltyGradientLeft α x y, hessian := X } : Jet n) ∈
-        ClosedSuperjet C u x ∧
-      ({ gradient := quadraticPenaltyGradientLeft α x y, hessian := Y } : Jet n) ∈
-        ClosedSubjet C v y ∧
-      IshiiMatrixRelation α x y X Y ∧
-      F x (u x) (quadraticPenaltyGradientLeft α x y) X <= 0 ∧
-      0 <= F y (v y) (quadraticPenaltyGradientLeft α x y) Y := by
-  rcases hI with ⟨data⟩
-  refine ⟨data.X, data.Y, data.superjet_mem, ?_, data.matrix_relation, ?_, ?_⟩
-  · simpa using data.subjet_mem
-  · exact hu.closedSuperjet_le_of_operatorContinuous hF data.superjet_mem
-  · simpa using hv.closedSubjet_nonneg_of_operatorContinuous hF data.subjet_mem
-
-/--
-Assume the conclusion of Ishii's lemma at `(x, y)`. If `v y ≤ u x`, then
-properness implies that the operator gap
-
-`F y (u x) (α • (x - y)) Y - F x (u x) (α • (x - y)) X`
-
-is nonnegative for the matrices supplied by the closed semijets.
--/
-theorem exists_nonnegative_operator_gap_of_quadraticPenaltyIshiiConclusion
-    {C : Set (Point n)} {F : Operator n} {u v : Point n -> Real}
-    {α : Real} {x y : Point n}
-    (hu : ViscositySubsolution C F u) (hv : ViscositySupersolution C F v)
-    (hF : OperatorContinuous F) (hproper : Proper F)
-    (hvyux : v y <= u x)
-    (hI : QuadraticPenaltyIshiiConclusion C C u v α x y) :
-    ∃ X Y : Hessian n,
-      IshiiMatrixRelation α x y X Y ∧
-      0 <=
-        F y (u x) (quadraticPenaltyGradientLeft α x y) Y -
-          F x (u x) (quadraticPenaltyGradientLeft α x y) X := by
-  rcases exists_closedSemijet_inequalities_of_quadraticPenaltyIshiiConclusion
-    hu hv hF hI with ⟨X, Y, _hJX, _hJY, hXY, hsub, hsuper⟩
-  refine ⟨X, Y, hXY, ?_⟩
-  have hmono :
-      F y (v y) (quadraticPenaltyGradientLeft α x y) Y <=
-        F y (u x) (quadraticPenaltyGradientLeft α x y) Y :=
-    hproper.mono_value y (quadraticPenaltyGradientLeft α x y) Y hvyux
-  linarith
-
-/--
-Under the specialized structural condition, the same operator gap is bounded
-above by a comparison modulus. Thus the matrices supplied by Ishii's lemma
-satisfy both inequalities
-
-`0 ≤ gap` and
-`gap ≤ ω (α * ‖x - y‖ ^ 2 + ‖x - y‖)`.
--/
-theorem exists_operator_gap_bounds_of_quadraticPenaltyIshiiConclusion
-    {C : Set (Point n)} {R : Set Real} {F : Operator n} {u v : Point n -> Real}
-    {α : Real} {x y : Point n}
-    (hu : ViscositySubsolution C F u) (hv : ViscositySupersolution C F v)
-    (hFcont : OperatorContinuous F) (hproper : Proper F)
-    (hcomp : IshiiOperatorComparisonConditionOn C R F)
-    (hα : 0 < α) (hx : x ∈ C) (hy : y ∈ C) (hr : u x ∈ R)
-    (hvyux : v y <= u x)
-    (hI : QuadraticPenaltyIshiiConclusion C C u v α x y) :
-    ∃ ω : Real -> Real, ComparisonModulus ω ∧
-      ∃ X Y : Hessian n,
-        IshiiMatrixRelation α x y X Y ∧
-        0 <=
-          F y (u x) (quadraticPenaltyGradientLeft α x y) Y -
-            F x (u x) (quadraticPenaltyGradientLeft α x y) X ∧
-        F y (u x) (quadraticPenaltyGradientLeft α x y) Y -
-            F x (u x) (quadraticPenaltyGradientLeft α x y) X <=
-          ω (α * ‖x - y‖ ^ 2 + ‖x - y‖) := by
-  rcases hcomp.bound with ⟨ω, hω, hbound⟩
-  rcases exists_nonnegative_operator_gap_of_quadraticPenaltyIshiiConclusion
-    hu hv hFcont hproper hvyux hI with ⟨X, Y, hXY, hnonneg⟩
-  refine ⟨ω, hω, X, Y, hXY, hnonneg, ?_⟩
-  exact hbound α hα x hx y hy (u x) hr X Y hXY
-
-/--
 Assume the conclusion of Ishii's lemma at `(x, y)`. If `u` is a strict
 subsolution with margin `ε` and `v y ≤ u x`, then properness implies that the
 operator gap
@@ -208,37 +122,6 @@ theorem eventually_comparisonScale_pos_of_strict_eventually_isMaxOn
     rw [hgrad]
     exact sub_nonpos.mpr hmono
   exact not_lt_of_ge (le_trans hgap hgap_nonpos) hε
-
-/--
-With a strict subsolution margin `ε`, the matrices supplied by Ishii's lemma
-satisfy both inequalities
-
-`ε ≤ gap` and
-`gap ≤ ω (α * ‖x - y‖ ^ 2 + ‖x - y‖)`.
--/
-theorem exists_strict_operator_gap_bounds_of_quadraticPenaltyIshiiConclusion
-    {C : Set (Point n)} {R : Set Real} {F : Operator n} {u v : Point n -> Real}
-    {ε α : Real} {x y : Point n}
-    (hu : StrictViscositySubsolution C F ε u) (hv : ViscositySupersolution C F v)
-    (hFcont : OperatorContinuous F) (hproper : Proper F)
-    (hcomp : IshiiOperatorComparisonConditionOn C R F)
-    (hα : 0 < α) (hx : x ∈ C) (hy : y ∈ C) (hr : u x ∈ R)
-    (hvyux : v y <= u x)
-    (hI : QuadraticPenaltyIshiiConclusion C C u v α x y) :
-    ∃ ω : Real -> Real, ComparisonModulus ω ∧
-      ∃ X Y : Hessian n,
-        IshiiMatrixRelation α x y X Y ∧
-        ε <=
-          F y (u x) (quadraticPenaltyGradientLeft α x y) Y -
-            F x (u x) (quadraticPenaltyGradientLeft α x y) X ∧
-        F y (u x) (quadraticPenaltyGradientLeft α x y) Y -
-            F x (u x) (quadraticPenaltyGradientLeft α x y) X <=
-          ω (α * ‖x - y‖ ^ 2 + ‖x - y‖) := by
-  rcases hcomp.bound with ⟨ω, hω, hbound⟩
-  rcases exists_strict_operator_gap_of_quadraticPenaltyIshiiConclusion
-    hu hv hFcont hproper hvyux hI with ⟨X, Y, hXY, hgap⟩
-  refine ⟨ω, hω, X, Y, hXY, hgap, ?_⟩
-  exact hbound α hα x hx y hy (u x) hr X Y hXY
 
 /--
 Let `ε > 0`, let `u` be a strict subsolution with margin `ε`, and let `v` be a
@@ -357,78 +240,6 @@ theorem comparison_of_localizedStrictificationAlong
   have huzw : u z <= w z + η := huw z hz
   have hwzv : w z <= v z := hwv z hz
   linarith
-
-/--
-Natural-number indexed constant-shift data imply comparison for a fixed pair
-of functions.
-
-In quantified mathematical form, assume:
-
-* `F` is proper and continuous;
-* `F` satisfies `IshiiOperatorComparisonConditionOn C R F`;
-* `u` is a viscosity subsolution of `F = 0` on `C`;
-* `v` is a viscosity supersolution of `F = 0` on `C`;
-* for every `η > 0`, there exist `δ > 0`, `ε > 0`, and sequences
-  `α : ℕ -> ℝ`, `x y : ℕ -> ℝ^n` satisfying the conditions in
-  `ConstantShiftLocalizedStrictificationAlongDataOn C R F u v`.
-
-Then `u z ≤ v z` for every `z ∈ C`.
--/
-theorem comparison_of_constantShiftLocalizedStrictificationAlongData
-    {C : Set (Point n)} {R : Set Real} {F : Operator n} {u v : Point n -> Real}
-    (hproper : Proper F)
-    (hFcont : OperatorContinuous F)
-    (hcomp : IshiiOperatorComparisonConditionOn C R F)
-    (hu : ViscositySubsolution C F u)
-    (hv : ViscositySupersolution C F v)
-    (hdata : ConstantShiftLocalizedStrictificationAlongDataOn C R F u v) :
-    ComparisonConclusionOn C u v :=
-  comparison_of_localizedStrictificationAlong hproper hFcont hcomp hv
-    (localizedStrictificationAlongOn_of_constantShiftData hu hdata)
-
-/--
-Reduced natural-number indexed constant-shift data imply comparison for a
-fixed pair of functions.
-
-In quantified mathematical form, suppose:
-
-* `F` is proper and continuous;
-* `F` satisfies `IshiiOperatorComparisonConditionOn C R F`;
-* `u` is a viscosity subsolution of `F = 0` on `C`;
-* `v` is a viscosity supersolution of `F = 0` on `C`;
-* `u x ∈ R` for every `x ∈ C`;
-* if `r ∈ R` and `δ ≥ 0`, then `r - δ ∈ R`;
-* the quadratic-penalty Ishii lemma holds for `u` and `v` on `C × C`;
-* for every `η > 0`, there exist `δ > 0`, `ε > 0`, and sequences
-  `α : ℕ -> ℝ`, `x y : ℕ -> ℝ^n` such that `δ ≤ η`,
-  `UniformScalarDecreaseOn C F δ ε` holds, and
-  `StrictDoubledVariableLocalizationAlongOn C R (fun z => u z - δ) v atTop α x y`
-  holds.
-
-Then `u z ≤ v z` for every `z ∈ C`.
--/
-theorem comparison_of_constantShiftLocalizedStrictificationAlongCore
-    {C : Set (Point n)} {R : Set Real} {F : Operator n} {u v : Point n -> Real}
-    (hproper : Proper F)
-    (hFcont : OperatorContinuous F)
-    (hcomp : IshiiOperatorComparisonConditionOn C R F)
-    (hu : ViscositySubsolution C F u)
-    (hv : ViscositySupersolution C F v)
-    (huR : ScalarRangeOn C R u)
-    (hR : ClosedUnderSubNonneg R)
-    (hIshii : QuadraticPenaltyIshiiLemmaOn C C u v)
-    (hcore :
-      ∀ η : Real, 0 < η ->
-        ∃ δ : Real, ∃ ε : Real,
-        ∃ α : ℕ -> Real, ∃ x : ℕ -> Point n, ∃ y : ℕ -> Point n,
-          0 < δ ∧ δ <= η ∧ 0 < ε ∧
-          UniformScalarDecreaseOn C F δ ε ∧
-          StrictDoubledVariableLocalizationAlongOn C R (fun z => u z - δ) v atTop α x y) :
-    ComparisonConclusionOn C u v :=
-  comparison_of_constantShiftLocalizedStrictificationAlongData
-    hproper hFcont hcomp hu hv
-    (constantShiftLocalizedStrictificationAlongDataOn_of_core_unshiftedIshii
-      huR hR hIshii hcore)
 
 /--
 If the ordinary boundary-value hypotheses construct natural-number indexed

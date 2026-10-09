@@ -52,13 +52,6 @@ def ClosedUnderSubNonneg (R : Set Real) : Prop :=
   ∀ r : Real, r ∈ R -> ∀ δ : Real, 0 <= δ -> r - δ ∈ R
 
 /--
-Boundedness of a real-valued function on a set `C`: there exist real numbers
-`m` and `M` such that, for every `x ∈ C`, `m ≤ u x` and `u x ≤ M`.
--/
-def ValueBoundedOn (C : Set (Point n)) (u : Point n -> Real) : Prop :=
-  ∃ m M : Real, ∀ x : Point n, x ∈ C -> m <= u x ∧ u x <= M
-
-/--
 Upper boundedness of a real-valued function on a set `C`: there exists a real
 number `M` such that, for every `x ∈ C`, `u x ≤ M`.
 -/
@@ -71,17 +64,6 @@ number `m` such that, for every `x ∈ C`, `m ≤ u x`.
 -/
 def ValueLowerBoundedOn (C : Set (Point n)) (u : Point n -> Real) : Prop :=
   ∃ m : Real, ∀ x : Point n, x ∈ C -> m <= u x
-
-/--
-If `u` has a minimum and a maximum on `C`, then `u` is bounded above and
-below on `C`.
--/
-theorem ValueBoundedOn.of_isMinOn_isMaxOn
-    {C : Set (Point n)} {u : Point n -> Real} {xmin xmax : Point n}
-    (hmin : IsMinOn u C xmin) (hmax : IsMaxOn u C xmax) :
-    ValueBoundedOn C u := by
-  exact ⟨u xmin, u xmax, fun x hx =>
-    ⟨isMinOn_iff.mp hmin x hx, isMaxOn_iff.mp hmax x hx⟩⟩
 
 /--
 If `u` has a maximum on `C`, then `u` is bounded above on `C`.
@@ -126,33 +108,6 @@ theorem ValueLowerBoundedOn.of_lowerSemicontinuousOn_isCompact
   rcases LowerSemicontinuousOn.exists_isMinOn hCne hCcompact hlsc with
     ⟨xmin, _hxmin, hmin⟩
   exact ValueLowerBoundedOn.of_isMinOn hmin
-
-/--
-If `C` is nonempty and compact, `u` is lower semicontinuous on `C`, and
-`u` is upper semicontinuous on `C`, then `u` is bounded above and below on
-`C`.
--/
-theorem ValueBoundedOn.of_lower_upperSemicontinuousOn_isCompact
-    {C : Set (Point n)} {u : Point n -> Real}
-    (hCne : C.Nonempty) (hCcompact : IsCompact C)
-    (hlsc : LowerSemicontinuousOn u C) (husc : UpperSemicontinuousOn u C) :
-    ValueBoundedOn C u := by
-  rcases LowerSemicontinuousOn.exists_isMinOn hCne hCcompact hlsc with
-    ⟨xmin, _hxmin, hmin⟩
-  rcases UpperSemicontinuousOn.exists_isMaxOn hCne hCcompact husc with
-    ⟨xmax, _hxmax, hmax⟩
-  exact ValueBoundedOn.of_isMinOn_isMaxOn hmin hmax
-
-/--
-If `C` is nonempty and compact and `u` is continuous on `C`, then `u` is
-bounded above and below on `C`.
--/
-theorem ValueBoundedOn.of_continuousOn_isCompact
-    {C : Set (Point n)} {u : Point n -> Real}
-    (hCne : C.Nonempty) (hCcompact : IsCompact C) (hu : ContinuousOn u C) :
-    ValueBoundedOn C u :=
-  ValueBoundedOn.of_lower_upperSemicontinuousOn_isCompact hCne hCcompact
-    hu.lowerSemicontinuousOn hu.upperSemicontinuousOn
 
 /--
 Boundary comparison on a set `C`: for every `x` in the topological frontier of
@@ -309,25 +264,6 @@ def StrictDoubledVariableLocalizationAlongOn
       l (nhdsWithin 0 (Set.Ioi 0))
 
 /--
-For functions `α : ι -> R` and `x y : ι -> R^n` and a filter `l` on `ι`, this
-predicate is the conjunction of the following three statements:
-
-* `α i * ‖x i - y i‖ ^ 2` tends to `0` along `l`;
-* `‖x i - y i‖` tends to `0` along `l`;
-* `{i | x i ≠ y i}` belongs to `l`.
-
-Together with `0 < α i` for all `i` in a set belonging to `l`, these
-statements imply that
-`α i * ‖x i - y i‖ ^ 2 + ‖x i - y i‖` tends to `0` through positive values
-along `l`.
--/
-def DoubledVariableScaleEstimatesAlong
-    {ι : Type*} (l : Filter ι) (α : ι -> Real) (x y : ι -> Point n) : Prop :=
-  Tendsto (fun i : ι => α i * ‖x i - y i‖ ^ 2) l (nhds 0) ∧
-    Tendsto (fun i : ι => ‖x i - y i‖) l (nhds 0) ∧
-      ∀ᶠ i in l, x i ≠ y i
-
-/--
 Let `α i` be real numbers indexed by a filter `l`. If `α i -> +∞` along `l`,
 then `{i | 0 < α i}` belongs to `l`.
 -/
@@ -352,18 +288,6 @@ theorem eventually_one_le_of_tendsto_atTop
     rw [Filter.mem_atTop_sets]
     exact ⟨1, by intro b hb; exact hb⟩
   exact hα hset
-
-theorem ScalarRangeOn.mono_spatial_set
-    {C D : Set (Point n)} {R : Set Real} {u : Point n -> Real}
-    (hu : ScalarRangeOn D R u) (hCD : C ⊆ D) :
-    ScalarRangeOn C R u :=
-  fun x hx => hu x (hCD hx)
-
-theorem ScalarRangeOn.mono_scalar_set
-    {C : Set (Point n)} {R S : Set Real} {u : Point n -> Real}
-    (hu : ScalarRangeOn C R u) (hRS : R ⊆ S) :
-    ScalarRangeOn C S u :=
-  fun x hx => hRS (hu x hx)
 
 /--
 For every function `u`, the scalar range condition holds with scalar set
@@ -421,29 +345,10 @@ theorem ScalarRangeOn.sub_const_of_closedUnderSubNonneg
     ScalarRangeOn C R (fun x => u x - δ) :=
   fun x hx => hR (u x) (hu x hx) δ hδ
 
-theorem ValueBoundedOn.mono_spatial_set
-    {C D : Set (Point n)} {u : Point n -> Real}
-    (hu : ValueBoundedOn D u) (hCD : C ⊆ D) :
-    ValueBoundedOn C u := by
-  rcases hu with ⟨m, M, hbound⟩
-  exact ⟨m, M, fun x hx => hbound x (hCD hx)⟩
-
 theorem BoundaryComparisonHypothesesOn.boundary
     {C : Set (Point n)} {R : Set Real} {u v : Point n -> Real}
     (h : BoundaryComparisonHypothesesOn C R u v) :
     BoundaryComparisonOn C u v :=
   h.1
-
-theorem BoundaryComparisonHypothesesOn.scalarRange
-    {C : Set (Point n)} {R : Set Real} {u v : Point n -> Real}
-    (h : BoundaryComparisonHypothesesOn C R u v) :
-    ScalarRangeOn C R u :=
-  h.2.1
-
-theorem BoundaryComparisonHypothesesOn.compactClosure
-    {C : Set (Point n)} {R : Set Real} {u v : Point n -> Real}
-    (h : BoundaryComparisonHypothesesOn C R u v) :
-    CompactClosure C :=
-  h.2.2
 
 end ViscositySolns

@@ -128,15 +128,6 @@ theorem blockHessianToPointHessian_pointHessianToBlockHessian
   simp [pointHessianToBlockHessian, blockHessianToPointHessian]
 
 /--
-Reindexing a Hermitian Hessian on `R^(n+n)` as a block Hessian on
-`R^n × R^n` preserves Hermitian symmetry.
--/
-theorem Matrix.IsHermitian.pointHessianToBlockHessian
-    {A : Hessian (n + n)} (hA : A.IsHermitian) :
-    (pointHessianToBlockHessian (n := n) A).IsHermitian :=
-  hA.submatrix finSumFinEquiv
-
-/--
 Reindexing a Hermitian block Hessian on `R^n × R^n` as a Hessian on
 `R^(n+n)` preserves Hermitian symmetry.
 -/
@@ -393,19 +384,6 @@ def doubledSameVector (z : Fin n -> Real) : Fin n ⊕ Fin n -> Real :=
 If `X` and `Y` satisfy `IshiiMatrixRelation α x y X Y`, then for every
 `z : Fin n ⊕ Fin n -> Real`,
 
-`zᵀ (ishiiLowerBlock α) z ≤ zᵀ (comparisonBlockDiagonal X Y) z`.
--/
-theorem IshiiMatrixRelation.quadraticForm_lower {α : Real} {x y : Point n}
-    {X Y : Hessian n} (h : IshiiMatrixRelation α x y X Y)
-    (z : Fin n ⊕ Fin n -> Real) :
-    dotProduct z (Matrix.mulVec (ishiiLowerBlock (n := n) α) z) <=
-      dotProduct z (Matrix.mulVec (comparisonBlockDiagonal X Y) z) :=
-  quadraticForm_mono_of_matrix_le h.1 z
-
-/--
-If `X` and `Y` satisfy `IshiiMatrixRelation α x y X Y`, then for every
-`z : Fin n ⊕ Fin n -> Real`,
-
 `zᵀ (comparisonBlockDiagonal X Y) z ≤ zᵀ (ishiiUpperBlock α) z`.
 -/
 theorem IshiiMatrixRelation.quadraticForm_upper {α : Real} {x y : Point n}
@@ -436,111 +414,6 @@ theorem dotProduct_self_nonneg {m : Type*} [Fintype m] (x : m -> Real) :
     0 <= dotProduct x x := by
   rw [dotProduct]
   exact Finset.sum_nonneg fun i _hi => mul_self_nonneg (x i)
-
-/--
-A finite entrywise bound on a Hessian gives an upper bound for its quadratic
-form.
-
-In quantified mathematical form, if `η ≥ 0` and `|Aᵢⱼ| ≤ η` for every
-matrix entry, then for every vector `v`,
-
-`⟪Av, v⟫ ≤ η n^2 ⟪v, v⟫`.
--/
-theorem hessian_quadraticForm_le_of_entrywise_abs_le
-    (A : Hessian n) {eta : Real} (heta : 0 <= eta)
-    (hA : ∀ i j : Fin n, |A i j| <= eta) (v : Point n) :
-    dotProduct (Matrix.mulVec A v) v <=
-      (eta * (n : Real) * (n : Real)) * dotProduct v v := by
-  have hquad :=
-    abs_quadraticModel_zero_zero_le_of_entrywise_abs_le
-      (n := n) (x0 := 0) (x := v) (A := A) heta hA
-  have hhalf_le :
-      (1 / 2 : Real) * dotProduct (Matrix.mulVec A v) v <=
-        ((1 / 2 : Real) * eta * (n : Real) * (n : Real)) * ‖v‖ ^ 2 := by
-    have hle_abs :
-        (1 / 2 : Real) * dotProduct (Matrix.mulVec A v) v <=
-          |(1 / 2 : Real) * dotProduct (Matrix.mulVec A v) v| :=
-      le_abs_self _
-    have hquad_eq :
-        quadraticModel (n := n) 0 0 0 A v =
-          (1 / 2 : Real) * dotProduct (Matrix.mulVec A v) v := by
-      simp [quadraticModel]
-    have hquad' :
-        |(1 / 2 : Real) * dotProduct (Matrix.mulVec A v) v| <=
-          ((1 / 2 : Real) * eta * (n : Real) * (n : Real)) * ‖v‖ ^ 2 := by
-      simpa [hquad_eq] using hquad
-    linarith
-  have hdot_norm : ‖v‖ ^ 2 <= dotProduct v v :=
-    norm_sq_le_dotProduct_self v
-  have hcoeff_nonneg : 0 <= eta * (n : Real) * (n : Real) := by positivity
-  calc
-    dotProduct (Matrix.mulVec A v) v <=
-        (eta * (n : Real) * (n : Real)) * ‖v‖ ^ 2 := by
-      linarith
-    _ <= (eta * (n : Real) * (n : Real)) * dotProduct v v := by
-      exact mul_le_mul_of_nonneg_left hdot_norm hcoeff_nonneg
-
-/--
-Every real symmetric Hessian is bounded above by a scalar multiple of the
-identity in the Loewner order.
-
-In quantified mathematical form, for every symmetric matrix `A` on `R^n`,
-there exists `μ ∈ R` such that `A ≤ μ I`.
--/
-theorem exists_hessian_le_smul_one_of_isHermitian
-    {A : Hessian n} (hA : A.IsHermitian) :
-    ∃ mu : Real, A <= mu • (1 : Hessian n) := by
-  let eta : Real := ∑ i : Fin n, ∑ j : Fin n, |A i j|
-  let mu : Real := eta * (n : Real) * (n : Real)
-  have heta_nonneg : 0 <= eta := by
-    exact Finset.sum_nonneg fun i _hi =>
-      Finset.sum_nonneg fun j _hj => abs_nonneg (A i j)
-  have hentry : ∀ i j : Fin n, |A i j| <= eta := by
-    intro i j
-    calc
-      |A i j| <= ∑ j : Fin n, |A i j| := by
-        exact Finset.single_le_sum (fun k _hk => abs_nonneg (A i k)) (Finset.mem_univ j)
-      _ <= eta := by
-        exact Finset.single_le_sum
-          (fun k _hk => Finset.sum_nonneg fun l _hl => abs_nonneg (A k l))
-          (Finset.mem_univ i)
-  refine ⟨mu, ?_⟩
-  rw [Matrix.le_iff]
-  refine Matrix.PosSemidef.of_dotProduct_mulVec_nonneg ?_ ?_
-  · exact (Matrix.isHermitian_one.smul (IsSelfAdjoint.all mu)).sub hA
-  · intro v
-    have hquad :
-        dotProduct (Matrix.mulVec A v) v <= mu * dotProduct v v := by
-      simpa [mu] using
-        hessian_quadraticForm_le_of_entrywise_abs_le
-          (n := n) A heta_nonneg hentry v
-    have hdiffQuad :
-        star v ⬝ᵥ Matrix.mulVec (mu • (1 : Hessian n) - A) v =
-          mu * dotProduct v v - dotProduct (Matrix.mulVec A v) v := by
-      simp [Matrix.sub_mulVec, Matrix.smul_mulVec, dotProduct_sub, Matrix.one_mulVec,
-        dotProduct_comm]
-    rw [hdiffQuad]
-    linarith
-
-/--
-Every real symmetric block Hessian on `R^n × R^n` is bounded above by a scalar
-multiple of the block identity in the Loewner order.
-
-In quantified mathematical form, for every symmetric matrix `A` on
-`R^n × R^n`, there exists `μ ∈ R` such that
-
-`A ≤ μ [I 0; 0 I]`.
--/
-theorem exists_blockHessian_le_smul_blockDiagonalIdentity_of_isHermitian
-    {A : BlockHessian n} (hA : A.IsHermitian) :
-    ∃ mu : Real, A <= mu • blockDiagonalIdentity n := by
-  rcases exists_hessian_le_smul_one_of_isHermitian
-      (n := n + n) (A := blockHessianToPointHessian (n := n) A)
-      (Matrix.IsHermitian.blockHessianToPointHessian (n := n) hA) with
-    ⟨mu, hmu⟩
-  refine ⟨mu, ?_⟩
-  have hblock := pointHessianToBlockHessian_mono (n := n) hmu
-  simpa [pointHessianToBlockHessian_smul_one] using hblock
 
 /--
 Young's inequality for the coordinate dot product.

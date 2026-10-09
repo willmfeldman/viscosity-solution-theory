@@ -6,10 +6,8 @@ Authors: William M. Feldman
 module
 
 public import ViscositySolns.Existence.Perron.Method.Core
-public import ViscositySolns.Existence.Perron.Method.PerronFamily
 public import ViscositySolns.Existence.Perron.Method.LowerInterfaces
 public import ViscositySolns.Existence.Perron.Method.StrictBoundary
-public import ViscositySolns.Existence.Perron.Method.HalfRelaxed
 
 /-!
 # Perron's method

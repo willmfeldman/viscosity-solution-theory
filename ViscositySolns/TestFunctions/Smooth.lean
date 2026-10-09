@@ -41,11 +41,6 @@ theorem coordinateVector_apply (i j : Fin n) :
 theorem coordinateVector_apply_self (i : Fin n) : coordinateVector i i = 1 := by
   simp [coordinateVector]
 
-theorem point_eq_sum_coordinateVector (v : Point n) :
-    (∑ i : Fin n, v i • coordinateVector i) = v := by
-  ext j
-  simp [coordinateVector]
-
 /-- The continuous linear functional represented by a coordinate gradient. -/
 def gradientLinearMap (p : Point n) : Point n →L[Real] Real :=
   ∑ i : Fin n, (ContinuousLinearMap.proj (R := Real) i).smulRight (p i)
@@ -245,35 +240,5 @@ theorem quadraticModel_eq_linearMap (x0 : Point n) (r : Real) (J : Jet n) (x : P
       r + J.toFirstDerivative (x - x0) +
         (1 / 2 : Real) * J.toSecondDerivative (x - x0) (x - x0) := by
   simp [quadraticModel, Jet.toFirstDerivative, Jet.toSecondDerivative]
-
-/--
-The recentered jet of a quadratic model is a superjet of that quadratic model.
-
-This is the exact-touching test-function fact used by Perron bump
-certification and by smooth-selection arguments.
--/
-theorem quadraticModelJetAt_mem_superjet
-    {C : Set (Point n)} (x0 : Point n) (r : Real) (p : Point n)
-    (X : Hessian n) (x : Point n) :
-    quadraticModelJetAt x0 p X x ∈
-      Superjet C (fun y => quadraticModel x0 r p X y) x := by
-  refine superjet_of_eventually_le_of_hasSecondOrderExpansionWithinAtValue
-    (φ := fun y => quadraticModel x0 r p X y) ?_ ?_
-  · exact Filter.Eventually.of_forall fun _ => le_rfl
-  · exact hasSecondOrderExpansionWithin_quadraticModel_recenter x0 r p X x
-
-/--
-The recentered jet of a quadratic model is also a subjet of that quadratic
-model.
--/
-theorem quadraticModelJetAt_mem_subjet
-    {C : Set (Point n)} (x0 : Point n) (r : Real) (p : Point n)
-    (X : Hessian n) (x : Point n) :
-    quadraticModelJetAt x0 p X x ∈
-      Subjet C (fun y => quadraticModel x0 r p X y) x := by
-  refine subjet_of_eventually_le_of_hasSecondOrderExpansionWithinAtValue
-    (φ := fun y => quadraticModel x0 r p X y) ?_ ?_
-  · exact Filter.Eventually.of_forall fun _ => le_rfl
-  · exact hasSecondOrderExpansionWithin_quadraticModel_recenter x0 r p X x
 
 end ViscositySolns

@@ -64,36 +64,6 @@ theorem eventually_uv_bounds_of_upper_lowerBoundedOn_of_eventually_isMaxOn
     exact ⟨hi.2.1, hi.2.2.1⟩
 
 /--
-Let `u : R^n -> R` be continuous at `z`. If `x i -> z` and `y i -> z` along
-`l`, then `u (x i) - u (y i) -> 0` along `l`.
--/
-theorem tendsto_valueGap_zero_of_continuousAt_of_tendsto_same
-    {ι : Type*} {l : Filter ι} {u : Point n -> Real} {x y : ι -> Point n}
-    {z : Point n}
-    (hu : ContinuousAt u z)
-    (hx : Tendsto x l (nhds z)) (hy : Tendsto y l (nhds z)) :
-    Tendsto (fun i : ι => u (x i) - u (y i)) l (nhds 0) := by
-  have hxv : Tendsto (fun i : ι => u (x i)) l (nhds (u z)) := hu.tendsto.comp hx
-  have hyv : Tendsto (fun i : ι => u (y i)) l (nhds (u z)) := hu.tendsto.comp hy
-  simpa using hxv.sub hyv
-
-/--
-Let `u : R^n -> R` be continuous at `z`. If `(x i, y i) -> (z, z)` along
-`l`, then `u (x i) - u (y i) -> 0` along `l`.
--/
-theorem tendsto_valueGap_zero_of_continuousAt_of_tendsto_pair_diagonal
-    {ι : Type*} {l : Filter ι} {u : Point n -> Real} {x y : ι -> Point n}
-    {z : Point n}
-    (hu : ContinuousAt u z)
-    (hxy : Tendsto (fun i : ι => (x i, y i)) l (nhds (z, z))) :
-    Tendsto (fun i : ι => u (x i) - u (y i)) l (nhds 0) := by
-  have hx : Tendsto x l (nhds z) := by
-    exact (continuous_fst.tendsto (z, z)).comp hxy
-  have hy : Tendsto y l (nhds z) := by
-    exact (continuous_snd.tendsto (z, z)).comp hxy
-  exact tendsto_valueGap_zero_of_continuousAt_of_tendsto_same hu hx hy
-
-/--
 If `x i -> z` and `‖x i - y i‖ -> 0` along `l`, then `y i -> z` along `l`.
 -/
 theorem tendsto_right_of_tendsto_left_of_tendsto_distance_zero
@@ -111,18 +81,6 @@ theorem tendsto_right_of_tendsto_left_of_tendsto_distance_zero
     abel
   simpa [hy_eq]
     using hy'
-
-/--
-If `x i -> z` and `‖x i - y i‖ -> 0` along `l`, then
-`(x i, y i) -> (z, z)` along `l`.
--/
-theorem tendsto_pair_diagonal_of_tendsto_left_of_tendsto_distance_zero
-    {ι : Type*} {l : Filter ι} {x y : ι -> Point n} {z : Point n}
-    (hx : Tendsto x l (nhds z))
-    (hdist : Tendsto (fun i : ι => ‖x i - y i‖) l (nhds 0)) :
-    Tendsto (fun i : ι => (x i, y i)) l (nhds (z, z)) := by
-  exact hx.prodMk_nhds
-    (tendsto_right_of_tendsto_left_of_tendsto_distance_zero hx hdist)
 
 /--
 If `x i -> z` within `C`, if `y i ∈ C` for all `i` in a set belonging to
@@ -156,21 +114,6 @@ theorem tendsto_nhdsWithin_of_tendsto_norm_sub_zero_of_eventually_mem
     rw [tendsto_iff_norm_sub_tendsto_zero]
     simpa using hxz
   exact tendsto_nhdsWithin_of_tendsto_nhds_of_eventually_within x hx hxC
-
-/--
-Let `u : R^n -> R` be continuous at `z` relative to `C`. If
-`x i -> z` within `C` and `y i -> z` within `C` along `l`, then
-`u (x i) - u (y i) -> 0` along `l`.
--/
-theorem tendsto_valueGap_zero_of_continuousWithinAt_of_tendsto_same
-    {ι : Type*} {l : Filter ι} {C : Set (Point n)} {u : Point n -> Real}
-    {x y : ι -> Point n} {z : Point n}
-    (hu : ContinuousWithinAt u C z)
-    (hx : Tendsto x l (nhdsWithin z C)) (hy : Tendsto y l (nhdsWithin z C)) :
-    Tendsto (fun i : ι => u (x i) - u (y i)) l (nhds 0) := by
-  have hxv : Tendsto (fun i : ι => u (x i)) l (nhds (u z)) := hu.tendsto.comp hx
-  have hyv : Tendsto (fun i : ι => u (y i)) l (nhds (u z)) := hu.tendsto.comp hy
-  simpa using hxv.sub hyv
 
 /--
 Let `u` be upper semicontinuous at `z` relative to `C`, and let `v` be lower
@@ -387,74 +330,6 @@ theorem tendsto_distance_zero_of_tendsto_weightedDistanceSq_of_eventually_one_le
   simpa [Real.sqrt_sq_eq_abs, abs_of_nonneg] using hsqrt
 
 /--
-Under the hypotheses of
-`tendsto_weightedDistanceSq_zero_of_shifted_closure_maximizers_of_tendsto`,
-if additionally `α i -> +∞`, then
-
-`α i * ‖x i - y i‖ ^ 2 + ‖x i - y i‖ -> 0`
-
-along `l`.
--/
-theorem tendsto_comparisonScale_zero_of_shifted_closure_maximizers_of_tendsto_atTop
-    {ι : Type*} {l : Filter ι}
-    {C : Set (Point n)} {u v : Point n -> Real} {δ : Real}
-    {α : ι -> Real} {x y : ι -> Point n} {x0 : Point n}
-    (hboundary : BoundaryComparisonOn C u v) (hδ : 0 < δ)
-    (hx0closure : x0 ∈ closure C) (hgap : v x0 < u x0 - δ)
-    (hu : UpperSemicontinuousOn (fun z : Point n => u z - δ) (closure C))
-    (hv : LowerSemicontinuousOn v (closure C))
-    (hx : Tendsto x l (nhdsWithin x0 (closure C)))
-    (hy : Tendsto y l (nhdsWithin x0 (closure C)))
-    (hmax :
-      ∀ᶠ i in l,
-        0 < α i ∧ x i ∈ closure C ∧ y i ∈ closure C ∧
-          IsMaxOn
-            (fun q : DoubledPoint n =>
-              doubledObjective (fun z : Point n => u z - δ) v (α i) q)
-            (closure C ×ˢ closure C) (x i, y i))
-    (hα : Tendsto α l atTop) :
-    Tendsto (fun i : ι => α i * ‖x i - y i‖ ^ 2 + ‖x i - y i‖) l (nhds 0) := by
-  have hquad :
-      Tendsto (fun i : ι => α i * ‖x i - y i‖ ^ 2) l (nhds 0) :=
-    tendsto_weightedDistanceSq_zero_of_shifted_closure_maximizers_of_tendsto
-      hboundary hδ hx0closure hgap hu hv hx hy hmax
-  have hdist : Tendsto (fun i : ι => ‖x i - y i‖) l (nhds 0) :=
-    tendsto_distance_zero_of_tendsto_weightedDistanceSq_of_eventually_one_le
-      hquad (eventually_one_le_of_tendsto_atTop hα)
-  exact tendsto_comparisonScale_zero_of_tendsto_quadratic_and_distance hquad hdist
-
-/--
-Assume `α i * ‖x i - y i‖ ^ 2 -> 0` along `l`, assume that
-`1 ≤ α i` for all `i` in a set belonging to `l`, and assume that
-`x i ≠ y i` for all `i` in a set belonging to `l`. Then
-`DoubledVariableScaleEstimatesAlong l α x y` holds.
--/
-theorem doubledVariableScaleEstimatesAlong_of_quadratic_of_eventually_one_le_of_ne
-    {ι : Type*} {l : Filter ι} {α : ι -> Real} {x y : ι -> Point n}
-    (hquad : Tendsto (fun i : ι => α i * ‖x i - y i‖ ^ 2) l (nhds 0))
-    (hαone : ∀ᶠ i in l, 1 <= α i)
-    (hne : ∀ᶠ i in l, x i ≠ y i) :
-    DoubledVariableScaleEstimatesAlong l α x y :=
-  ⟨hquad,
-    tendsto_distance_zero_of_tendsto_weightedDistanceSq_of_eventually_one_le
-      hquad hαone,
-    hne⟩
-
-/--
-Assume `α i * ‖x i - y i‖ ^ 2 -> 0` along `l`, assume `α i -> +∞` along
-`l`, and assume `{i | x i ≠ y i}` belongs to `l`. Then
-`DoubledVariableScaleEstimatesAlong l α x y` holds.
--/
-theorem doubledVariableScaleEstimatesAlong_of_quadratic_of_tendsto_atTop_of_ne
-    {ι : Type*} {l : Filter ι} {α : ι -> Real} {x y : ι -> Point n}
-    (hquad : Tendsto (fun i : ι => α i * ‖x i - y i‖ ^ 2) l (nhds 0))
-    (hα : Tendsto α l atTop)
-    (hne : ∀ᶠ i in l, x i ≠ y i) :
-    DoubledVariableScaleEstimatesAlong l α x y :=
-  doubledVariableScaleEstimatesAlong_of_quadratic_of_eventually_one_le_of_ne
-    hquad (eventually_one_le_of_tendsto_atTop hα) hne
-
-/--
 Suppose selected doubled-variable maximizers are available along a filter
 `l`. If there exists `z ∈ C` such that `v z < u z`, if
 `ScalarRangeOn C R u` holds, if
@@ -482,59 +357,5 @@ theorem strictDoubledVariableLocalizationAlongOn_of_eventually_maximizers_of_sca
     hfail huR hmax
     (tendsto_comparisonScale_zero_of_tendsto_quadratic_and_distance hquad hdist)
     hscale_pos
-
-/--
-Suppose selected doubled-variable maximizers are available along a filter
-`l`. If there exists `z ∈ C` such that `v z < u z`, if
-`ScalarRangeOn C R u` holds, if
-`α i * ‖x i - y i‖ ^ 2 -> 0`, if `‖x i - y i‖ -> 0`, and if `x i ≠ y i`
-for all `i` in a set belonging to `l`, then these data satisfy
-`StrictDoubledVariableLocalizationAlongOn C R u v l α x y`.
--/
-theorem strictDoubledVariableLocalizationAlongOn_of_scales_of_ne
-    {ι : Type*} {l : Filter ι}
-    {C : Set (Point n)} {R : Set Real} {u v : Point n -> Real}
-    {α : ι -> Real} {x y : ι -> Point n}
-    (hfail : ∃ z : Point n, z ∈ C ∧ v z < u z)
-    (huR : ScalarRangeOn C R u)
-    (hmax :
-      ∀ᶠ i in l,
-        0 < α i ∧ x i ∈ C ∧ y i ∈ C ∧
-          IsMaxOn (fun q : DoubledPoint n => doubledObjective u v (α i) q)
-            (C ×ˢ C) (x i, y i))
-    (hquad : Tendsto (fun i : ι => α i * ‖x i - y i‖ ^ 2) l (nhds 0))
-    (hdist : Tendsto (fun i : ι => ‖x i - y i‖) l (nhds 0))
-    (hne : ∀ᶠ i in l, x i ≠ y i) :
-    StrictDoubledVariableLocalizationAlongOn C R u v l α x y :=
-  strictDoubledVariableLocalizationAlongOn_of_eventually_maximizers_of_scalarRange_of_scales
-    hfail huR hmax hquad hdist
-    (eventually_comparisonScale_pos_of_eventually_isMaxOn_of_eventually_ne hmax hne)
-
-/--
-Assume there are functions `α : ι -> R` and `x y : ι -> R^n` such that, for
-all `i` in a set belonging to `l`, one has `0 < α i`, `x i ∈ C`, `y i ∈ C`,
-and `(x i, y i)` maximizes
-`(x', y') ↦ u x' - v y' - (α i / 2) * ∑ j, (x' j - y' j)^2`
-on `C × C`.
-
-If there exists `z ∈ C` such that `v z < u z`, if `ScalarRangeOn C R u`
-holds, and if `DoubledVariableScaleEstimatesAlong l α x y` holds, then
-`StrictDoubledVariableLocalizationAlongOn C R u v l α x y` holds.
--/
-theorem strictDoubledVariableLocalizationAlongOn_of_scaleEstimates
-    {ι : Type*} {l : Filter ι}
-    {C : Set (Point n)} {R : Set Real} {u v : Point n -> Real}
-    {α : ι -> Real} {x y : ι -> Point n}
-    (hfail : ∃ z : Point n, z ∈ C ∧ v z < u z)
-    (huR : ScalarRangeOn C R u)
-    (hmax :
-      ∀ᶠ i in l,
-        0 < α i ∧ x i ∈ C ∧ y i ∈ C ∧
-          IsMaxOn (fun q : DoubledPoint n => doubledObjective u v (α i) q)
-            (C ×ˢ C) (x i, y i))
-    (hscale : DoubledVariableScaleEstimatesAlong l α x y) :
-    StrictDoubledVariableLocalizationAlongOn C R u v l α x y :=
-  strictDoubledVariableLocalizationAlongOn_of_scales_of_ne
-    hfail huR hmax hscale.1 hscale.2.1 hscale.2.2
 
 end ViscositySolns

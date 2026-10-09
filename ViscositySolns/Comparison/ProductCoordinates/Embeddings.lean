@@ -100,30 +100,6 @@ The point obtained from `z = (x0, y0)` by replacing its right coordinate with
 def pointWithRight (z : Point (n + n)) (y : Point n) : Point (n + n) :=
   (pointSumEquivBlockPoint n).symm (Sum.elim (pointLeft (n := n) z) y)
 
-theorem continuous_leftPointEmbedding :
-    Continuous (leftPointEmbedding (n := n)) := by
-  refine continuous_pi ?_
-  intro i
-  cases hsplit : finSumFinEquiv.symm i with
-  | inl j =>
-      simpa [leftPointEmbedding, leftBlockPoint, pointSumEquivBlockPoint_symm_apply,
-        hsplit] using (continuous_apply j : Continuous fun x : Point n => x j)
-  | inr j =>
-      simpa [leftPointEmbedding, leftBlockPoint, pointSumEquivBlockPoint_symm_apply,
-        hsplit] using (continuous_const : Continuous fun _x : Point n => (0 : Real))
-
-theorem continuous_rightPointEmbedding :
-    Continuous (rightPointEmbedding (n := n)) := by
-  refine continuous_pi ?_
-  intro i
-  cases hsplit : finSumFinEquiv.symm i with
-  | inl j =>
-      simpa [rightPointEmbedding, rightBlockPoint, pointSumEquivBlockPoint_symm_apply,
-        hsplit] using (continuous_const : Continuous fun _y : Point n => (0 : Real))
-  | inr j =>
-      simpa [rightPointEmbedding, rightBlockPoint, pointSumEquivBlockPoint_symm_apply,
-        hsplit] using (continuous_apply j : Continuous fun y : Point n => y j)
-
 theorem continuous_pointLeft :
     Continuous (pointLeft (n := n)) := by
   refine continuous_pi ?_
@@ -239,47 +215,6 @@ theorem continuous_rightPointJet :
       ((continuous_apply (Fin.natAdd n i)).comp
         (Jet.continuous_hessian (n := n + n)))
   simpa [rightPointJet] using hgrad.prodMk hhess
-
-/--
-Convergence of block jets implies convergence of their left-coordinate
-projected jets.
--/
-theorem tendsto_leftPointJet_of_tendsto
-    {ι : Type*} {l : Filter ι} {JSeq : ι -> Jet (n + n)} {J : Jet (n + n)}
-    (hJ : Filter.Tendsto JSeq l (nhds J)) :
-    Filter.Tendsto (fun i : ι => leftPointJet (n := n) (JSeq i)) l
-      (nhds (leftPointJet (n := n) J)) :=
-  (continuous_leftPointJet (n := n)).tendsto J |>.comp hJ
-
-/--
-Convergence of block jets implies convergence of the negated right-coordinate
-projected jets.
-
-In standard mathematical terms, if `J_i -> J` as jets on `R^n × R^n`, then
-the jets obtained by taking the right coordinate component and negating both
-the gradient and Hessian also converge:
-`-(right J_i) -> -(right J)`.
--/
-theorem tendsto_rightPointJet_neg_of_tendsto
-    {ι : Type*} {l : Filter ι} {JSeq : ι -> Jet (n + n)} {J : Jet (n + n)}
-    (hJ : Filter.Tendsto JSeq l (nhds J)) :
-    Filter.Tendsto (fun i : ι => (rightPointJet (n := n) (JSeq i)).neg) l
-      (nhds ((rightPointJet (n := n) J).neg)) := by
-  have hcont : Continuous fun K : Jet (n + n) => (rightPointJet (n := n) K).neg := by
-    apply continuous_induced_rng.mpr
-    change Continuous fun K : Jet (n + n) =>
-      (((rightPointJet (n := n) K).neg).gradient,
-        ((rightPointJet (n := n) K).neg).hessian)
-    have hright : Continuous fun K : Jet (n + n) => rightPointJet (n := n) K :=
-      continuous_rightPointJet (n := n)
-    have hgrad :
-        Continuous fun K : Jet (n + n) => -((rightPointJet (n := n) K).gradient) :=
-      (Jet.continuous_gradient.comp hright).neg
-    have hhess :
-        Continuous fun K : Jet (n + n) => -((rightPointJet (n := n) K).hessian) :=
-      (Jet.continuous_hessian.comp hright).neg
-    simpa [Jet.neg] using hgrad.prodMk hhess
-  exact hcont.tendsto J |>.comp hJ
 
 @[simp]
 theorem pointSumEquivBlockPoint_leftPointEmbedding (x : Point n) :

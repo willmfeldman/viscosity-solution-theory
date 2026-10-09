@@ -80,28 +80,6 @@ theorem ProperBoundaryComparisonStatementOn.unfold
   exact h hproper hcont hcomp u v ⟨hbd, hry, hcompact⟩ hu hv hry
 
 /--
-Unbounded-scalar version of `ProperBoundaryComparisonStatementOn`.
-
-In quantified mathematical form, if the scalar set is all real numbers, then
-the scalar-range condition is automatic: for every `x ∈ C`,
-`u x ∈ Set.univ`.
--/
-theorem ProperBoundaryComparisonStatementOn.unfold_univScalar
-    {C : Set (Point n)} {F : Operator n}
-    (h : ProperBoundaryComparisonStatementOn C Set.univ F) :
-    Proper F ->
-    OperatorContinuous F ->
-    IshiiOperatorComparisonConditionOn C Set.univ F ->
-    ∀ u v : Point n -> Real,
-      BoundaryComparisonOn C u v ->
-      CompactClosure C ->
-      ViscositySubsolution C F u ->
-      ViscositySupersolution C F v ->
-        ComparisonConclusionOn C u v := by
-  intro hproper hcont hcomp u v hbd hcompact hu hv
-  exact h.unfold hproper hcont hcomp u v hbd (ScalarRangeOn.univ C u) hcompact hu hv
-
-/--
 Let `ω` be a comparison modulus and let `ε > 0`. Let `t i` be a family of
 real numbers which converges to `0` through positive values along a nontrivial
 filter `l`. Then it is impossible that `ε ≤ ω (t i)` holds for all `i` in a
@@ -147,15 +125,6 @@ theorem StrictViscositySubsolution.closedSuperjet_le_neg_of_operatorContinuous
   closedSuperjet_induction
     (isClosed_Iic.preimage hF.continuous)
     (fun y hy K hK => hu.2 y hy K hK) hJ
-
-theorem StrictViscositySubsolution.to_viscositySubsolution
-    {C : Set (Point n)} {F : Operator n} {ε : Real} {u : Point n -> Real}
-    (hu : StrictViscositySubsolution C F ε u) (hε : 0 <= ε) :
-    ViscositySubsolution C F u := by
-  refine ⟨hu.upperSemicontinuousOn, ?_⟩
-  intro x hx J hJ
-  have hstrict := hu.2 x hx J hJ
-  linarith
 
 /--
 Uniform decrease of the operator under a fixed downward shift in the scalar
@@ -344,56 +313,6 @@ def ConstantShiftLocalizedStrictificationAlongDataOn
       StrictDoubledVariableLocalizationAlongOn C R (fun x => u x - δ) v atTop α x y
 
 /--
-Constant-shift data stated directly in terms of maximizers selected on
-`closure C × closure C`.
-
-In quantified mathematical form, this predicate says that, for every real
-number `η > 0`, there exist real numbers `δ` and `ε`, functions
-`α : ℕ -> ℝ` and `x y : ℕ -> ℝ^n`, and a point `x0 : ℝ^n`, such that:
-
-* `0 < δ` and `δ ≤ η`;
-* `0 < ε`;
-* `F x (r - δ) p X ≤ F x r p X - ε` for every `x ∈ C`, scalar `r`,
-  first-derivative vector `p`, and Hessian matrix `X`;
-* the quadratic-penalty Ishii lemma holds for `x ↦ u x - δ` and `v` on
-  `C × C`;
-* `u x - δ ∈ R` for every `x ∈ C`;
-* `x0 ∈ closure C` and `v x0 < u x0 - δ`;
-* `x ↦ u x - δ` is upper semicontinuous on `closure C`;
-* `v` is lower semicontinuous on `closure C`;
-* `x i -> x0` and `y i -> x0` within `closure C` as `i -> ∞`;
-* for all `i` in a set belonging to `atTop`, `0 < α i`,
-  `x i ∈ closure C`, `y i ∈ closure C`, and `(x i, y i)` maximizes
-  `(x', y') ↦ u x' - δ - v y' - (α i / 2) * ∑ j, (x' j - y' j)^2`
-  on `closure C × closure C`;
-* `α i -> +∞` as `i -> ∞`.
--/
-def ConstantShiftClosureMaximizerDataOn
-    (C : Set (Point n)) (R : Set Real) (F : Operator n)
-    (u v : Point n -> Real) : Prop :=
-  ∀ η : Real, 0 < η ->
-    ∃ δ : Real, ∃ ε : Real,
-    ∃ α : ℕ -> Real, ∃ x : ℕ -> Point n, ∃ y : ℕ -> Point n,
-    ∃ x0 : Point n,
-      0 < δ ∧ δ <= η ∧ 0 < ε ∧
-      UniformScalarDecreaseOn C F δ ε ∧
-      QuadraticPenaltyIshiiLemmaOn C C (fun x => u x - δ) v ∧
-      ScalarRangeOn C R (fun x => u x - δ) ∧
-      x0 ∈ closure C ∧
-      v x0 < u x0 - δ ∧
-      UpperSemicontinuousOn (fun x => u x - δ) (closure C) ∧
-      LowerSemicontinuousOn v (closure C) ∧
-      Tendsto x atTop (nhdsWithin x0 (closure C)) ∧
-      Tendsto y atTop (nhdsWithin x0 (closure C)) ∧
-      (∀ᶠ i in atTop,
-        0 < α i ∧ x i ∈ closure C ∧ y i ∈ closure C ∧
-          IsMaxOn
-            (fun q : DoubledPoint n =>
-              doubledObjective (fun z : Point n => u z - δ) v (α i) q)
-            (closure C ×ˢ closure C) (x i, y i)) ∧
-      Tendsto α atTop atTop
-
-/--
 Natural-number indexed constant-shift strictification data with scalar range
 and shifted Ishii hypotheses derived from unshifted hypotheses.
 
@@ -470,26 +389,6 @@ def ConstantShiftBoundaryStrictificationAlongDataConstructorOn
     ViscositySubsolution C F u ->
     ViscositySupersolution C F v ->
       ConstantShiftLocalizedStrictificationAlongDataOn C R F u v
-
-/--
-A constructor for constant-shift data stated in terms of maximizers selected
-on `closure C × closure C`.
-
-In quantified mathematical form, this predicate says that, whenever `C` is
-nonempty and `u`, `v` satisfy the boundary comparison, scalar-range,
-compact-closure, subsolution, and supersolution hypotheses on `C`, then
-`ConstantShiftClosureMaximizerDataOn C R F u v` holds.
--/
-def ConstantShiftBoundaryClosureMaximizerDataConstructorOn
-    (C : Set (Point n)) (R : Set Real) (F : Operator n) : Prop :=
-  ∀ u v : Point n -> Real,
-    C.Nonempty ->
-    BoundaryComparisonOn C u v ->
-    ScalarRangeOn C R u ->
-    CompactClosure C ->
-    ViscositySubsolution C F u ->
-    ViscositySupersolution C F v ->
-      ConstantShiftClosureMaximizerDataOn C R F u v
 
 /--
 The theorem-form hypothesis that supplies the quadratic-penalty Ishii lemma
@@ -604,63 +503,6 @@ def TraceConstantShiftBoundaryLocalizationAlongConstructorOn
           StrictDoubledVariableLocalizationAlongOn C R (fun z => u z - δ) v atTop α x y
 
 /--
-The trace-form constant-shift construction stated directly in terms of
-maximizers selected on `closure C × closure C`.
-
-In quantified mathematical form, this predicate says that, whenever `C` is
-nonempty and `u`, `v` satisfy the boundary comparison, scalar-range,
-compact-closure, subsolution, and supersolution hypotheses for
-`traceSecondOrderOperator A b c f` on `C`, then for every `η > 0` there
-exist `δ > 0`, sequences `α : ℕ -> ℝ`, `x y : ℕ -> ℝ^n`, and a point
-`x0 : ℝ^n` such that:
-
-* `δ ≤ η`;
-* `x0 ∈ closure C` and `v x0 < u x0 - δ`;
-* `x ↦ u x - δ` is upper semicontinuous on `closure C`;
-* `v` is lower semicontinuous on `closure C`;
-* `x i -> x0` and `y i -> x0` within `closure C` as `i -> ∞`;
-* for all `i` in a set belonging to `atTop`, `(x i, y i)` maximizes
-  `(x', y') ↦ u x' - δ - v y' - (α i / 2) * ∑ j, (x' j - y' j)^2`
-  on `closure C × closure C`, with `0 < α i`, `x i ∈ closure C`, and
-  `y i ∈ closure C`;
-* `α i -> +∞` as `i -> ∞`.
-
-The shifted scalar range, shifted Ishii lemma, and strict scalar decrease are
-supplied separately by `ClosedUnderSubNonneg R`,
-`QuadraticPenaltyIshiiLemmaConstructorOn C`, and a positive lower bound for
-the zeroth-order coefficient.
--/
-def TraceConstantShiftBoundaryClosureMaximizerConstructorOn
-    (C : Set (Point n)) (R : Set Real)
-    (A : Point n -> Hessian n) (b : Point n -> Point n)
-    (c f : Point n -> Real) : Prop :=
-  ∀ u v : Point n -> Real,
-    C.Nonempty ->
-    BoundaryComparisonOn C u v ->
-    ScalarRangeOn C R u ->
-    CompactClosure C ->
-    ViscositySubsolution C (traceSecondOrderOperator A b c f) u ->
-    ViscositySupersolution C (traceSecondOrderOperator A b c f) v ->
-      ∀ η : Real, 0 < η ->
-        ∃ δ : Real,
-        ∃ α : ℕ -> Real, ∃ x : ℕ -> Point n, ∃ y : ℕ -> Point n,
-        ∃ x0 : Point n,
-          0 < δ ∧ δ <= η ∧
-          x0 ∈ closure C ∧
-          v x0 < u x0 - δ ∧
-          UpperSemicontinuousOn (fun z => u z - δ) (closure C) ∧
-          LowerSemicontinuousOn v (closure C) ∧
-          Tendsto x atTop (nhdsWithin x0 (closure C)) ∧
-          Tendsto y atTop (nhdsWithin x0 (closure C)) ∧
-          (∀ᶠ i in atTop,
-            0 < α i ∧ x i ∈ closure C ∧ y i ∈ closure C ∧
-              IsMaxOn
-                (fun q : DoubledPoint n =>
-                  doubledObjective (fun z => u z - δ) v (α i) q)
-                (closure C ×ˢ closure C) (x i, y i)) ∧
-          Tendsto α atTop atTop
-
-/--
 For trace-form operators, a positive lower bound on the zeroth-order
 coefficient reduces the constant-shift core constructor to the remaining
 doubled-variable localization construction.
@@ -687,36 +529,6 @@ theorem constantShiftBoundaryStrictificationAlongCoreConstructorOn_traceSecondOr
   · exact
       uniformScalarDecreaseOn_traceSecondOrderOperator_of_zeroth_lower_bound
         hδpos.le hcγ
-
-/--
-For trace-form operators, the closure-maximizer construction, together with
-the scalar-range and Ishii declarations and a positive lower bound for the
-zeroth-order coefficient, gives the generic closure-maximizer data
-constructor.
--/
-theorem constantShiftBoundaryClosureMaximizerDataConstructorOn_traceSecondOrderOperator
-    {C : Set (Point n)} {R : Set Real}
-    {A : Point n -> Hessian n} {b : Point n -> Point n} {c f : Point n -> Real}
-    {γ : Real}
-    (hR : ClosedUnderSubNonneg R)
-    (hIshii : QuadraticPenaltyIshiiLemmaConstructorOn C)
-    (hγ : 0 < γ) (hcγ : ZerothCoefficientLowerBoundOn C c γ)
-    (hconstruct : TraceConstantShiftBoundaryClosureMaximizerConstructorOn C R A b c f) :
-    ConstantShiftBoundaryClosureMaximizerDataConstructorOn C R
-      (traceSecondOrderOperator A b c f) := by
-  intro u v hCne hboundary huR hCcompact hu hv η hη
-  rcases hconstruct u v hCne hboundary huR hCcompact hu hv η hη with
-    ⟨δ, α, x, y, x0, hδpos, hδη, hx0closure, hgap, husc, hvlsc, hx, hy, hmax,
-      hα⟩
-  refine ⟨δ, γ * δ, α, x, y, x0, hδpos, hδη, ?_, ?_, ?_, ?_, hx0closure,
-    hgap, husc, hvlsc, hx, hy, hmax, hα⟩
-  · exact mul_pos hγ hδpos
-  · exact
-      uniformScalarDecreaseOn_traceSecondOrderOperator_of_zeroth_lower_bound
-        hδpos.le hcγ
-  · exact hIshii (fun z : Point n => u z - δ) v
-      (hu.1.add upperSemicontinuousOn_const) hv.1
-  · exact huR.sub_const_of_closedUnderSubNonneg hR hδpos.le
 
 /--
 The reduced boundary-level constant-shift construction implies the
@@ -864,45 +676,6 @@ def CompactClosureBoundaryStrictificationConstructorOn
     ViscositySubsolution C F u ->
     ViscositySupersolution C F v ->
       StrictifiedBoundaryComparisonHypothesesOn C R F u v
-
-/--
-Reduced constructor for the analytic data in the strictified boundary
-hypotheses.
-
-In quantified mathematical form, this says that, under the ordinary
-boundary-value hypotheses on `C`, one can prove both:
-
-* `v` is a viscosity supersolution on `closure C`;
-* `CompactClosureStrictificationOn C R F u v`.
-
-Together with the ordinary boundary comparison, scalar-range, compactness,
-and nonemptiness hypotheses, these two conclusions imply
-`StrictifiedBoundaryComparisonHypothesesOn C R F u v`.
--/
-def CompactClosureStrictificationDataConstructorOn
-    (C : Set (Point n)) (R : Set Real) (F : Operator n) : Prop :=
-  ∀ u v : Point n -> Real,
-    C.Nonempty ->
-    BoundaryComparisonOn C u v ->
-    ScalarRangeOn C R u ->
-    CompactClosure C ->
-    ViscositySubsolution C F u ->
-    ViscositySupersolution C F v ->
-      ViscositySupersolution (closure C) F v ∧
-        CompactClosureStrictificationOn C R F u v
-
-/--
-The reduced analytic data constructor supplies the full strictified boundary
-hypotheses.
--/
-theorem compactClosureBoundaryStrictificationConstructorOn_of_dataConstructor
-    {C : Set (Point n)} {R : Set Real} {F : Operator n}
-    (hdata : CompactClosureStrictificationDataConstructorOn C R F) :
-    CompactClosureBoundaryStrictificationConstructorOn C R F := by
-  intro u v hCne hboundary huR hCcompact hu hv
-  rcases hdata u v hCne hboundary huR hCcompact hu hv with
-    ⟨hvClosure, hstrictify⟩
-  exact ⟨hCne, hboundary, huR, hCcompact, hvClosure, hstrictify⟩
 
 /--
 The theorem-shaped proposition for strict comparison conditional on Ishii's

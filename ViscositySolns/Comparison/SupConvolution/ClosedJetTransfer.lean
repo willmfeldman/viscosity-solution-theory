@@ -458,16 +458,6 @@ def infConvolutionTransferPoint (lambda : Real) (η : Point n) (J : Jet n) :
   η - lambda⁻¹ • J.gradient
 
 /--
-The compact inf-convolution is the negative of the compact sup-convolution of
-the negated function.
--/
-theorem compactInfConvolution_eq_neg_compactSupConvolution_neg
-    {K : Set (Point n)} {v : Point n -> Real} {lambda : Real} {η : Point n} :
-    compactInfConvolution lambda K v η =
-      -compactSupConvolution lambda K (fun x => -v x) η :=
-  rfl
-
-/--
 The inf-convolution kernel is the negative of the sup-convolution kernel for
 the negated function.
 -/

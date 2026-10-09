@@ -86,8 +86,6 @@ theorem exists_contactPoint_hasSomeSecondOrderJet_closedBall
   exact ⟨hx.1.1, hx.2⟩
 
 /--
-Unpacked form of `exists_contactPoint_hasSomeSecondOrderJet`.
-
 In quantified mathematical form, under Jensen's contact-set theorem and
 Aleksandrov's theorem, if `f` is semiconvex and has a strict local maximum at
 `x0`, then for every `r > 0` and `delta > 0` there exist `x`, `q`, `a`, and
@@ -212,89 +210,6 @@ theorem exists_contactPoint_data_localMaxCalculus_closedBall
   exact ⟨x, q, a, X, hxBall, hqBall, hX, hmax, hjet, hcalc⟩
 
 /--
-The contact-point data for the strictified quadratic objective used in the
-convex matrix theorem.
--/
-theorem exists_strictifiedQuadraticObjective_contactPoint_data_hasSecondOrderJet
-    (hJensen : JensenContactSetPositiveMeasureTheorem n)
-    (hAleksandrov : AleksandrovSecondDifferentiabilityByJetsTheorem n)
-    {g : Point n -> Real} {B : Hessian n}
-    (hsemi :
-      ∃ lambda : Real,
-        CoordinateSemiconvexOn lambda Set.univ (strictifiedQuadraticObjective g B))
-    (hmax : IsMaxOn (semiconvexQuadraticObjective g B) Set.univ 0)
-    {r delta : Real} (hr : 0 < r) (hdelta : 0 < delta) :
-    ∃ x : Point n, ∃ q : Point n, ∃ a : Point n, ∃ X : Hessian n,
-      x ∈ Metric.closedBall (0 : Point n) r ∧
-        q ∈ Metric.ball 0 delta ∧
-        X.IsHermitian ∧
-        IsLocalMax (linearPerturbation (strictifiedQuadraticObjective g B) q) x ∧
-        HasSecondOrderJet (strictifiedQuadraticObjective g B) x a X := by
-  exact exists_contactPoint_data_hasSecondOrderJet
-    hJensen hAleksandrov hsemi
-    (strictLocalMax_strictifiedQuadraticObjective_of_isMaxOn_univ hmax)
-    hr hdelta
-
-/--
-Localized unpacked source-proof data for the strictified quadratic objective.
-
-In quantified mathematical form, assume the localized Jensen contact-set
-theorem, the localized Aleksandrov theorem, `g` is convex on `R^n`, and
-`x ↦ g x - (1 / 2) * ⟪B x, x⟫` has a maximum at `0` on all of `R^n`. Then
-for every `r > 0` and every `delta > 0` there exist `x`, `q`, `a`, and `X`
-such that `x ∈ closedBall 0 r`, `q ∈ ball 0 delta`, `X` is Hermitian,
-`y ↦ strictifiedQuadraticObjective g B y + q · y` has a local maximum at
-`x`, and `(a, X)` is a second-order jet of `strictifiedQuadraticObjective g B`
-at `x`.
--/
-theorem exists_strictifiedQuadraticObjective_contactPoint_data_hasSecondOrderJet_closedBall
-    (hJensen : JensenContactSetPositiveMeasureOnClosedBallTheorem n)
-    (hAleksandrov : AleksandrovSecondDifferentiabilityByJetsOnClosedBallTheorem n)
-    {g : Point n -> Real} {B : Hessian n}
-    (hconv : ConvexOn Real Set.univ g)
-    (hmax : IsMaxOn (semiconvexQuadraticObjective g B) Set.univ 0)
-    {r delta : Real} (hr : 0 < r) (hdelta : 0 < delta) :
-    ∃ x : Point n, ∃ q : Point n, ∃ a : Point n, ∃ X : Hessian n,
-      x ∈ Metric.closedBall (0 : Point n) r ∧
-        q ∈ Metric.ball 0 delta ∧
-        X.IsHermitian ∧
-        IsLocalMax (linearPerturbation (strictifiedQuadraticObjective g B) q) x ∧
-        HasSecondOrderJet (strictifiedQuadraticObjective g B) x a X := by
-  have hsemi :=
-    exists_coordinateSemiconvexOn_strictifiedQuadraticObjective_closedBall
-      (n := n) (B := B) hconv (le_of_lt hr)
-  exact exists_contactPoint_data_hasSecondOrderJet_closedBall
-    hJensen hAleksandrov hr hsemi
-    (strictLocalMax_strictifiedQuadraticObjective_of_isMaxOn_univ hmax)
-    hdelta
-
-/--
-At a contact point for the strictified quadratic objective, the
-local-maximum calculus theorem gives the first- and second-order inequalities.
--/
-theorem exists_strictifiedQuadraticObjective_contactPoint_data_localMaxCalculus
-    (hJensen : JensenContactSetPositiveMeasureTheorem n)
-    (hAleksandrov : AleksandrovSecondDifferentiabilityByJetsTheorem n)
-    {g : Point n -> Real} {B : Hessian n}
-    (hsemi :
-      ∃ lambda : Real,
-        CoordinateSemiconvexOn lambda Set.univ (strictifiedQuadraticObjective g B))
-    (hmax : IsMaxOn (semiconvexQuadraticObjective g B) Set.univ 0)
-    {r delta : Real} (hr : 0 < r) (hdelta : 0 < delta) :
-    ∃ x : Point n, ∃ q : Point n, ∃ a : Point n, ∃ X : Hessian n,
-      x ∈ Metric.closedBall (0 : Point n) r ∧
-        q ∈ Metric.ball 0 delta ∧
-        X.IsHermitian ∧
-        IsLocalMax (linearPerturbation (strictifiedQuadraticObjective g B) q) x ∧
-        HasSecondOrderJet (strictifiedQuadraticObjective g B) x a X ∧
-        a + q = 0 ∧
-        X <= 0 := by
-  exact exists_contactPoint_data_localMaxCalculus
-    hJensen hAleksandrov hsemi
-    (strictLocalMax_strictifiedQuadraticObjective_of_isMaxOn_univ hmax)
-    hr hdelta
-
-/--
 Localized source-proof data for the strictified quadratic objective, together
 with the local-maximum calculus conclusions.
 -/
@@ -320,49 +235,6 @@ theorem exists_strictifiedQuadraticObjective_contactPoint_data_localMaxCalculus_
     hJensen hAleksandrov hr hsemi
     (strictLocalMax_strictifiedQuadraticObjective_of_isMaxOn_univ hmax)
     hdelta
-
-/--
-Source-proof data for the strictified quadratic objective, expressed as closed
-superjet data for the original function.
-
-In quantified mathematical form, assume Jensen's contact-set theorem,
-Aleksandrov's differentiability theorem, semiconvexity of
-`x ↦ g x - (1 / 2) * ⟪B x, x⟫ - (∑ i, x_i^2)^2`, and that
-`x ↦ g x - (1 / 2) * ⟪B x, x⟫` has a maximum at `0`. Then for every
-`r > 0` and every `delta > 0` there exist `x`, `q`, `a`, and `X` such that
-`x ∈ closedBall 0 r`, `q ∈ ball 0 delta`, `X` is Hermitian,
-`a + q = 0`, `X ≤ 0`, and after adding the coordinate-quartic jet at `x`
-and the recentered quadratic jet at `x`, the resulting jet belongs to
-`\overline J^{2,+}_{R^n} g(x)`. Its Hessian component is at most
-`B + (coordinate-quartic Hessian at x)` in the Loewner order.
--/
-theorem exists_strictifiedQuadraticObjective_closedSuperjet_data
-    (hJensen : JensenContactSetPositiveMeasureTheorem n)
-    (hAleksandrov : AleksandrovSecondDifferentiabilityByJetsTheorem n)
-    {g : Point n -> Real} {B : Hessian n}
-    (hsemi :
-      ∃ lambda : Real,
-        CoordinateSemiconvexOn lambda Set.univ (strictifiedQuadraticObjective g B))
-    (hmax : IsMaxOn (semiconvexQuadraticObjective g B) Set.univ 0)
-    {r delta : Real} (hr : 0 < r) (hdelta : 0 < delta) :
-    ∃ x : Point n, ∃ q : Point n, ∃ a : Point n, ∃ X : Hessian n,
-      x ∈ Metric.closedBall (0 : Point n) r ∧
-        q ∈ Metric.ball 0 delta ∧
-        X.IsHermitian ∧
-        HasSecondOrderJet (strictifiedQuadraticObjective g B) x a X ∧
-        a + q = 0 ∧
-        X <= 0 ∧
-        (({ gradient := a, hessian := X } : Jet n) + coordinateQuarticJetAt x) +
-            quadraticModelJetAt 0 0 B x ∈ ClosedSuperjet Set.univ g x ∧
-        (((( { gradient := a, hessian := X } : Jet n) + coordinateQuarticJetAt x) +
-            quadraticModelJetAt 0 0 B x).hessian) <=
-          (coordinateQuarticJetAt x).hessian + B := by
-  rcases exists_strictifiedQuadraticObjective_contactPoint_data_localMaxCalculus
-      hJensen hAleksandrov hsemi hmax hr hdelta with
-    ⟨x, q, a, X, hxBall, hqBall, hX, _hmaxPerturbed, hjet, ha, hXle⟩
-  exact ⟨x, q, a, X, hxBall, hqBall, hX, hjet, ha, hXle,
-    hjet.closedSuperjet_of_strictifiedQuadraticObjective,
-    strictifiedQuadraticObjective_closedSuperjetJet_hessian_le hXle⟩
 
 /--
 Localized source-proof data for the strictified quadratic objective, expressed

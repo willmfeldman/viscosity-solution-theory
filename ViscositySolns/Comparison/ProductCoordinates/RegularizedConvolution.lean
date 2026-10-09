@@ -635,47 +635,6 @@ theorem isMaxOn_regularizedDoubledConvolution_normalized_sub_cilQuadratic_of_mem
       (n := n) hHerm hepsilon hA hKne hLne hKcompact hLcompact hu hv hmax hzero
 
 /--
-The previous theorem, with semicontinuity hypotheses stated for the original
-functions on the translated compact neighborhoods.
-
-In standard mathematical terms, upper semicontinuity of `u` on
-`{x0 + x | x ∈ K}` and lower semicontinuity of `v` on
-`{y0 + y | y ∈ L}` imply the corresponding semicontinuity hypotheses for the
-translated affine-normalized functions on `K` and `L`.
--/
-theorem isMaxOn_regularizedDoubledConvolution_normalized_sub_cilQuadratic_of_isMaxOn_expansion'
-    {epsilon mu : Real} {K L : Set (Point n)} {u v : Point n -> Real}
-    {x0 y0 : Point n} {φ0 : Real} {P : BlockPoint n} {A : BlockHessian n}
-    (hHerm : A.IsHermitian) (hepsilon : 0 < epsilon)
-    (hA : A <= mu • blockDiagonalIdentity n)
-    (hKne : K.Nonempty) (hLne : L.Nonempty)
-    (hKcompact : IsCompact K) (hLcompact : IsCompact L)
-    (hu : UpperSemicontinuousOn u ((fun x : Point n => x0 + x) '' K))
-    (hv : LowerSemicontinuousOn v ((fun y : Point n => y0 + y) '' L))
-    (hmax : IsMaxOn
-      (fun q : DoubledPoint n =>
-        u q.1 - v q.2 - doubledQuadraticExpansionAt (n := n) x0 y0 φ0 P A q)
-      {q : DoubledPoint n | q.1 - x0 ∈ K ∧ q.2 - y0 ∈ L}
-      (x0, y0))
-    (hzero :
-      regularizedDoubledConvolution (n := n) (epsilon⁻¹ + mu) K L
-          (normalizedLeftOfBlockGradient (n := n) u x0 P)
-          (normalizedRightOfBlockGradient (n := n) v y0 P) 0 = 0) :
-    IsMaxOn
-      (fun ξ : BlockPoint n =>
-        regularizedDoubledConvolution (n := n) (epsilon⁻¹ + mu) K L
-            (normalizedLeftOfBlockGradient (n := n) u x0 P)
-            (normalizedRightOfBlockGradient (n := n) v y0 P) ξ -
-          blockQuadraticModel (A + epsilon • (A * A)) ξ)
-      Set.univ 0 := by
-  exact
-    isMaxOn_regularizedDoubledConvolution_normalized_sub_cilQuadratic_of_isMaxOn_expansion
-      (n := n) hHerm hepsilon hA hKne hLne hKcompact hLcompact
-      (upperSemicontinuousOn_normalizedLeftOfBlockGradient (n := n) hu)
-      (lowerSemicontinuousOn_normalizedRightOfBlockGradient (n := n) hv)
-      hmax hzero
-
-/--
 The translated-neighborhood version of the normalized regularized maximum
 condition without an additional origin-value hypothesis.
 

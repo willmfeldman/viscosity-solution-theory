@@ -239,45 +239,6 @@ theorem MaximumPrincipleConclusion.sub_const_left
   exact ⟨data.sub_const_left⟩
 
 /--
-Subtracting a constant from the first function preserves the two-function
-maximum-principle theorem-shaped proposition.
-
-In quantified mathematical form, for every real number `δ`, suppose that for
-every local maximum point of
-`(x', y') ↦ u x' - v y' - φ (x', y')` on `C × D`, the maximum-principle
-conclusion holds. Then for every local maximum point of
-`(x', y') ↦ (u x' - δ) - v y' - φ (x', y')` on `C × D`, the corresponding
-maximum-principle conclusion holds for `x ↦ u x - δ` and `v`.
--/
-theorem DoubledMaximumPrincipleOn.sub_const_left
-    {C D : Set (Point n)} {u v : Point n -> Real}
-    {φ : DoubledPoint n -> Real} {p q : DoubledPoint n -> Point n}
-    {matrixRel : DoubledPoint n -> Hessian n -> Hessian n -> Prop} {δ : Real}
-    (hMP : DoubledMaximumPrincipleOn C D u v φ p q matrixRel) :
-    DoubledMaximumPrincipleOn C D (fun z => u z - δ) v φ p q matrixRel := by
-  intro x y hlocal
-  have hlocal_unshifted :
-      HasDoubledLocalMaximumOn C D u v φ x y :=
-    (hasDoubledLocalMaximumOn_sub_const_left_iff
-      (C := C) (D := D) (u := u) (v := v) (φ := φ) (x := x) (y := y)
-      (δ := δ)).1 hlocal
-  exact (hMP x y hlocal_unshifted).sub_const_left
-
-/--
-Unpack `MaximumPrincipleConclusion` into matrices `X` and `Y`.
--/
-theorem MaximumPrincipleConclusion.exists_matrices
-    {C D : Set (Point n)} {u v : Point n -> Real} {x y p q : Point n}
-    {matrixRel : Hessian n -> Hessian n -> Prop}
-    (h : MaximumPrincipleConclusion C D u v x y p q matrixRel) :
-    ∃ X Y : Hessian n,
-      ({ gradient := p, hessian := X } : Jet n) ∈ ClosedSuperjet C u x ∧
-      ({ gradient := q, hessian := Y } : Jet n) ∈ ClosedSubjet D v y ∧
-      matrixRel X Y := by
-  rcases h with ⟨data⟩
-  exact ⟨data.X, data.Y, data.superjet_mem, data.subjet_mem, data.matrix_relation⟩
-
-/--
 The matrix relation in the quadratic-penalty case:
 `X` and `Y` satisfy the block inequalities
 `-(3 * α) [I 0; 0 I] ≤ [X 0; 0 -Y] ≤ 3 [α I -α I; -α I α I]`.

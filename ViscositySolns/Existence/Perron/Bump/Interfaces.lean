@@ -6,7 +6,6 @@ Authors: William M. Feldman
 module
 
 public import ViscositySolns.Existence.Perron.Bump.Definitions
-public import ViscositySolns.Existence.Perron.Bump.Bridges
 
 /-!
 # Perron bump interfaces

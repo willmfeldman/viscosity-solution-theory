@@ -216,22 +216,6 @@ theorem blockQuadraticModel_pointHessianToBlockHessian_pointSumEquivBlockPoint
     dotProduct_comm]
 
 /--
-The quadratic expression of a block diagonal Hessian on `R^n × R^n`.
-
-In quantified mathematical form, for every `x, y : R^n`,
-
-`1 / 2 * ⟪[X 0; 0 -Y] (x, y), (x, y)⟫ =
-  1 / 2 * ⟪X x, x⟫ - 1 / 2 * ⟪Y y, y⟫`.
--/
-theorem blockQuadraticModel_comparisonBlockDiagonal_doubledPoint
-    (X Y : Hessian n) (q : DoubledPoint n) :
-    blockQuadraticModel (comparisonBlockDiagonal X Y) (doubledPointToBlockPoint q) =
-      quadraticModel 0 0 0 X q.1 - quadraticModel 0 0 0 Y q.2 := by
-  simp [blockQuadraticModel, quadraticModel, doubledPointToBlockPoint, comparisonBlockDiagonal,
-    Matrix.fromBlocks_mulVec, Matrix.neg_mulVec, sumElim_dotProduct_sumElim]
-  ring
-
-/--
 The block Hessian of the coordinate quadratic penalty gives the coordinate
 quadratic penalty.
 
@@ -373,20 +357,6 @@ theorem blockPointRight_comparisonPenaltyBlock_mulVec_doubledPoint
   rfl
 
 /--
-The upper Ishii block has quadratic expression equal to three times the
-coordinate quadratic penalty.
--/
-theorem blockQuadraticModel_ishiiUpperBlock_doubledPoint
-    (α : Real) (q : DoubledPoint n) :
-    blockQuadraticModel (ishiiUpperBlock (n := n) α) (doubledPointToBlockPoint q) =
-      3 * quadraticPenalty α q.1 q.2 := by
-  have hpen :=
-    blockQuadraticModel_comparisonPenaltyBlock_doubledPoint (n := n) α q
-  dsimp [blockQuadraticModel] at hpen ⊢
-  simp [ishiiUpperBlock, Matrix.smul_mulVec, smul_dotProduct] at hpen ⊢
-  nlinarith
-
-/--
 For every vector `z : Fin n -> Real`, the Hessian matrix of
 `(α / 2) * ∑ i, (x i - y i)^2` sends `(z, z)` to zero.
 -/
@@ -461,90 +431,6 @@ theorem IshiiMatrixRelation.left_le_right {α : Real} {x y : Point n}
     simp [Matrix.sub_mulVec, dotProduct_sub]
   rw [hdiffQuad]
   linarith
-
-/--
-The lower Ishii block bound implies `-(3 * α) I ≤ X`.
--/
-theorem IshiiMatrixRelation.left_lower_bound {α : Real} {x y : Point n}
-    {X Y : Hessian n} (h : IshiiMatrixRelation α x y X Y) :
-    (-(3 * α)) • (1 : Hessian n) <= X := by
-  have hsub := matrix_le_submatrix h.1 (Sum.inl : Fin n -> Fin n ⊕ Fin n)
-  have hlower :
-      Matrix.submatrix (ishiiLowerBlock (n := n) α) Sum.inl Sum.inl =
-        (-(3 * α)) • (1 : Hessian n) := by
-    ext i j
-    by_cases hij : i = j <;>
-      simp [ishiiLowerBlock, blockDiagonalIdentity, hij]
-  have hmiddle :
-      Matrix.submatrix (comparisonBlockDiagonal X Y) Sum.inl Sum.inl = X := by
-    ext i j
-    simp [comparisonBlockDiagonal]
-  simpa [hlower, hmiddle] using hsub
-
-/--
-The upper Ishii block bound implies `X ≤ 3α I`.
--/
-theorem IshiiMatrixRelation.left_upper_bound {α : Real} {x y : Point n}
-    {X Y : Hessian n} (h : IshiiMatrixRelation α x y X Y) :
-    X <= (3 * α) • (1 : Hessian n) := by
-  have hsub := matrix_le_submatrix h.2 (Sum.inl : Fin n -> Fin n ⊕ Fin n)
-  have hmiddle :
-      Matrix.submatrix (comparisonBlockDiagonal X Y) Sum.inl Sum.inl = X := by
-    ext i j
-    simp [comparisonBlockDiagonal]
-  have hupper :
-      Matrix.submatrix (ishiiUpperBlock (n := n) α) Sum.inl Sum.inl =
-        (3 * α) • (1 : Hessian n) := by
-    ext i j
-    simp [ishiiUpperBlock, comparisonPenaltyBlock]
-    ring
-  simpa [hmiddle, hupper] using hsub
-
-/--
-The upper Ishii block bound implies `-(3 * α) I ≤ Y`.
--/
-theorem IshiiMatrixRelation.right_lower_bound {α : Real} {x y : Point n}
-    {X Y : Hessian n} (h : IshiiMatrixRelation α x y X Y) :
-    (-(3 * α)) • (1 : Hessian n) <= Y := by
-  have hsub := matrix_le_submatrix h.2 (Sum.inr : Fin n -> Fin n ⊕ Fin n)
-  have hneg : -Y <= (3 * α) • (1 : Hessian n) := by
-    have hmiddle :
-        Matrix.submatrix (comparisonBlockDiagonal X Y) Sum.inr Sum.inr = -Y := by
-      ext i j
-      simp [comparisonBlockDiagonal]
-    have hupper :
-        Matrix.submatrix (ishiiUpperBlock (n := n) α) Sum.inr Sum.inr =
-          (3 * α) • (1 : Hessian n) := by
-      ext i j
-      simp [ishiiUpperBlock, comparisonPenaltyBlock]
-      ring
-    simpa [hmiddle, hupper] using hsub
-  have hneg' : (-(3 * α)) • (1 : Hessian n) <= Y := by
-    simpa [neg_smul] using neg_le_neg hneg
-  exact hneg'
-
-/--
-The lower Ishii block bound implies `Y ≤ 3α I`.
--/
-theorem IshiiMatrixRelation.right_upper_bound {α : Real} {x y : Point n}
-    {X Y : Hessian n} (h : IshiiMatrixRelation α x y X Y) :
-    Y <= (3 * α) • (1 : Hessian n) := by
-  have hsub := matrix_le_submatrix h.1 (Sum.inr : Fin n -> Fin n ⊕ Fin n)
-  have hneg : (-(3 * α)) • (1 : Hessian n) <= -Y := by
-    have hlower :
-        Matrix.submatrix (ishiiLowerBlock (n := n) α) Sum.inr Sum.inr =
-          (-(3 * α)) • (1 : Hessian n) := by
-      ext i j
-      by_cases hij : i = j <;>
-        simp [ishiiLowerBlock, blockDiagonalIdentity, hij]
-    have hmiddle :
-        Matrix.submatrix (comparisonBlockDiagonal X Y) Sum.inr Sum.inr = -Y := by
-      ext i j
-      simp [comparisonBlockDiagonal]
-    simpa [hlower, hmiddle] using hsub
-  have hneg' : Y <= (3 * α) • (1 : Hessian n) := by
-    simpa [neg_smul] using neg_le_neg hneg
-  exact hneg'
 
 @[simp]
 theorem comparisonBlockDiagonal_apply_left_left (X Y : Hessian n) (i j : Fin n) :

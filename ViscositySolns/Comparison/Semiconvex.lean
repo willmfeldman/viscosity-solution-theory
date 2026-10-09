@@ -217,21 +217,6 @@ theorem ConvexOn.coordinateSemiconvexOn_of_semiconvexConvexification
   nlinarith
 
 /--
-On a convex set, coordinate semiconvexity is equivalent to convexity after
-adding the quadratic function `x ↦ (lambda / 2) * ∑ i, x_i^2`.
--/
-theorem coordinateSemiconvexOn_iff_convexOn_semiconvexConvexification
-    {lambda : Real} {C : Set (Point n)} {f : Point n -> Real}
-    (hC : Convex Real C) :
-    CoordinateSemiconvexOn lambda C f ↔
-      ConvexOn Real C (semiconvexConvexification lambda f) := by
-  constructor
-  · intro hsemi
-    exact hsemi.convexOn_semiconvexConvexification hC
-  · intro hconv
-    exact ConvexOn.coordinateSemiconvexOn_of_semiconvexConvexification hconv
-
-/--
 A convex function is coordinate semiconvex with constant `0`.
 
 In quantified mathematical form, if `f` is convex on `C`, then for every
@@ -730,54 +715,6 @@ def ConvexifiedSemiconvexMatrixLemmaOn (lambda : Real) : Prop :=
         SemiconvexMatrixConclusion lambda f B
 
 /--
-The paper's convexity formulation of the semiconvex matrix lemma implies the
-coordinate-semiconvexity formulation.
--/
-theorem SemiconvexMatrixLemmaOn.of_convexified
-    {lambda : Real}
-    (hlemma : ConvexifiedSemiconvexMatrixLemmaOn (n := n) lambda) :
-    SemiconvexMatrixLemmaOn (n := n) lambda := by
-  intro hlambda f hf B hB hsemi hmax
-  exact hlemma hlambda f hf B hB
-    (hsemi.convexOn_semiconvexConvexification convex_univ) hmax
-
-/--
-The coordinate-semiconvexity formulation of the semiconvex matrix lemma
-implies the paper's convexity formulation.
--/
-theorem ConvexifiedSemiconvexMatrixLemmaOn.of_coordinate
-    {lambda : Real}
-    (hlemma : SemiconvexMatrixLemmaOn (n := n) lambda) :
-    ConvexifiedSemiconvexMatrixLemmaOn (n := n) lambda := by
-  intro hlambda f hf B hB hconv hmax
-  exact hlemma hlambda f hf B hB
-    (ConvexOn.coordinateSemiconvexOn_of_semiconvexConvexification hconv) hmax
-
-/--
-The coordinate-semiconvexity and convexified formulations of the semiconvex
-matrix lemma are equivalent.
--/
-theorem semiconvexMatrixLemmaOn_iff_convexifiedSemiconvexMatrixLemmaOn
-    {lambda : Real} :
-    SemiconvexMatrixLemmaOn (n := n) lambda ↔
-      ConvexifiedSemiconvexMatrixLemmaOn (n := n) lambda := by
-  constructor
-  · exact ConvexifiedSemiconvexMatrixLemmaOn.of_coordinate
-  · exact SemiconvexMatrixLemmaOn.of_convexified
-
-/--
-Unpack `SemiconvexMatrixConclusion` into the matrix `X` and the two matrix
-inequalities.
--/
-theorem SemiconvexMatrixConclusion.exists_matrix
-    {lambda : Real} {f : Point n -> Real} {B : Hessian n}
-    (h : SemiconvexMatrixConclusion lambda f B) :
-    ∃ X : Hessian n,
-      ({ gradient := 0, hessian := X } : Jet n) ∈ ClosedSuperjet Set.univ f 0 ∧
-        (-lambda) • (1 : Hessian n) <= X ∧
-        X <= B := h
-
-/--
 Apply `SemiconvexMatrixLemmaOn` to a continuous semiconvex function whose
 quadratic modification has a maximum at the origin.
 -/
@@ -789,53 +726,5 @@ theorem SemiconvexMatrixLemmaOn.apply
     (hmax : IsMaxOn (semiconvexQuadraticObjective f B) Set.univ 0) :
     SemiconvexMatrixConclusion lambda f B :=
   hlemma hlambda f hf B hB hsemi hmax
-
-/--
-Apply `SemiconvexMatrixLemmaOn` using only coordinate semiconvexity on all of
-`R^n`.
-
-The continuity hypothesis in `SemiconvexMatrixLemmaOn` is supplied by
-`CoordinateSemiconvexOn.continuous_univ`.
--/
-theorem SemiconvexMatrixLemmaOn.apply_of_coordinateSemiconvexOn
-    {lambda : Real} (hlemma : SemiconvexMatrixLemmaOn (n := n) lambda)
-    (hlambda : 0 <= lambda) {f : Point n -> Real}
-    {B : Hessian n} (hB : B.IsHermitian)
-    (hsemi : CoordinateSemiconvexOn lambda Set.univ f)
-    (hmax : IsMaxOn (semiconvexQuadraticObjective f B) Set.univ 0) :
-    SemiconvexMatrixConclusion lambda f B :=
-  hlemma.apply hlambda hsemi.continuous_univ hB hsemi hmax
-
-/--
-Apply the semiconvex matrix lemma to a compact sup-convolution.
-
-In quantified mathematical form, suppose `K` is nonempty and compact,
-`v : R^n -> R` is upper semicontinuous on `K`, `0 ≤ lambda`, `B` is
-Hermitian, and
-`semiconvexQuadraticObjective (ξ ↦ compactSupConvolution lambda K v ξ) B`
-has a maximum at `0` on all of `R^n`. If `SemiconvexMatrixLemmaOn lambda`
-holds, then there exists a matrix `X` such that
-
-`(0, X) ∈ \overline J^{2,+}_{R^n}
-  (ξ ↦ compactSupConvolution lambda K v ξ)(0)`
-
-and `-lambda I ≤ X ≤ B`.
--/
-theorem SemiconvexMatrixLemmaOn.compactSupConvolution_of_isCompact
-    {lambda : Real} (hlemma : SemiconvexMatrixLemmaOn (n := n) lambda)
-    (hlambda : 0 <= lambda) {K : Set (Point n)} {v : Point n -> Real}
-    (hKne : K.Nonempty) (hKcompact : IsCompact K)
-    (hv : UpperSemicontinuousOn v K) {B : Hessian n}
-    (hB : B.IsHermitian)
-    (hmax : IsMaxOn
-      (semiconvexQuadraticObjective
-        (fun ξ : Point n => compactSupConvolution lambda K v ξ) B)
-      Set.univ 0) :
-    SemiconvexMatrixConclusion lambda
-      (fun ξ : Point n => compactSupConvolution lambda K v ξ) B := by
-  exact hlemma.apply_of_coordinateSemiconvexOn hlambda
-    hB
-    (coordinateSemiconvexOn_compactSupConvolution_of_isCompact hKne hKcompact hv)
-    hmax
 
 end ViscositySolns

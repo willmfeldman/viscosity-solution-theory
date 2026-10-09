@@ -79,14 +79,6 @@ theorem coordinateQuartic_zero : coordinateQuartic (0 : Point n) = 0 := by
   simp [coordinateQuartic]
 
 /--
-The coordinate quartic is continuous.
--/
-theorem continuous_coordinateQuartic :
-    Continuous (coordinateQuartic (n := n)) := by
-  exact
-    ((continuous_id : Continuous fun x : Point n => x).dotProduct continuous_id).pow 2
-
-/--
 The coordinate quadratic identity underlying the quartic estimate.
 
 In quantified mathematical form, if `a + b = 1`, then
@@ -420,61 +412,6 @@ theorem coordinateQuartic_pos_of_ne_zero {x : Point n} (hx : x ≠ 0) :
   have hdot_ge : ‖x‖ ^ 2 <= dotProduct x x := norm_sq_le_dotProduct_self x
   have hdot_pos : 0 < dotProduct x x := lt_of_lt_of_le hnorm_sq_pos hdot_ge
   exact sq_pos_of_pos hdot_pos
-
-/--
-The coordinate quartic is fourth order at the origin.
-
-In quantified mathematical form,
-
-`(∑ i, x_i^2)^2 = o(|x|^2)` as `x -> 0`.
--/
-theorem coordinateQuartic_isLittleO_norm_sq :
-    (fun x : Point n => coordinateQuartic x) =o[𝓝 (0 : Point n)]
-      (fun x : Point n => ‖x‖ ^ 2) := by
-  have hbig :
-      (fun x : Point n => coordinateQuartic x) =O[𝓝 (0 : Point n)]
-        (fun x : Point n => ‖x‖ ^ 4) := by
-    refine Asymptotics.IsBigO.of_bound ((n : Real) ^ 2) ?_
-    filter_upwards with x
-    have hdot : dotProduct x x <= (n : Real) * ‖x‖ ^ 2 :=
-      dotProduct_self_le_card_mul_norm_sq x
-    have hdot_nonneg : 0 <= dotProduct x x := by
-      rw [dotProduct]
-      exact Finset.sum_nonneg fun i _hi => by
-        simpa [sq] using sq_nonneg (x i)
-    have hsq :
-        (dotProduct x x) ^ 2 <= ((n : Real) * ‖x‖ ^ 2) ^ 2 :=
-      pow_le_pow_left₀ hdot_nonneg hdot 2
-    have hquartic_nonneg : 0 <= coordinateQuartic x := by
-      exact sq_nonneg (dotProduct x x)
-    calc
-      ‖coordinateQuartic x‖ = coordinateQuartic x := by
-        rw [Real.norm_eq_abs, abs_of_nonneg hquartic_nonneg]
-      _ = (dotProduct x x) ^ 2 := rfl
-      _ <= ((n : Real) * ‖x‖ ^ 2) ^ 2 := hsq
-      _ = (n : Real) ^ 2 * ‖x‖ ^ 4 := by ring
-      _ = (n : Real) ^ 2 * ‖‖x‖ ^ 4‖ := by
-        rw [Real.norm_eq_abs, abs_of_nonneg (pow_nonneg (norm_nonneg x) 4)]
-  have hsmall :
-      (fun x : Point n => ‖x‖ ^ 4) =o[𝓝 (0 : Point n)]
-        (fun x : Point n => ‖x‖ ^ 2) :=
-    Asymptotics.isLittleO_norm_pow_norm_pow (E' := Point n)
-      (by norm_num : 2 < 4)
-  exact hbig.trans_isLittleO hsmall
-
-/--
-At the origin, the coordinate quartic has zero value, zero gradient, and zero
-Hessian in the second-order expansion sense used by semijets.
--/
-theorem hasSecondOrderExpansionWithin_coordinateQuartic_zero
-    {C : Set (Point n)} :
-    HasSecondOrderExpansionWithin C (coordinateQuartic (n := n)) 0
-      ({ gradient := 0, hessian := 0 } : Jet n) := by
-  refine ⟨coordinateQuartic, ?_, ?_⟩
-  · have h := coordinateQuartic_isLittleO_norm_sq (n := n)
-    simpa [SemijetRemainder] using h.mono (nhdsWithin_le_nhds (s := C))
-  · filter_upwards with x
-    simp [coordinateQuartic, quadraticModel]
 
 /--
 The canonical second-order jet of the coordinate quartic at a point.

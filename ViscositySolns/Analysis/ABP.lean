@@ -92,41 +92,6 @@ Lebesgue measure zero.
 def ABPMaximumPrincipleAleksandrovDifferentiabilityOnClosedBallTheorem (n : Nat) : Prop :=
   AleksandrovSecondDifferentiabilityByJetsOnClosedBallTheorem n
 
-/--
-The two source-paper analytic inputs supply a Jensen contact point at which a
-second-order jet exists.
--/
-theorem ABPMaximumPrincipleContactSetJensenTheorem.exists_contactPoint_hasSomeSecondOrderJet
-    (hJensen : ABPMaximumPrincipleContactSetJensenTheorem n)
-    (hAleksandrov : ABPMaximumPrincipleAleksandrovDifferentiabilityTheorem n)
-    {f : Point n -> Real}
-    (hsemi : ∃ lambda : Real, CoordinateSemiconvexOn lambda Set.univ f)
-    {x0 : Point n} (hstrict : StrictLocalMax f x0)
-    {r delta : Real} (hr : 0 < r) (hdelta : 0 < delta) :
-    ∃ x : Point n, x ∈ JensenContactSet f x0 r delta ∧ HasSomeSecondOrderJet f x :=
-  ViscositySolns.exists_contactPoint_hasSomeSecondOrderJet
-    hJensen hAleksandrov hsemi hstrict hr hdelta
-
-namespace ABPMaximumPrincipleContactSetJensenOnClosedBallTheorem
-
-/--
-The localized analytic inputs supply a Jensen contact point at which a
-second-order jet exists.
--/
-theorem exists_contactPoint_hasSomeSecondOrderJet
-    (hJensen : ABPMaximumPrincipleContactSetJensenOnClosedBallTheorem n)
-    (hAleksandrov : ABPMaximumPrincipleAleksandrovDifferentiabilityOnClosedBallTheorem n)
-    {f : Point n -> Real}
-    {x0 : Point n} {r : Real} (hr : 0 < r)
-    (hsemi : ∃ lambda : Real, CoordinateSemiconvexOn lambda (Metric.closedBall x0 r) f)
-    (hstrict : StrictLocalMax f x0)
-    {delta : Real} (hdelta : 0 < delta) :
-    ∃ x : Point n, x ∈ JensenContactSet f x0 r delta ∧ HasSomeSecondOrderJet f x :=
-  ViscositySolns.exists_contactPoint_hasSomeSecondOrderJet_closedBall
-    hJensen hAleksandrov hr hsemi hstrict hdelta
-
-end ABPMaximumPrincipleContactSetJensenOnClosedBallTheorem
-
 namespace ABPMaximumPrincipleContactSetJensenTheorem
 
 /--
@@ -171,51 +136,6 @@ theorem exists_contactPoint_data_localMaxCalculus
         X <= 0 :=
   ViscositySolns.exists_contactPoint_data_localMaxCalculus
     hJensen hAleksandrov hsemi hstrict hr hdelta
-
-/--
-Unpacked source-proof data for the strictified quadratic objective.
--/
-theorem exists_strictifiedQuadraticObjective_contactPoint_data_hasSecondOrderJet
-    (hJensen : ABPMaximumPrincipleContactSetJensenTheorem n)
-    (hAleksandrov : ABPMaximumPrincipleAleksandrovDifferentiabilityTheorem n)
-    {g : Point n -> Real} {B : Hessian n}
-    (hsemi :
-      ∃ lambda : Real,
-        CoordinateSemiconvexOn lambda Set.univ (strictifiedQuadraticObjective g B))
-    (hmax : IsMaxOn (semiconvexQuadraticObjective g B) Set.univ 0)
-    {r delta : Real} (hr : 0 < r) (hdelta : 0 < delta) :
-    ∃ x : Point n, ∃ q : Point n, ∃ a : Point n, ∃ X : Hessian n,
-      x ∈ Metric.closedBall (0 : Point n) r ∧
-        q ∈ Metric.ball 0 delta ∧
-        X.IsHermitian ∧
-        IsLocalMax (linearPerturbation (strictifiedQuadraticObjective g B) q) x ∧
-        HasSecondOrderJet (strictifiedQuadraticObjective g B) x a X :=
-  ViscositySolns.exists_strictifiedQuadraticObjective_contactPoint_data_hasSecondOrderJet
-    hJensen hAleksandrov hsemi hmax hr hdelta
-
-/--
-Unpacked source-proof data for the strictified quadratic objective, together
-with the local-maximum calculus conclusions.
--/
-theorem exists_strictifiedQuadraticObjective_contactPoint_data_localMaxCalculus
-    (hJensen : ABPMaximumPrincipleContactSetJensenTheorem n)
-    (hAleksandrov : ABPMaximumPrincipleAleksandrovDifferentiabilityTheorem n)
-    {g : Point n -> Real} {B : Hessian n}
-    (hsemi :
-      ∃ lambda : Real,
-        CoordinateSemiconvexOn lambda Set.univ (strictifiedQuadraticObjective g B))
-    (hmax : IsMaxOn (semiconvexQuadraticObjective g B) Set.univ 0)
-    {r delta : Real} (hr : 0 < r) (hdelta : 0 < delta) :
-    ∃ x : Point n, ∃ q : Point n, ∃ a : Point n, ∃ X : Hessian n,
-      x ∈ Metric.closedBall (0 : Point n) r ∧
-        q ∈ Metric.ball 0 delta ∧
-        X.IsHermitian ∧
-        IsLocalMax (linearPerturbation (strictifiedQuadraticObjective g B) q) x ∧
-        HasSecondOrderJet (strictifiedQuadraticObjective g B) x a X ∧
-        a + q = 0 ∧
-        X <= 0 :=
-  ViscositySolns.exists_strictifiedQuadraticObjective_contactPoint_data_localMaxCalculus
-    hJensen hAleksandrov hsemi hmax hr hdelta
 
 end ABPMaximumPrincipleContactSetJensenTheorem
 
@@ -263,56 +183,6 @@ theorem exists_contactPoint_data_localMaxCalculus
         X <= 0 :=
   ViscositySolns.exists_contactPoint_data_localMaxCalculus_closedBall
     hJensen hAleksandrov hr hsemi hstrict hdelta
-
-/--
-Localized source-proof data for the strictified quadratic objective, expressed
-as closed superjet data for the original function.
--/
-theorem exists_strictifiedQuadraticObjective_closedSuperjet_data
-    (hJensen : ABPMaximumPrincipleContactSetJensenOnClosedBallTheorem n)
-    (hAleksandrov : ABPMaximumPrincipleAleksandrovDifferentiabilityOnClosedBallTheorem n)
-    {g : Point n -> Real} {B : Hessian n}
-    (hconv : ConvexOn Real Set.univ g)
-    (hmax : IsMaxOn (semiconvexQuadraticObjective g B) Set.univ 0)
-    {r delta : Real} (hr : 0 < r) (hdelta : 0 < delta) :
-    ∃ x : Point n, ∃ q : Point n, ∃ a : Point n, ∃ X : Hessian n,
-      x ∈ Metric.closedBall (0 : Point n) r ∧
-        q ∈ Metric.ball 0 delta ∧
-        X.IsHermitian ∧
-        HasSecondOrderJet (strictifiedQuadraticObjective g B) x a X ∧
-        a + q = 0 ∧
-        X <= 0 ∧
-        (({ gradient := a, hessian := X } : Jet n) + coordinateQuarticJetAt x) +
-            quadraticModelJetAt 0 0 B x ∈ ClosedSuperjet Set.univ g x ∧
-        (((( { gradient := a, hessian := X } : Jet n) + coordinateQuarticJetAt x) +
-            quadraticModelJetAt 0 0 B x).hessian) <=
-          (coordinateQuarticJetAt x).hessian + B :=
-  ViscositySolns.exists_strictifiedQuadraticObjective_closedSuperjet_data_closedBall
-    hJensen hAleksandrov hconv hmax hr hdelta
-
-/--
-Localized selected closed-superjet data with explicit estimates on the base
-point and first-order component.
--/
-theorem exists_strictifiedQuadraticObjective_closedSuperjet_data_norm_bounds
-    (hJensen : ABPMaximumPrincipleContactSetJensenOnClosedBallTheorem n)
-    (hAleksandrov : ABPMaximumPrincipleAleksandrovDifferentiabilityOnClosedBallTheorem n)
-    {g : Point n -> Real} {B : Hessian n}
-    (hconv : ConvexOn Real Set.univ g)
-    (hmax : IsMaxOn (semiconvexQuadraticObjective g B) Set.univ 0)
-    {r delta : Real} (hr : 0 < r) (hdelta : 0 < delta) :
-    ∃ x : Point n, ∃ a : Point n, ∃ X : Hessian n, ∃ J : Jet n,
-      ‖x‖ <= r ∧
-        ‖a‖ < delta ∧
-        X.IsHermitian ∧
-        HasSecondOrderJet (strictifiedQuadraticObjective g B) x a X ∧
-        J =
-          (({ gradient := a, hessian := X } : Jet n) + coordinateQuarticJetAt x) +
-            quadraticModelJetAt 0 0 B x ∧
-        J ∈ ClosedSuperjet Set.univ g x ∧
-        J.hessian <= (coordinateQuarticJetAt x).hessian + B :=
-  ViscositySolns.exists_strictifiedQuadraticObjective_closedSuperjet_data_closedBall_norm_bounds
-    hJensen hAleksandrov hconv hmax hr hdelta
 
 end ABPMaximumPrincipleContactSetJensenOnClosedBallTheorem
 
@@ -378,17 +248,6 @@ theorem ABPMaximumPrincipleConvexMatrixTheorem.of_aleksandrov
     hAleksandrov
 
 /--
-The localized ABP/Jensen and Aleksandrov analytic inputs imply the
-semiconvex Jensen theorem family needed by the comparison proof.
--/
-theorem ABPMaximumPrincipleSufficientForSemiconvexJensen.of_localized_jensen_aleksandrov
-    (hJensen : ABPMaximumPrincipleContactSetJensenOnClosedBallTheorem n)
-    (hAleksandrov : ABPMaximumPrincipleAleksandrovDifferentiabilityOnClosedBallTheorem n) :
-    ABPMaximumPrincipleSufficientForSemiconvexJensen n :=
-  (ABPMaximumPrincipleConvexMatrixTheorem.of_localized_jensen_aleksandrov
-    hJensen hAleksandrov).to_semiconvexJensen
-
-/--
 The semiconvex Jensen theorem family needed by the comparison proof follows
 from the localized Aleksandrov second-differentiability theorem alone.
 -/
@@ -407,15 +266,5 @@ theorem ABPMaximumPrincipleSufficientForSemiconvexJensen.apply
     (lambda : Real) :
     AleksandrovJensenSemiconvexMatrixTheoremOn (n := n) lambda :=
   hABP lambda
-
-/--
-The ABP theorem family sufficient for the semiconvex Jensen step implies the
-coordinate semiconvex matrix lemma for every constant `lambda`.
--/
-theorem ABPMaximumPrincipleSufficientForSemiconvexJensen.semiconvexMatrixLemmaOn
-    (hABP : ABPMaximumPrincipleSufficientForSemiconvexJensen n)
-    (lambda : Real) :
-    SemiconvexMatrixLemmaOn (n := n) lambda :=
-  (hABP.apply lambda).to_semiconvexMatrixLemmaOn
 
 end ViscositySolns

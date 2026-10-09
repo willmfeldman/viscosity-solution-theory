@@ -34,14 +34,6 @@ def upperEnvelope (C : Set (Point n)) (u : Point n -> Real) : Point n -> Real :=
 def lowerEnvelope (C : Set (Point n)) (u : Point n -> Real) : Point n -> Real :=
   fun x => liminf u (nhdsWithin x C)
 
-theorem upperEnvelope_def (C : Set (Point n)) (u : Point n -> Real) (x : Point n) :
-    upperEnvelope C u x = limsup u (nhdsWithin x C) :=
-  rfl
-
-theorem lowerEnvelope_def (C : Set (Point n)) (u : Point n -> Real) (x : Point n) :
-    lowerEnvelope C u x = liminf u (nhdsWithin x C) :=
-  rfl
-
 /--
 If a level lies strictly below the upper envelope at `x`, then points of `C`
 arbitrarily close to `x` have values above that level.
@@ -63,62 +55,6 @@ theorem frequently_lowerEnvelope_lt
     (ha : lowerEnvelope C u x < a) :
     ∃ᶠ y in nhdsWithin x C, u y < a :=
   frequently_lt_of_liminf_lt hcobddAbove ha
-
-/--
-Every relative neighborhood of `x` contains a point whose value is above a
-strict level below the upper envelope.
--/
-theorem exists_mem_nhdsWithin_lt_upperEnvelope
-    {C : Set (Point n)} {u : Point n -> Real} {x : Point n} {a : Real}
-    (hcobddBelow : (nhdsWithin x C).IsCoboundedUnder (· <= ·) u)
-    (ha : a < upperEnvelope C u x) {V : Set (Point n)}
-    (hV : V ∈ nhdsWithin x C) :
-    ∃ y ∈ V, a < u y := by
-  rcases ((frequently_lt_upperEnvelope hcobddBelow ha).and_eventually hV).exists
-    with ⟨y, hyval, hyV⟩
-  exact ⟨y, hyV, hyval⟩
-
-/--
-Every relative neighborhood of `x` contains a point whose value is below a
-strict level above the lower envelope.
--/
-theorem exists_mem_nhdsWithin_lowerEnvelope_lt
-    {C : Set (Point n)} {u : Point n -> Real} {x : Point n} {a : Real}
-    (hcobddAbove : (nhdsWithin x C).IsCoboundedUnder (· >= ·) u)
-    (ha : lowerEnvelope C u x < a) {V : Set (Point n)}
-    (hV : V ∈ nhdsWithin x C) :
-    ∃ y ∈ V, u y < a := by
-  rcases ((frequently_lowerEnvelope_lt hcobddAbove ha).and_eventually hV).exists
-    with ⟨y, hyval, hyV⟩
-  exact ⟨y, hyV, hyval⟩
-
-/--
-For every positive `ε`, every relative neighborhood of `x` contains a point
-with value above `upperEnvelope C u x - ε`.
--/
-theorem exists_upperEnvelope_sub_lt
-    {C : Set (Point n)} {u : Point n -> Real} {x : Point n} {ε : Real}
-    (hε : 0 < ε)
-    (hcobddBelow : (nhdsWithin x C).IsCoboundedUnder (· <= ·) u)
-    {V : Set (Point n)} (hV : V ∈ nhdsWithin x C) :
-    ∃ y ∈ V, upperEnvelope C u x - ε < u y := by
-  have hlt : upperEnvelope C u x - ε < upperEnvelope C u x :=
-    sub_lt_self _ hε
-  exact exists_mem_nhdsWithin_lt_upperEnvelope hcobddBelow hlt hV
-
-/--
-For every positive `ε`, every relative neighborhood of `x` contains a point
-with value below `lowerEnvelope C u x + ε`.
--/
-theorem exists_lt_lowerEnvelope_add
-    {C : Set (Point n)} {u : Point n -> Real} {x : Point n} {ε : Real}
-    (hε : 0 < ε)
-    (hcobddAbove : (nhdsWithin x C).IsCoboundedUnder (· >= ·) u)
-    {V : Set (Point n)} (hV : V ∈ nhdsWithin x C) :
-    ∃ y ∈ V, u y < lowerEnvelope C u x + ε := by
-  have hlt : lowerEnvelope C u x < lowerEnvelope C u x + ε :=
-    lt_add_of_pos_right _ hε
-  exact exists_mem_nhdsWithin_lowerEnvelope_lt hcobddAbove hlt hV
 
 /-- The upper envelope is upper semicontinuous on any set where its defining
 filters satisfy the real-valued limsup boundedness conditions. In particular,
@@ -154,14 +90,6 @@ theorem lowerSemicontinuousOn_lowerEnvelope_on
   filter_upwards [hnear, self_mem_nhdsWithin] with z hz hzS
   exact lt_of_lt_of_le hyy'
     (le_liminf_of_le (hcobddAbove z hzS) (hz.mono fun _ h => le_of_lt h))
-
-/-- The upper envelope is upper semicontinuous on `C`, under local boundedness. -/
-theorem upperSemicontinuousOn_upperEnvelope
-    {C : Set (Point n)} {u : Point n -> Real}
-    (hbddAbove : ∀ x ∈ C, (nhdsWithin x C).IsBoundedUnder (· <= ·) u)
-    (hcobddBelow : ∀ x ∈ C, (nhdsWithin x C).IsCoboundedUnder (· <= ·) u) :
-    UpperSemicontinuousOn (upperEnvelope C u) C :=
-  upperSemicontinuousOn_upperEnvelope_on hbddAbove hcobddBelow
 
 /-- The lower envelope is lower semicontinuous on `C`, under local boundedness. -/
 theorem lowerSemicontinuousOn_lowerEnvelope

@@ -5,8 +5,6 @@ Authors: William M. Feldman
 -/
 module
 
-public import ViscositySolns.Existence.Perron.Method.StrictBoundary.SubsolutionPatches
-public import ViscositySolns.Existence.Perron.Method.StrictBoundary.BentAnnulusPatches
 public import ViscositySolns.Existence.Perron.Method.StrictBoundary.EnvelopeAssembly
 
 /-!

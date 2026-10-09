@@ -86,25 +86,6 @@ theorem quadraticModel_eq_frechetSecondOrderModel (x0 : Point n) (r : Real)
   funext x
   exact (frechetSecondOrderModel_of_jet x0 r ⟨p, X⟩ x).symm
 
-/-- The Fréchet second-order model is a `C²` function of the base point. -/
-theorem contDiff_frechetSecondOrderModel (x0 : Point n) (r : Real)
-    (Dφ : Point n →L[Real] Real)
-    (D2φ : Point n →L[Real] Point n →L[Real] Real) :
-    ContDiff Real 2 (frechetSecondOrderModel x0 r Dφ D2φ) := by
-  have hshift : ContDiff Real (2 : ℕ∞ω) (fun y : Point n => y - x0) :=
-    contDiff_id.sub contDiff_const
-  have hlin : ContDiff Real (2 : ℕ∞ω) (fun y : Point n => Dφ (y - x0)) :=
-    Dφ.contDiff.comp hshift
-  have hbil :
-      ContDiff Real (2 : ℕ∞ω) (fun y : Point n => D2φ (y - x0) (y - x0)) :=
-    (D2φ.contDiff.comp hshift).clm_apply hshift
-  have hsum :
-      ContDiff Real (2 : ℕ∞ω)
-        (fun y : Point n =>
-          r + Dφ (y - x0) + (1 / 2 : Real) * D2φ (y - x0) (y - x0)) :=
-    (contDiff_const.add hlin).add (contDiff_const.mul hbil)
-  exact hsum
-
 /--
 Global version of the model derivative: for a symmetric bilinear second
 derivative, the Fréchet quadratic model has derivative `Dφ + D²φ (x - x₀)`

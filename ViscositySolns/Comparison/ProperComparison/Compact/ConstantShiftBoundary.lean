@@ -35,43 +35,6 @@ Let `l` be a filter on `ι` with `NeBot l`. Suppose there are functions
 `l`, one has `0 < α i`, `x i ∈ C`, `y i ∈ C`, and `(x i, y i)` maximizes
 `(x', y') ↦ u x' - v y' - (α i / 2) * ∑ j, (x' j - y' j)^2`
 on `C × C`.
-Suppose also that `DoubledVariableScaleEstimatesAlong l α x y` holds and that
-`u x ∈ R` for every `x ∈ C`. Then `u ≤ v` on `C`.
--/
-theorem strictComparison_of_eventually_maximizers_of_scaleEstimates
-    {ι : Type*} {l : Filter ι} [NeBot l]
-    {C : Set (Point n)} {R : Set Real} {F : Operator n} {u v : Point n -> Real}
-    {ε : Real} {α : ι -> Real} {x y : ι -> Point n}
-    (hu : StrictViscositySubsolution C F ε u) (hv : ViscositySupersolution C F v)
-    (hFcont : OperatorContinuous F) (hproper : Proper F)
-    (hcomp : IshiiOperatorComparisonConditionOn C R F)
-    (hIshii : QuadraticPenaltyIshiiLemmaOn C C u v)
-    (hε : 0 < ε)
-    (huR : ScalarRangeOn C R u)
-    (hmax :
-      ∀ᶠ i in l,
-        0 < α i ∧ x i ∈ C ∧ y i ∈ C ∧
-          IsMaxOn (fun q : DoubledPoint n => doubledObjective u v (α i) q)
-            (C ×ˢ C) (x i, y i))
-    (hscale : DoubledVariableScaleEstimatesAlong l α x y) :
-    ComparisonConclusionOn C u v := by
-  refine strictComparison_of_doubledVariableLocalizationAlong
-    (l := l) (α := α) (x := x) (y := y)
-    hu hv hFcont hproper hcomp hIshii hε ?_
-  intro hfail
-  exact strictDoubledVariableLocalizationAlongOn_of_scaleEstimates
-    hfail huR hmax hscale hfail
-
-/--
-Assume `ε > 0`, `u` is a strict subsolution with margin `ε`, `v` is a
-supersolution, `F` is proper and continuous, `F` satisfies the Ishii
-structural condition, and `QuadraticPenaltyIshiiLemmaOn C C u v` holds.
-
-Let `l` be a filter on `ι` with `NeBot l`. Suppose there are functions
-`α : ι -> R` and `x y : ι -> R^n` such that, for all `i` in a set belonging to
-`l`, one has `0 < α i`, `x i ∈ C`, `y i ∈ C`, and `(x i, y i)` maximizes
-`(x', y') ↦ u x' - v y' - (α i / 2) * ∑ j, (x' j - y' j)^2`
-on `C × C`.
 Suppose also that `u x ∈ R` for every `x ∈ C`, that
 `α i * ‖x i - y i‖ ^ 2 -> 0` along `l`, and that
 `‖x i - y i‖ -> 0` along `l`. Then `u ≤ v` on `C`.
@@ -122,9 +85,8 @@ theorem strictComparison_of_eventually_maximizers_of_scales
     hfail huR hmax hquad hdist hscale_pos hfail
 
 /--
-Assume the hypotheses of
-`strictComparison_of_eventually_maximizers_of_scaleEstimates`. Instead of
-assuming `DoubledVariableScaleEstimatesAlong l α x y` directly, assume:
+Assume the strict-comparison hypotheses below. Instead of assuming
+`DoubledVariableScaleEstimatesAlong l α x y` directly, assume:
 
 * `α i * ‖x i - y i‖ ^ 2 -> 0` along `l`;
 * `{i | 1 ≤ α i}` belongs to `l`.
@@ -516,64 +478,5 @@ theorem comparison_of_constantShift_boundary_of_aleksandrov
     (JensenContactSetPositiveMeasureOnClosedBallTheorem.proof (n := n + n))
     hAleksandrov hproper hFcont hcomp hboundary huR hR hCne hCcompact
     hu hv husc hvlsc hdecrease
-
-/--
-Constant-shift data stated using maximizers on `closure C × closure C` imply
-comparison for a fixed pair of functions.
-
-In quantified mathematical form, assume:
-
-* `F` is proper and continuous;
-* `F` satisfies `IshiiOperatorComparisonConditionOn C R F`;
-* `u` is a viscosity subsolution of `F = 0` on `C`;
-* `v` is a viscosity supersolution of `F = 0` on `C`;
-* `u ≤ v` on `frontier C`;
-* for every `η > 0`, there are `δ`, `ε`, `α`, `x`, `y`, and `x0` satisfying
-  the conditions in `ConstantShiftClosureMaximizerDataOn C R F u v`.
-
-Then `u z ≤ v z` for every `z ∈ C`.
--/
-theorem comparison_of_constantShiftClosureMaximizerData
-    {C : Set (Point n)} {R : Set Real} {F : Operator n} {u v : Point n -> Real}
-    (hproper : Proper F)
-    (hFcont : OperatorContinuous F)
-    (hcomp : IshiiOperatorComparisonConditionOn C R F)
-    (hboundary : BoundaryComparisonOn C u v)
-    (hu : ViscositySubsolution C F u)
-    (hv : ViscositySupersolution C F v)
-    (hdata : ConstantShiftClosureMaximizerDataOn C R F u v) :
-    ComparisonConclusionOn C u v := by
-  intro z hz
-  refine le_of_forall_pos_le_add fun η hη => ?_
-  rcases hdata η hη with
-    ⟨δ, ε, α, x, y, x0, hδpos, hδη, hε, hdec, hIshii, huR, hx0closure,
-      hgap, husc, hvlsc, hx, hy, hmax, hα⟩
-  have hstrict : StrictViscositySubsolution C F ε (fun z : Point n => u z - δ) :=
-    hu.strict_sub_const_of_uniformScalarDecrease hdec
-  have hshift :
-      ComparisonConclusionOn C (fun z : Point n => u z - δ) v :=
-    strictComparison_of_shifted_closure_maximizers_of_tendsto_atTop
-      hboundary hδpos hx0closure hgap hstrict hv hFcont hproper hcomp hIshii hε
-      huR husc hvlsc hx hy hmax hα
-  have hzshift : u z - δ <= v z := hshift z hz
-  linarith
-
-/--
-If the ordinary boundary-value hypotheses construct constant-shift data stated
-using maximizers on `closure C × closure C`, then the ordinary boundary
-comparison statement on `C` follows.
--/
-theorem properBoundaryComparisonStatementOn_of_constantShiftClosureMaximizerDataConstructor
-    {C : Set (Point n)} {R : Set Real} {F : Operator n}
-    (hconstruct : ConstantShiftBoundaryClosureMaximizerDataConstructorOn C R F) :
-    ProperBoundaryComparisonStatementOn C R F := by
-  intro hproper hFcont hcomp u v hextra hu hv _huR
-  rcases hextra with ⟨hboundary, huR, hCcompact⟩
-  by_cases hCne : C.Nonempty
-  · exact comparison_of_constantShiftClosureMaximizerData
-      hproper hFcont hcomp hboundary hu hv
-      (hconstruct u v hCne hboundary huR hCcompact hu hv)
-  · intro x hx
-    exact (hCne ⟨x, hx⟩).elim
 
 end ViscositySolns
