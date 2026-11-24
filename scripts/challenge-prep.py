@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# canonical-challenge-prep v1.3.1 (publication standard v1.4)
+# canonical-challenge-prep v1.3.2 (publication standard v1.4)
 """Keep challenge workspaces self-contained and checkable on their own.
 
 Each Challenge must compile on its own, against Mathlib only, so a
@@ -154,6 +154,23 @@ SCOPE_OPEN = re.compile(r"^(?:noncomputable\s+)?(?:@\[[^\]]*\]\s*)?(?:public\s+)
 SCOPE_END = re.compile(r"^end(?:\s+(\S+))?\s*$")
 
 
+def closes_exposed_section(lines: list[str]) -> bool:
+    """True if a body (with its `@[expose] public section` line removed) has an `end`
+    that matches no scope it opened, i.e. it closes the exposed public section. The
+    generated block emits that section itself and leaves it open, so the stubs below
+    it stay public; an `end` for it would make them private."""
+    depth = 0
+    for ln in lines:
+        s = ln.strip()
+        if SCOPE_OPEN.match(s):
+            depth += 1
+        elif SCOPE_END.match(s):
+            if depth == 0:
+                return True
+            depth -= 1
+    return False
+
+
 def open_namespaces(lines: list[str]) -> list[str]:
     """Namespaces still open at the end of a body (comments are not parsed).
 
@@ -219,6 +236,9 @@ def generate_block(ws: Path) -> list[str]:
         stripped = [ln for ln in body if ln.strip() != EXPOSE]
         if len(stripped) == len(body):
             raise Failure(f"{files[name]}: missing `{EXPOSE}` after the imports")
+        if closes_exposed_section(stripped):
+            raise Failure(f"{files[name]}: closes `{EXPOSE}`; leave it open (close every other"
+                          " section and namespace), or the stubs below the generated block become private")
         if opened := open_namespaces(stripped):
             raise Failure(f"{files[name]}: namespace {', '.join(opened)} left open; close it so"
                           " that concatenated files keep their declaration names")

@@ -3,18 +3,15 @@ description: >
   Lean 4 formalization of viscosity-solution theory for second-order
   degenerate elliptic equations, following Crandall, Ishii, and Lions,
   "User's guide to viscosity solutions" (Bull. AMS 27, 1992).
-lean_toolchain: leanprover/lean4:v4.35.0-rc3
-mathlib: v4.35.0-rc3
+lean_toolchain: leanprover/lean4:v4.36.0
+mathlib: v4.36.0
 dependencies:
   - name: AleksandrovDifferentiability
     url: https://github.com/willmfeldman/aleksandrov-differentiability
-    rev: v0.4.0
-    commit: 5e5c2ec4cee4f8851387e9bb309eeb703cd72a25
-# Comparator tool revisions pinned in scripts/release-comparator.sh.
+    rev: v0.5.0
+    commit: 058378f1033dfd842b52b611497996fc92b28a2f
 comparator:
-  comparator_revision: fd5d5bcf14177b187f66d4502071268d877887c3
-  lean4export_revision: 66f1fb4bc256072069767fce52d39480e4524869
-  landrun_revision: 811cfff51ceaf3d9843708aa6d22e9b84ccac8b4
+  engine: "lake comparator"
 permitted_axioms: [propext, Quot.sound, Classical.choice]
 automation:
   methods:

@@ -61,14 +61,16 @@ project. The Jensen lemma is proved internally and unconditionally.
 
 ## Toolchain
 
-- Lean: `leanprover/lean4:v4.35.0-rc3`
-- Mathlib: `v4.35.0-rc3`
-- AleksandrovDifferentiability: release `v0.4.0`, pinned through the parent
+- Lean: `leanprover/lean4:v4.36.0`
+- Mathlib: `v4.36.0`
+- AleksandrovDifferentiability: release `v0.5.0`, pinned through the parent
   `lake-manifest.json`
-- Comparator: `leanprover/comparator`, with a `lean4export` build matching Lean
-  `v4.35.0-rc3` and the pinned `landrun` revision; the release workflow runs on a
-  standard GitHub-hosted Linux runner. The workflow builds every dependency
-  from source rather than from prebuilt release archives.
+- Comparator: the toolchain's own `lake comparator` (shipped with Lean
+  `v4.36.0`, so the toolchain pin is also the tool pin), run with `--paranoid`,
+  which adds every external checker bundled with the toolchain, inside Lake's
+  `bwrap` sandbox. The release workflow runs on a standard GitHub-hosted Linux
+  runner and builds every dependency from source rather than from prebuilt
+  release archives.
 
 Every workspace sets `packagesDir = "../../.lake/packages"` in its
 `lakefile.toml` (and records the same folder in its `lake-manifest.json`), so
@@ -84,9 +86,9 @@ the Vocabulary, Challenge, and Solution targets of all seven workspaces with
 confirms that every generated vocabulary block is up to date. That shows each file compiles against the current library; it
 does not compare statements. Actual statement equality, proof, and
 permitted-axiom checks for those pairs belong to the separate release
-Comparator workflow, which validates the inventory before installing its tools.
+Comparator workflow, which validates the inventory before preparing its sandbox.
 That workflow downloads the Mathlib cache and builds the library before
-Comparator runs, because Comparator's sandbox can read the shared dependency
+Comparator runs, because the comparator sandbox can read the shared dependency
 folder but cannot write to it or reach the network.
 
 Each standalone workspace defaults to its `Challenge` target only. Thus a
@@ -104,17 +106,23 @@ lake exe cache get && lake build
 ```
 
 For a Comparator release run, dispatch `.github/workflows/release-comparator.yml`
-on a fresh release-candidate commit. It installs the pinned tools, runs all
-seven configurations, and uploads a report artifact. Treat `Solution.lean` as
-potentially adversarial. Review and trust the release checkout's `Vocabulary.lean` (and `Vocabulary/`), `Challenge.lean`,
-`lakefile.toml`, `lake-manifest.json`, `lean-toolchain`, `config.json`, and
-the Comparator toolchain. Then:
+on a fresh release-candidate commit. It prepares the `bwrap` sandbox, builds
+the trusted `Vocabulary` and `Challenge` targets, runs `lake comparator
+--paranoid` on all seven configurations, and uploads a report artifact. Treat
+`Solution.lean` as potentially adversarial. Review and trust the release
+checkout's `Vocabulary.lean` (and `Vocabulary/`), `Challenge.lean`,
+`lakefile.toml`, `lake-manifest.json`, `lean-toolchain` (which also pins the
+comparator), and `config.json`. Then:
 
-1. Run `make challenges-challenge-only` (or run `lake build` in an individual
-   workspace). This elaborates only the trusted `Challenge` target and its Mathlib-only vocabulary.
-2. Invoke Comparator in its release sandbox with that workspace's
-   `config.json`, without first running `lake build Solution` or the trusted
-   all-workspace driver.
+1. Run `make challenges-challenge-only` (or run `lake build Vocabulary Challenge`
+   in an individual workspace). This elaborates only the trusted `Challenge`
+   target and its Mathlib-only vocabulary.
+2. Run `scripts/release-comparator.sh install`, then
+   `scripts/release-comparator.sh run`, without first running
+   `lake build Solution` or the trusted all-workspace driver. The script runs
+   `lake comparator --paranoid` with each workspace's `config.json`. The sandbox
+   hides home directories, so a checkout under `/home` is judged from a copy
+   outside it.
 3. Confirm each theorem depends only on:
    `propext`, `Classical.choice`, and `Quot.sound`.
 
@@ -122,10 +130,10 @@ The ordinary challenge-build driver does not perform statement comparison.
 
 ### Recorded acceptance
 
-The release Comparator workflow accepted all seven workspaces on 2026-10-02,
-on a standard GitHub-hosted Linux runner, with Lean `v4.35.0-rc3`, Mathlib
-`c55e6e7`, AleksandrovDifferentiability `v0.4.0` (built from source),
-Comparator `fd5d5bc`, `landrun` `811cfff`, and `lean4export` `66f1fb4`:
+The release Comparator workflow accepted all seven workspaces on 2026-11-24,
+on a standard GitHub-hosted Linux runner, with Lean `v4.36.0` and its
+`lake comparator --paranoid`, Mathlib `fc4f59e`, and
+AleksandrovDifferentiability `v0.5.0` (built from source):
 
 | Workspace | Statement comparison and kernel check | Axioms |
 |---|---|---|
@@ -138,11 +146,8 @@ Comparator `fd5d5bc`, `landrun` `811cfff`, and `lean4export` `66f1fb4`:
 | `uniqueness` | PASS | same |
 
 The GitHub release carries the attestation artifact from running this
-workflow on the release commit itself: commit and tree hashes, toolchain and
-tool revisions, per-workspace results, and complete logs.
-Comparator ran under `landrun` without the additional `systemd-run`
-containment that upstream recommends for a full adversarial guarantee, so
-these results establish Comparator's checks, not that stronger sandbox claim.
+workflow on the release commit itself: commit and tree hashes, toolchain
+version, per-workspace results, and complete logs.
 
 ### Scope of each challenge
 

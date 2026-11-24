@@ -13,7 +13,7 @@ public import ViscositySolns.Foundation
 
 @[expose] public noncomputable section
 
-open scoped ContDiff MatrixOrder Topology
+open scoped MatrixOrder Topology
 open scoped ENNReal
 
 open ContinuousLinearMap

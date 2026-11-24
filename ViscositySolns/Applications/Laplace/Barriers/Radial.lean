@@ -8,6 +8,7 @@ module
 public import ViscositySolns.Applications.Laplace.Geometry
 public import ViscositySolns.Semijets.Calculus.QuadraticControl
 public import Mathlib.Analysis.Calculus.MeanValue
+public import Mathlib.Analysis.Calculus.Deriv.Pow
 public import Mathlib.Analysis.SpecialFunctions.ExpDeriv
 public import Mathlib.Analysis.InnerProductSpace.PiL2
 
